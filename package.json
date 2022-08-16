@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/DivoDivnoe/middle.messenger.praktikum.yandex#readme",
   "devDependencies": {
+    "@parcel/transformer-css": "2.7.0",
     "@parcel/transformer-pug": "2.7.0",
-    "parcel": "2.7.0"
-  }
+    "parcel": "2.7.0",
+    "postcss": "8.4.16",
+    "postcss-nested": "5.0.6"
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead"
 }

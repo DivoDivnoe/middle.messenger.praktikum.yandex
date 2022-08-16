@@ -3,6 +3,9 @@
   "transformers": {
     "*.pug": [
       "@parcel/transformer-pug"
+    ],
+    "*.css": [
+      "@parcel/transformer-css"
     ]
   }
 }
