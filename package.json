@@ -1,0 +1,25 @@
+{
+  "name": "middle.messenger.praktikum.yandex",
+  "version": "1.0.0",
+  "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel index.pug",
+    "build": "parcel build index.pug"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DivoDivnoe/middle.messenger.praktikum.yandex.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DivoDivnoe/middle.messenger.praktikum.yandex/issues"
+  },
+  "homepage": "https://github.com/DivoDivnoe/middle.messenger.praktikum.yandex#readme",
+  "devDependencies": {
+    "@parcel/transformer-pug": "2.7.0",
+    "parcel": "2.7.0"
+  }
+}
