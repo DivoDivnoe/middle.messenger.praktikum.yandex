@@ -21,9 +21,18 @@
   "devDependencies": {
     "@anikin/parcel-transformer-handlebars-precompile": "1.0.1",
     "@parcel/transformer-css": "2.7.0",
+    "eslint": "8.22.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-prettier": "4.2.1",
     "parcel": "2.7.0",
     "postcss": "8.4.16",
-    "postcss-nested": "5.0.6"
+    "postcss-nested": "5.0.6",
+    "prettier": "2.7.1"
   },
-  "browserslist": "> 0.5%, last 2 versions, not dead"
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "dependencies": {
+    "handlebars": "4.7.7"
+  }
 }

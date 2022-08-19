@@ -1,0 +1,19 @@
+<form class={{loginStyles.loginForm}}>
+  <fieldset>
+    <legend class={{loginStyles.title}}>Вход</legend>
+    <p class={{loginStyles.formItem}}>
+      <label for='login'>Логин</label>
+      {{> input id='login' type='text' placeholder='Логин' required=true }}
+      <span class={{loginStyles.errorMessage}}>Введите логин</span>
+    </p>
+    <p class={{loginStyles.formItem}}>
+      <label for='password'>Пароль</label>
+      {{> input id='password' type='password' placeholder='Пароль' required=true }}
+      <span class={{loginStyles.errorMessage}}>Введите пароль</span>
+    </p>
+
+    <span class={{loginStyles.errorMessage}}>Неверный логин или пароль</span>
+  </fieldset>
+
+  {{> button type='submit' content='Авторизоваться' }}
+</form>

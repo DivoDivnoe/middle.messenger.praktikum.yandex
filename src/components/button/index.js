@@ -1,4 +1,4 @@
 import styles from './button.module.css';
-import './button.js';
+import './button';
 
 export default styles;

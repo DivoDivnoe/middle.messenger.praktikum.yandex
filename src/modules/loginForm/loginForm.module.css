@@ -1,0 +1,63 @@
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  height: 460px;
+  padding: 50px 30px 30px 30px;
+  border-radius: 12px;
+  background: var(--c-white);
+  box-shadow: 0px 0px 6px var(--c-black-transparent-2);
+}
+
+.title {
+  margin-bottom: 51px;
+  font-size: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.loginForm fieldset {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.formItem {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--c-primary);
+}
+
+.formItem label {
+  font-size: 9px;
+  line-height: 9px;
+  color: var(--c-gray-0);
+}
+
+.formItem input {
+  display: block;
+  width: 100%;
+}
+
+.errorMessage {
+  position: absolute;
+  left: 0;
+  font-size: 8px;
+  line-height: 8px;
+  color: var(--c-red);
+}
+
+.formItem .errorMessage {
+  top: calc(100% + 8px);
+}
+
+.loginForm fieldset > .errorMessage {
+  width: 100%;
+  text-align: center;
+}
+
+.loginForm button {
+  margin-top: auto;
+}
