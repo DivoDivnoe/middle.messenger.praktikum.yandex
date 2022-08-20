@@ -4,7 +4,9 @@
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
     "dev": "parcel ./src/pages/signup/signup.html",
-    "build": "parcel build ./src/pages/**/*.html"
+    "build": "parcel build ./src/pages/**/*.html",
+    "lint": "eslint --ext .js,.ts, --fix ./",
+    "prepare": "husky install"
   },
   "type": "module",
   "repository": {
@@ -26,6 +28,8 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "4.2.1",
+    "husky": "8.0.1",
+    "lint-staged": "13.0.3",
     "parcel": "2.7.0",
     "postcss": "8.4.16",
     "postcss-nested": "5.0.6",

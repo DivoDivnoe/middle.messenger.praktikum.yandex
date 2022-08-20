@@ -6,5 +6,7 @@ import loginStyles from './src/modules/loginForm';
 window.addEventListener('DOMContentLoaded', () => {
   const app = document.querySelector('#app');
 
-  app.innerHTML = template({ content: 'content', buttonStyles, inputStyles, loginStyles });
+  app.innerHTML = template({
+    content: 'content', buttonStyles, inputStyles, loginStyles,
+  });
 });
