@@ -5,8 +5,10 @@
   "scripts": {
     "dev": "parcel ./src/pages/signup/signup.html",
     "build": "parcel build ./src/pages/**/*.html",
-    "lint": "eslint --ext .js,.ts, --fix ./",
     "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   },
   "type": "module",
   "repository": {
