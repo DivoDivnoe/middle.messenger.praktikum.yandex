@@ -29,6 +29,10 @@ body * {
   font-family: inherit;
 }
 
+a {
+  text-decoration: none;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
