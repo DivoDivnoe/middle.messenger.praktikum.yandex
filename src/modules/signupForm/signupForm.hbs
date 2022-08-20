@@ -1,0 +1,51 @@
+<form class={{signupStyles.signupForm}}>
+  <h1 class={{signupStyles.title}}>Регистрация</h1>
+
+  <fieldset>
+    <legend class='visually-hidden'>Данные пользователя</legend>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='login'>Почта</label>
+      {{> input id='email' name='email' type='email' placeholder='Почта' required=true }}
+      <span class={{signupStyles.errorMessage}}>Введите email</span>
+    </p>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='login'>Логин</label>
+      {{> input id='login' name='login' type='text' placeholder='Логин' required=true }}
+      <span class={{signupStyles.errorMessage}}>Введите логин</span>
+    </p>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='first_name'>Имя</label>
+      {{> input id='first_name' name='first_name' type='text' placeholder='Имя' required=true }}
+      <span class={{signupStyles.errorMessage}}>Введите имя</span>
+    </p>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='second_name'>Фамилия</label>
+      {{> input id='second_name' name='second_name' type='text' placeholder='Фамилия' required=true }}
+      <span class={{signupStyles.errorMessage}}>Введите фамилию</span>
+    </p>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='phone'>Телефон</label>
+      {{> input id='phone' name='phone' type='text' placeholder='Телефон' }}
+    </p>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='password'>Пароль</label>
+      {{> input id='password' name='password' type='password' placeholder='Пароль' }}
+      <span class={{signupStyles.errorMessage}}>Введите пароль</span>
+    </p>
+
+    <p class={{signupStyles.formItem}}>
+      <label for='password_extra'>Пароль (ещё раз)</label>
+      {{> input id='password_extra' name='password_extra' type='password' placeholder='Пароль (ещё раз)' }}
+      <span class={{signupStyles.errorMessage}}>Пароли не совпадают</span>
+    </p>
+  </fieldset>
+
+  {{> button type='submit' content='Зарегистрироваться' }}
+  <a class={{signupStyles.link}} href="/login">Войти</a>
+</form>

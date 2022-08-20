@@ -2,10 +2,9 @@
   "name": "middle.messenger.praktikum.yandex",
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
-  "main": "index.js",
   "scripts": {
-    "dev": "parcel index.html",
-    "build": "parcel build index.html"
+    "dev": "parcel ./src/pages/signup/signup.html",
+    "build": "parcel build ./src/pages/**/*.html"
   },
   "type": "module",
   "repository": {
@@ -21,6 +20,7 @@
   "devDependencies": {
     "@anikin/parcel-transformer-handlebars-precompile": "1.0.1",
     "@parcel/transformer-css": "2.7.0",
+    "@parcel/transformer-postcss": "2.7.0",
     "eslint": "8.22.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",

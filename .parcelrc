@@ -5,6 +5,7 @@
       "@anikin/parcel-transformer-handlebars-precompile"
     ],
     "*.css": [
+      "@parcel/transformer-postcss",
       "@parcel/transformer-css"
     ]
   }
