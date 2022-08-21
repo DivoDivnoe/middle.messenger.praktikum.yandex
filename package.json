@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
-    "dev": "parcel ./src/pages/home/home.html",
+    "dev": "parcel ./src/pages/login/index.html",
     "build": "parcel build ./src/pages/{*,**/*}.html",
     "start": "node ./server.js",
     "prepare": "husky install"
@@ -31,6 +31,7 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "4.2.1",
+    "express": "4.18.1",
     "husky": "8.0.1",
     "lint-staged": "13.0.3",
     "parcel": "2.7.0",
@@ -40,7 +41,6 @@
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
-    "express": "4.18.1",
     "handlebars": "4.7.7"
   }
 }
