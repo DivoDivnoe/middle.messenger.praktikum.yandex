@@ -1,11 +1,16 @@
 {{#if isEditable}}
-  <div class='{{avatarStyles.avatar}} {{lookup avatarStyles size}} {{avatarStyles.isEditable}}'>
+  <div
+    class='{{className}}
+      {{avatarStyles.avatar}}
+      {{lookup avatarStyles size}}
+      {{avatarStyles.isEditable}}'
+  >
     {{#if src}}
       <img src={{src}} alt='your avatar' />
     {{/if}}
   </div>
 {{else}}
-  <div class='{{avatarStyles.avatar}} {{lookup avatarStyles size}}'>
+  <div class='{{className}} {{avatarStyles.avatar}} {{lookup avatarStyles size}}'>
     {{#if src}}
       <img src={{src}} alt='your avatar' />
     {{/if}}

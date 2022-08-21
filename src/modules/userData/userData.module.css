@@ -1,9 +1,5 @@
 .userData {
-  position: fixed;
-  top: 50%;
-  left: 50%;
   width: 510px;
-  transform: translate(-50%, -50%);
 }
 
 .item {
@@ -14,7 +10,10 @@
   margin: 0;
   padding: 4px 0;
   line-height: 13px;
-  border-bottom: 1px solid var(--c-gray-1);
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--c-gray-1);
+  }
 
   input {
     width: 400px;
