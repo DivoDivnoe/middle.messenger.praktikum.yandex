@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 import express from 'express';
 
 const app = express();
