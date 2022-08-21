@@ -1,0 +1,19 @@
+<div class={{avatarFormStyles.popupWrapper}}>
+  <div class='{{avatarFormStyles.popup}} {{condition isError avatarFormStyles.error}}'>
+    <h2 class={{avatarFormStyles.title}}>Загрузите файл</h2>
+    <p class={{avatarFormStyles.errorMessage}}>Ошибка, попробуйте ещё раз</p>
+
+    <form class={{avatarFormStyles.form}}>
+      <label>
+        Выбрать файл на компьютере
+        {{> input name="file" type='file' required=true disabled=false}}
+      </label>
+
+      {{!-- here will be shown file path --}}
+      <span class={{avatarFormStyles.path}}></span>
+
+      {{> button type='submit' content="Поменять"}}
+      <span class={{avatarFormStyles.errorMessage}} >Нужно выбрать файл</span>
+    </form>
+  </div>
+</div>
