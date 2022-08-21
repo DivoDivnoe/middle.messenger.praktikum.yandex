@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
-    "dev": "parcel ./src/pages/profileWithPopup/profileWithPopup.html",
-    "build": "parcel build ./src/pages/**/*.html",
+    "dev": "parcel ./src/pages/home/home.html",
+    "build": "parcel build ./src/pages/{*,**/*}.html",
+    "start": "node ./server.js",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -39,6 +40,7 @@
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
+    "express": "4.18.1",
     "handlebars": "4.7.7"
   }
 }
