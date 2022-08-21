@@ -5,6 +5,7 @@
   color: var(--c-black);
   border: none;
   outline: none;
+  background-color: transparent;
 }
 
 .input:focus {
