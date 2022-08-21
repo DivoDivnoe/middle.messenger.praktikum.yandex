@@ -3,6 +3,7 @@ import profileStyles from '../../modules/profile';
 import * as profilePageStyles from './profile.module.css';
 import avatarStyles from '../../components/avatar';
 import userDataStyles from '../../modules/userData';
+import arrowButtonStyles from '../../components/arrowButton';
 import inputStyles from '../../components/input';
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -22,6 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
     avatarStyles,
     userDataStyles,
     profileStyles,
+    arrowButtonStyles,
     inputStyles,
     user,
   });
