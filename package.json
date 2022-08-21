@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "parcel ./src/pages/login/index.html",
     "build": "parcel build ./src/pages/{*,**/*}.html",
-    "start": "node ./server.js",
+    "start": "npm run build && node ./server.js",
     "prepare": "husky install"
   },
   "lint-staged": {
