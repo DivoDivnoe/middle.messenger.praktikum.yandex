@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
-    "dev": "parcel ./src/pages/profileForm/profileForm.html",
+    "dev": "parcel ./src/pages/passwordForm/passwordForm.html",
     "build": "parcel build ./src/pages/**/*.html",
     "prepare": "husky install"
   },
