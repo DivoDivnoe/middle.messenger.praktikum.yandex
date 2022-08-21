@@ -6,42 +6,42 @@
 
     <p class={{signupStyles.formItem}}>
       <label for='login'>Почта</label>
-      {{> input id='email' name='email' type='email' placeholder='Почта' required=true }}
+      {{> input id='email' name='email' type='email' placeholder='Почта' required=true disabled=false }}
       <span class={{signupStyles.errorMessage}}>Введите email</span>
     </p>
 
     <p class={{signupStyles.formItem}}>
       <label for='login'>Логин</label>
-      {{> input id='login' name='login' type='text' placeholder='Логин' required=true }}
+      {{> input id='login' name='login' type='text' placeholder='Логин' required=true disabled=false }}
       <span class={{signupStyles.errorMessage}}>Введите логин</span>
     </p>
 
     <p class={{signupStyles.formItem}}>
       <label for='first_name'>Имя</label>
-      {{> input id='first_name' name='first_name' type='text' placeholder='Имя' required=true }}
+      {{> input id='first_name' name='first_name' type='text' placeholder='Имя' required=true disabled=false }}
       <span class={{signupStyles.errorMessage}}>Введите имя</span>
     </p>
 
     <p class={{signupStyles.formItem}}>
       <label for='second_name'>Фамилия</label>
-      {{> input id='second_name' name='second_name' type='text' placeholder='Фамилия' required=true }}
+      {{> input id='second_name' name='second_name' type='text' placeholder='Фамилия' required=true disabled=false }}
       <span class={{signupStyles.errorMessage}}>Введите фамилию</span>
     </p>
 
     <p class={{signupStyles.formItem}}>
       <label for='phone'>Телефон</label>
-      {{> input id='phone' name='phone' type='text' placeholder='Телефон' }}
+      {{> input id='phone' name='phone' type='text' placeholder='Телефон' disabled=false }}
     </p>
 
     <p class={{signupStyles.formItem}}>
       <label for='password'>Пароль</label>
-      {{> input id='password' name='password' type='password' placeholder='Пароль' }}
+      {{> input id='password' name='password' type='password' placeholder='Пароль' required=true disabled=false }}
       <span class={{signupStyles.errorMessage}}>Введите пароль</span>
     </p>
 
     <p class={{signupStyles.formItem}}>
       <label for='password_extra'>Пароль (ещё раз)</label>
-      {{> input id='password_extra' name='password_extra' type='password' placeholder='Пароль (ещё раз)' }}
+      {{> input id='password_extra' name='password_extra' type='password' placeholder='Пароль (ещё раз)' required=true disabled=false }}
       <span class={{signupStyles.errorMessage}}>Пароли не совпадают</span>
     </p>
   </fieldset>

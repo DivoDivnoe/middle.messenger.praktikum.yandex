@@ -6,13 +6,13 @@
 
     <p class={{loginStyles.formItem}}>
       <label for='login'>Логин</label>
-      {{> input id='login' name='login' type='text' placeholder='Логин' required=true }}
+      {{> input id='login' name='login' type='text' placeholder='Логин' required=true disabled=false }}
       <span class={{loginStyles.errorMessage}}>Введите логин</span>
     </p>
 
     <p class={{loginStyles.formItem}}>
       <label for='password'>Пароль</label>
-      {{> input id='password' name='password' type='password' placeholder='Пароль' required=true }}
+      {{> input id='password' name='password' type='password' placeholder='Пароль' required=true disabled=false }}
       <span class={{loginStyles.errorMessage}}>Введите пароль</span>
     </p>
 

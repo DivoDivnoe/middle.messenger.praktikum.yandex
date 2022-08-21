@@ -4,7 +4,7 @@
   <h1 class="visually-hidden">Профиль пользователя</h1>
   <h2 class={{profileStyles.title}}>{{user.name}}</h2>
 
-  {{> userData className=profileStyles.userData }}
+  {{> userData className=profileStyles.userData }} isNotEditable=true
 
   <div class={{profileStyles.links}}>
     <a href="/profile/edit">Изменить данные</a>
