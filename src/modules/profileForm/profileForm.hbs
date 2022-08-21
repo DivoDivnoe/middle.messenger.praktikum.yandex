@@ -1,0 +1,10 @@
+<div class="{{profileFormStyles.profile}}">
+  {{> avatar className=profileFormStyles.avatar size='large' isEditable=false}}
+
+  <h1 class="visually-hidden">Редактирование данных пользователя</h1>
+
+  <form>
+    {{> userData className=profileFormStyles.userData isNotEditable=false }} 
+    {{> button type='submit' content='Сохранить' }}
+  </form>
+</div>

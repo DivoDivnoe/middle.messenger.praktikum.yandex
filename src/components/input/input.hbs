@@ -4,7 +4,7 @@
   type={{type}}
   placeholder='{{placeholder}}'
   name={{name}}
-  required={{required}}
   value='{{value}}'
-  disabled={{disabled}}
+  {{condition required 'required'}}
+  {{condition disabled 'disabled'}}
 />
