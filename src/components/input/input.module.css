@@ -7,7 +7,3 @@
   outline: none;
   background-color: transparent;
 }
-
-.input:focus {
-  /* outline-color: var(--c-primary); */
-}
