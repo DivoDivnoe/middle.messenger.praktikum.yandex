@@ -1,0 +1,14 @@
+<div class="{{profileStyles.profile}}">
+  {{> avatar className=profileStyles.avatar size='large' isEditable=true}}
+
+  <h1 class="visually-hidden">Профиль пользователя</h1>
+  <h2 class={{profileStyles.title}}>{{user.name}}</h2>
+
+  {{> userData className=profileStyles.userData isNotEditable=true }} 
+
+  <div class={{profileStyles.links}}>
+    <a href="/profileForm">Изменить данные</a>
+    <a href="/passwordForm">Изменить пароль</a>
+    <a class={{profileStyles.logout}} href="/logout">Выйти</a>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+<form class={{loginStyles.loginForm}}>
+  <h1 class={{loginStyles.title}}>Вход</h1>
+
+  <fieldset>
+    <legend class='visually-hidden'>Логин и пароль</legend>
+
+    <p class={{loginStyles.formItem}}>
+      <label for='login'>Логин</label>
+      {{> input id='login' name='login' type='text' placeholder='Логин' required=true disabled=false }}
+      <span class={{loginStyles.errorMessage}}>Введите логин</span>
+    </p>
+
+    <p class={{loginStyles.formItem}}>
+      <label for='password'>Пароль</label>
+      {{> input id='password' name='password' type='password' placeholder='Пароль' required=true disabled=false }}
+      <span class={{loginStyles.errorMessage}}>Введите пароль</span>
+    </p>
+
+    <span class={{loginStyles.errorMessage}}>Неверный логин или пароль</span>
+  </fieldset>
+
+  {{> button type='submit' content='Авторизоваться' }}
+  <a class={{loginStyles.link}} href="/signup">Нет аккаунта?</a>
+</form>

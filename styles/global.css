@@ -1,0 +1,47 @@
+:root {
+  --c-primary: #3369f3;
+  --c-primary-hover: #4174f4;
+  --c-primary-active: #255ef2;
+
+  --c-black: #000000;
+  --c-text-black: #1e1e1e;
+  --c-black-transparent-0: rgba(0, 0, 0, 0.4);
+  --c-black-transparent-1: rgba(0, 0, 0, 0.25);
+  --c-black-transparent-2: rgba(0, 0, 0, 0.14);
+  --c-white: #ffffff;
+
+  --c-gray-0: #999999;
+  --c-gray-1: #eaeaea;
+  --c-gray-2: #efefef;
+  --c-gray-3: #fbfbfb;
+
+  --c-red: #ff2f2f;
+}
+
+html,
+body {
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--c-text-black);
+}
+
+html *,
+body * {
+  font-family: inherit;
+}
+
+a {
+  text-decoration: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+}
