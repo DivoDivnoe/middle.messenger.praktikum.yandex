@@ -1,13 +1,18 @@
-import template from './profile.hbs';
+import template from './profileWithPopup.hbs';
 import profileStyles from '../../modules/profile';
-import * as profilePageStyles from './profile.module.css';
+import avatarFormStyles from '../../modules/avatarForm';
+import profilePageStyles from './profileWithPopup.module.css';
 import avatarStyles from '../../components/avatar';
+import buttonStyles from '../../components/button';
 import userDataStyles from '../../modules/userData';
 import arrowButtonStyles from '../../components/arrowButton';
 import inputStyles from '../../components/input';
 
 window.addEventListener('DOMContentLoaded', () => {
   const app = document.querySelector('#app');
+
+  if (!app) throw new Error('no #app element');
+
   app.classList.add(profilePageStyles.profilePage);
 
   const user = {
@@ -24,7 +29,9 @@ window.addEventListener('DOMContentLoaded', () => {
     userDataStyles,
     profileStyles,
     arrowButtonStyles,
+    avatarFormStyles,
     inputStyles,
+    buttonStyles,
     user,
   });
 });

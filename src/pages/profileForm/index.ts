@@ -1,7 +1,6 @@
-import template from './profileWithPopup.hbs';
-import profileStyles from '../../modules/profile';
-import avatarFormStyles from '../../modules/avatarForm';
-import * as profilePageStyles from './profileWithPopup.module.css';
+import template from './profileForm.hbs';
+import profileFormStyles from '../../modules/profileForm';
+import profileFormPageStyles from './profileForm.module.css';
 import avatarStyles from '../../components/avatar';
 import buttonStyles from '../../components/button';
 import userDataStyles from '../../modules/userData';
@@ -10,7 +9,10 @@ import inputStyles from '../../components/input';
 
 window.addEventListener('DOMContentLoaded', () => {
   const app = document.querySelector('#app');
-  app.classList.add(profilePageStyles.profilePage);
+
+  if (!app) throw new Error('no #app element');
+
+  app.classList.add(profileFormPageStyles.profileFormPage);
 
   const user = {
     login: 'Andrey',
@@ -24,11 +26,10 @@ window.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = template({
     avatarStyles,
     userDataStyles,
-    profileStyles,
+    profileFormStyles,
     arrowButtonStyles,
-    avatarFormStyles,
-    inputStyles,
     buttonStyles,
+    inputStyles,
     user,
   });
 });

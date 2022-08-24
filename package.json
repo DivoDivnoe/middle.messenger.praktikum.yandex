@@ -6,10 +6,12 @@
     "dev": "parcel ./src/pages/login/index.html",
     "build": "parcel build ./src/pages/{*,**/*}.html",
     "start": "npm run build && node ./server.js",
+    "stylelint": "stylelint  \"**/*.css\" --fix",
+    "check": "tsc && lint-staged && npm run stylelint",
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.js": "eslint --fix"
+    "*.{js,ts}": "eslint --fix"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,8 @@
     "@anikin/parcel-transformer-handlebars-precompile": "1.0.1",
     "@parcel/transformer-css": "2.7.0",
     "@parcel/transformer-postcss": "2.7.0",
+    "@typescript-eslint/eslint-plugin": "5.35.0",
+    "@typescript-eslint/parser": "5.35.0",
     "eslint": "8.22.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-prettier": "8.5.0",
@@ -35,7 +39,10 @@
     "parcel": "2.7.0",
     "postcss": "8.4.16",
     "postcss-nested": "5.0.6",
-    "prettier": "2.7.1"
+    "prettier": "2.7.1",
+    "stylelint": "14.11.0",
+    "stylelint-config-standard": "28.0.0",
+    "typescript": "4.7.4"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {

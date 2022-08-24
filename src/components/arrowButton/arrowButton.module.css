@@ -12,6 +12,15 @@
   border-right: 1px solid var(--c-gray-1);
   cursor: pointer;
 
+  .arrow {
+    --size: 28px;
+
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: var(--c-primary) url('/static/arrow_left.svg') center center no-repeat;
+  }
+
   &:hover {
     .arrow {
       background-color: var(--c-primary-hover);
@@ -23,13 +32,4 @@
       background-color: var(--c-primary-active);
     }
   }
-}
-
-.arrow {
-  --size: 28px;
-
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  background: var(--c-primary) url('/static/arrow_left.svg') center center no-repeat;
 }
