@@ -1,12 +1,42 @@
+.errorMessage {
+  position: absolute;
+  left: 0;
+  font-size: 8px;
+  line-height: 8px;
+  color: var(--c-red);
+}
+
+.formItem {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--c-primary);
+
+  label {
+    font-size: 9px;
+    line-height: 9px;
+    color: var(--c-gray-0);
+  }
+
+  input {
+    display: block;
+    width: 100%;
+  }
+
+  .errorMessage {
+    top: calc(100% + 4px);
+  }
+}
+
 .signupForm {
   display: flex;
   flex-direction: column;
   width: 340px;
   height: 615px;
-  padding: 50px 30px 30px 30px;
+  padding: 50px 30px 30px;
   border-radius: 12px;
   background: var(--c-white);
-  box-shadow: 0px 0px 6px var(--c-black-transparent-2);
+  box-shadow: 0 0 6px var(--c-black-transparent-2);
 
   fieldset {
     position: relative;
@@ -34,36 +64,6 @@
   font-size: 20px;
   line-height: 20px;
   text-align: center;
-}
-
-.formItem {
-  position: relative;
-  margin-top: 0;
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--c-primary);
-
-  label {
-    font-size: 9px;
-    line-height: 9px;
-    color: var(--c-gray-0);
-  }
-
-  input {
-    display: block;
-    width: 100%;
-  }
-
-  .errorMessage {
-    top: calc(100% + 4px);
-  }
-}
-
-.errorMessage {
-  position: absolute;
-  left: 0;
-  font-size: 8px;
-  line-height: 8px;
-  color: var(--c-red);
 }
 
 .link {

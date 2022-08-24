@@ -10,44 +10,13 @@
   background-color: var(--c-black-transparent-0);
 }
 
-.popup {
-  display: flex;
-  flex-direction: column;
-  width: 340px;
-  height: 257px;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: var(--c-white);
-
-  box-shadow: 0px 0px 6px var(--c-black-transparent-2);
-  border-radius: 12px;
-
-  text-align: center;
-
-  &:not(.error) {
-    & > .errorMessage {
-      display: none;
-    }
-  }
-
-  & > .errorMessage {
-    margin-bottom: 43px;
-  }
-
-  input {
-    display: none;
-  }
-}
-
-.error {
-  h2 {
-    display: none;
-  }
+.errorMessage {
+  color: var(--c-red);
 }
 
 .title,
 .errorMessage {
-  margin: 0 0 43px 0;
+  margin: 0 0 43px;
   font-size: 15px;
   line-height: 20px;
 }
@@ -81,8 +50,37 @@
   }
 }
 
-.errorMessage {
-  color: var(--c-red);
+.popup {
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  height: 257px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: var(--c-white);
+  box-shadow: 0 0 6px var(--c-black-transparent-2);
+  border-radius: 12px;
+  text-align: center;
+
+  & > .errorMessage {
+    margin-bottom: 43px;
+  }
+
+  &:not(.error) {
+    & > .errorMessage {
+      display: none;
+    }
+  }
+
+  input {
+    display: none;
+  }
+}
+
+.error {
+  h2 {
+    display: none;
+  }
 }
 
 .path {
