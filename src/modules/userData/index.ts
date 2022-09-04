@@ -1,4 +1,3 @@
-import * as styles from './userData.module.css';
-import './userData';
+import UserData from './UserData';
 
-export default styles;
+export default UserData;

@@ -1,4 +1,3 @@
-import * as styles from './profile.module.css';
-import './profile';
+import Profile from './Profile';
 
-export default styles;
+export default Profile;

@@ -1,4 +1,3 @@
-import * as loginStyles from './loginForm.module.css';
-import './loginForm';
+import LoginForm from './LoginForm';
 
-export default loginStyles;
+export default LoginForm;

@@ -1,4 +1,3 @@
-import * as styles from './avatar.module.css';
-import './avatar';
+import Avatar from './Avatar';
 
-export default styles;
+export default Avatar;

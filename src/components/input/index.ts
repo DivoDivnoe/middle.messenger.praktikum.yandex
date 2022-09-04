@@ -1,4 +1,3 @@
-import * as styles from './input.module.css';
-import './input';
+import Input from './Input';
 
-export default styles;
+export default Input;

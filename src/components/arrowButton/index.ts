@@ -1,4 +1,3 @@
-import * as styles from './arrowButton.module.css';
-import './arrowButton';
+import ArrowButton from './ArrowButton';
 
-export default styles;
+export default ArrowButton;

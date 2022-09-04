@@ -1,4 +1,3 @@
-import * as styles from './button.module.css';
-import './button';
+import Button from './Button';
 
-export default styles;
+export default Button;

@@ -1,22 +1,14 @@
-import template from './passwordForm.hbs';
-import passwordFormStyles from '../../modules/passwordForm';
-import passwordFormPageStyles from './passwordForm.module.css';
-import avatarStyles from '../../components/avatar';
-import buttonStyles from '../../components/button';
-import arrowButtonStyles from '../../components/arrowButton';
-import inputStyles from '../../components/input';
+import styles from './passwordForm.module.css';
+import renderDOM from '@/utils/helpers/renderDOM';
+import PasswordForm from '@/modules/PasswordForm';
+import ArrowButton from '@/components/ArrowButton';
 
 window.addEventListener('DOMContentLoaded', () => {
-  const app = document.querySelector('#app');
+  const passwordForm = new PasswordForm({ props: {} });
+  const arrowButton = new ArrowButton({ props: {} });
 
-  if (!app) throw new Error('no #app element');
+  const app = renderDOM('#app', passwordForm);
+  renderDOM('#app', arrowButton);
 
-  app.classList.add(passwordFormPageStyles.passwordFormPage);
-  app.innerHTML = template({
-    avatarStyles,
-    passwordFormStyles,
-    arrowButtonStyles,
-    buttonStyles,
-    inputStyles,
-  });
+  app.classList.add(String(styles.passwordFormPage));
 });

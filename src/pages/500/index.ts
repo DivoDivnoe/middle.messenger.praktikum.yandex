@@ -1,12 +1,10 @@
-import template from './500.hbs';
 import styles from './500.module.css';
-import errorStyles from '../../modules/errorMessage';
+import ErrorMessage from '@/modules/ErrorMessage';
+import renderDOM from '@/utils/helpers/renderDOM';
 
 window.addEventListener('DOMContentLoaded', () => {
-  const app = document.querySelector('#app');
+  const errorMessage = new ErrorMessage({ props: { errorCode: 500, errorText: 'Мы уже фиксим' } });
+  const app = renderDOM('#app', errorMessage);
 
-  if (!app) throw new Error('no #app element');
-
-  app.classList.add(styles.serverErrorPage);
-  app.innerHTML = template({ errorStyles });
+  app.classList.add(String(styles.serverErrorPage));
 });

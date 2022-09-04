@@ -1,37 +1,25 @@
-import template from './profileWithPopup.hbs';
-import profileStyles from '../../modules/profile';
-import avatarFormStyles from '../../modules/avatarForm';
-import profilePageStyles from './profileWithPopup.module.css';
-import avatarStyles from '../../components/avatar';
-import buttonStyles from '../../components/button';
-import userDataStyles from '../../modules/userData';
-import arrowButtonStyles from '../../components/arrowButton';
-import inputStyles from '../../components/input';
+import styles from './profileWithPopup.module.css';
+import renderDOM from '@/utils/helpers/renderDOM';
+import ArrowButton from '@/components/ArrowButton';
+import { UserProps } from '@/modules/UserData/UserData';
+import Profile from '@/modules/Profile';
+import AvatarForm from '@/modules/AvatarForm';
+
+const mockUser: UserProps = {
+  email: 'some.email@gmail.com',
+  login: 'login',
+  first_name: 'Andrey',
+  second_name: 'Ivanov',
+};
 
 window.addEventListener('DOMContentLoaded', () => {
-  const app = document.querySelector('#app');
+  const profile = new Profile({ props: { user: mockUser } });
+  const arrowButton = new ArrowButton({ props: {} });
+  const avatarForm = new AvatarForm({ props: {} });
 
-  if (!app) throw new Error('no #app element');
+  const app = renderDOM('#app', profile);
+  renderDOM('#app', arrowButton);
+  renderDOM('#app', avatarForm);
 
-  app.classList.add(profilePageStyles.profilePage);
-
-  const user = {
-    login: 'Andrey',
-    name: 'Andrey',
-    secondName: 'Ivanov',
-    email: 'andrey.ivanov@gmail.ru',
-    phone: '+7 (999) 999 99 99',
-    displayedName: 'Andrey',
-  };
-
-  app.innerHTML = template({
-    avatarStyles,
-    userDataStyles,
-    profileStyles,
-    arrowButtonStyles,
-    avatarFormStyles,
-    inputStyles,
-    buttonStyles,
-    user,
-  });
+  app.classList.add(String(styles.profilePage));
 });

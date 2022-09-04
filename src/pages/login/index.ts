@@ -1,14 +1,10 @@
-import template from './login.hbs';
-import loginStyles from '../../modules/loginForm';
-import loginPageStyles from './login.module.css';
-import buttonStyles from '../../components/button';
-import inputStyles from '../../components/input';
+import styles from './login.module.css';
+import LoginForm from '@/modules/LoginForm';
+import renderDOM from '@/utils/helpers/renderDOM';
 
 window.addEventListener('DOMContentLoaded', () => {
-  const app = document.querySelector('#app');
+  const loginForm = new LoginForm({ props: {} });
+  const app = renderDOM('#app', loginForm);
 
-  if (!app) throw new Error('no #app element');
-
-  app.classList.add(loginPageStyles.loginPage);
-  app.innerHTML = template({ loginStyles, buttonStyles, inputStyles });
+  app.classList.add(String(styles.loginPage));
 });

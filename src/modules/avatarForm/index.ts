@@ -1,5 +1,3 @@
-import * as styles from './avatarForm.module.css';
-import './avatarForm';
-import '../../helpers/condition';
+import AvatarForm from './AvatarForm';
 
-export default styles;
+export default AvatarForm;

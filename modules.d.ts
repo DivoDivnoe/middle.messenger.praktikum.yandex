@@ -1,13 +1,19 @@
 // declaration.d.ts
 
-// import type { Transformer } from 'handlebars/types/index';
-
 declare module '*.module.css' {
-  const content: any;
+  const content: Record<string, string>;
   export default content;
 }
 
 declare module '*.hbs' {
-  const content: any;
+  import { TemplateDelegate } from 'handlebars';
+
+  const content: TemplateDelegate;
   export default content;
+}
+
+declare module 'handlebars/dist/handlebars.runtime' {
+  import Handlebars from 'handlebars';
+
+  export default Handlebars;
 }

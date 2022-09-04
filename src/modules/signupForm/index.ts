@@ -1,4 +1,3 @@
-import * as signupStyles from './signupForm.module.css';
-import './signupForm';
+import SignupForm from './SignupForm';
 
-export default signupStyles;
+export default SignupForm;

@@ -1,4 +1,3 @@
-import * as errorStyles from './errorMessage.module.css';
-import './errorMessage';
+import ErrorMessage from './ErrorMessage';
 
-export default errorStyles;
+export default ErrorMessage;

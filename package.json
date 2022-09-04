@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
-    "dev": "parcel ./src/pages/login/index.html",
+    "dev": "parcel ./src/pages/signup/index.html",
     "build": "parcel build ./src/pages/{*,**/*}.html",
     "start": "npm run build && node ./server.js",
     "stylelint": "stylelint  \"**/*.css\" --fix",
@@ -37,6 +37,7 @@
     "husky": "8.0.1",
     "lint-staged": "13.0.3",
     "parcel": "2.7.0",
+    "parcel-resolver-tspaths": "0.0.9",
     "postcss": "8.4.16",
     "postcss-nested": "5.0.6",
     "prettier": "2.7.1",

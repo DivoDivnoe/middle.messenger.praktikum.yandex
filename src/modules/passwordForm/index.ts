@@ -1,4 +1,3 @@
-import * as styles from './passwordForm.module.css';
-import './passwordForm';
+import PasswordForm from './PasswordForm';
 
-export default styles;
+export default PasswordForm;

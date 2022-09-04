@@ -1,13 +1,10 @@
-import template from './404.hbs';
 import styles from './404.module.css';
-import errorStyles from '../../modules/errorMessage';
+import renderDOM from '@/utils/helpers/renderDOM';
+import ErrorMessage from '@/modules/ErrorMessage';
 
 window.addEventListener('DOMContentLoaded', () => {
-  const app = document.querySelector('#app');
+  const errorMessage = new ErrorMessage({ props: { errorCode: 404, errorText: 'Не туда попали' } });
+  const app = renderDOM('#app', errorMessage);
 
-  if (!app) throw new Error('no #app element');
-
-  app.classList.add(styles.notFoundPage);
-
-  app.innerHTML = template({ errorStyles });
+  app.classList.add(String(styles.notFoundPage));
 });

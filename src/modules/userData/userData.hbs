@@ -1,46 +1,46 @@
-<div class="{{userDataStyles.userData}} {{className}}">
-  <p class={{userDataStyles.item}}>
+<div class='{{styles.userData}} {{className}}'>
+  <p class={{styles.item}}>
     <label for='email'>Почта</label>
-    {{> input id='email' name='email' type='email' placeholder='Почта' required=true value=user.email disabled=isNotEditable }}
-    {{#if (not isNotEditable) }}
-      <span class={{userDataStyles.errorMessage}}>Введите почту</span>
+    {{{emailInput}}}
+    {{#if isEditable}}
+      <span class={{styles.errorMessage}}>Введите почту</span>
     {{/if}}
   </p>
 
-  <p class={{userDataStyles.item}}>
+  <p class={{styles.item}}>
     <label for='login'>Логин</label>
-    {{> input id='login' name='login' type='text' placeholder='Логин' required=true value=user.login disabled=isNotEditable }}
-    {{#if (not isNotEditable) }}
-      <span class={{userDataStyles.errorMessage}}>Введите логин</span>
+    {{{loginInput}}}
+    {{#if isEditable}}
+      <span class={{styles.errorMessage}}>Введите логин</span>
     {{/if}}
   </p>
 
-  <p class={{userDataStyles.item}}>
+  <p class={{styles.item}}>
     <label for='first_name'>Имя</label>
-    {{> input id='first_name' name='first_name' type='text' placeholder='Имя' required=true value=user.name disabled=isNotEditable }}
-    {{#if (not isNotEditable) }}
-      <span class={{userDataStyles.errorMessage}}>Введите имя</span>
+    {{{firstNameInput}}}
+    {{#if isEditable}}
+      <span class={{styles.errorMessage}}>Введите имя</span>
     {{/if}}
   </p>
 
-  <p class={{userDataStyles.item}}>
+  <p class={{styles.item}}>
     <label for='second_name'>Фамилия</label>
-    {{> input id='second_name' name='second_name' type='text' placeholder='Фамилия' required=true value=user.secondName disabled=isNotEditable }}
-    {{#if (not isNotEditable) }}
-      <span class={{userDataStyles.errorMessage}}>Введите фамилию</span>
+    {{{secondNameInput}}}
+    {{#if isEditable}}
+      <span class={{styles.errorMessage}}>Введите фамилию</span>
     {{/if}}
   </p>
 
-  <p class={{userDataStyles.item}}>
+  <p class={{styles.item}}>
     <label for='display_name'>Имя в чате</label>
-    {{> input id='display_name' name='display_name' type='text' placeholder='Имя в чате' required=true value=user.displayedName disabled=isNotEditable }}
-    {{#if (not isNotEditable) }}
-      <span class={{userDataStyles.errorMessage}}>Введите имя в чате</span>
+    {{{displayNameInput}}}
+    {{#if isEditable}}
+      <span class={{styles.errorMessage}}>Введите имя в чате</span>
     {{/if}}
   </p>
 
-  <p class={{userDataStyles.item}}>
+  <p class={{styles.item}}>
     <label for='phone'>Телефон</label>
-    {{> input id='phone' name='phone' type='text' placeholder='Телефон' required=false value=user.phone disabled=isNotEditable }}
+    {{{phoneInput}}}
   </p>
 </div>

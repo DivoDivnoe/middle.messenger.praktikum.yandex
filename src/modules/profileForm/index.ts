@@ -1,4 +1,3 @@
-import * as styles from './profileForm.module.css';
-import './profileForm';
+import ProfileForm from './ProfileForm';
 
-export default styles;
+export default ProfileForm;

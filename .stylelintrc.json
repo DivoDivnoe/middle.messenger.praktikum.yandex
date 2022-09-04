@@ -5,5 +5,6 @@
     "selector-class-pattern": "^.*$",
     "string-quotes": "single",
     "color-hex-length": "long"
-  }
+  },
+  "ignoreFiles": ["dist/*"]
 }

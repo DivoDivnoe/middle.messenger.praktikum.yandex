@@ -1,14 +1,10 @@
-import template from './signup.hbs';
-import signupStyles from '../../modules/signupForm';
-import signupPageStyles from './signup.module.css';
-import buttonStyles from '../../components/button';
-import inputStyles from '../../components/input';
+import styles from './signup.module.css';
+import renderDOM from '@/utils/helpers/renderDOM';
+import SignupForm from '@/modules/SignupForm';
 
 window.addEventListener('DOMContentLoaded', () => {
-  const app = document.querySelector('#app');
+  const signupForm = new SignupForm({ props: {} });
+  const app = renderDOM('#app', signupForm);
 
-  if (!app) throw new Error('no #app element');
-
-  app.classList.add(signupPageStyles.signupPage);
-  app.innerHTML = template({ signupStyles, buttonStyles, inputStyles });
+  app.classList.add(String(styles.signupPage));
 });
