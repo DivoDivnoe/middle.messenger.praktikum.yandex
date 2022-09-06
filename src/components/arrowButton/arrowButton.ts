@@ -3,11 +3,7 @@ import template from './ArrowButton.hbs';
 import styles from './ArrowButton.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 
-type BaseArrowButtonProps = {
-  styles: Record<string, string>;
-};
-
-class ArrowButton extends BaseComponent<BaseArrowButtonProps> {
+class ArrowButton extends BaseComponent {
   constructor({ listeners = {} }: ComponentProps) {
     super({ props: { styles }, listeners });
   }

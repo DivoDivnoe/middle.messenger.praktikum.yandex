@@ -9,16 +9,7 @@ import { InputType } from '@/components/Input/Input';
 import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
 
-type BasePasswordFormProps = {
-  styles: Record<string, string>;
-  avatar: Avatar;
-  button: Button;
-  oldPasswordInput: Input;
-  newPasswordInput: Input;
-  newPasswordExtraInput: Input;
-};
-
-class PasswordForm extends BaseComponent<BasePasswordFormProps> {
+class PasswordForm extends BaseComponent {
   constructor({ listeners = {} }: ComponentProps) {
     const avatar = PasswordForm._initAvatar();
     const button = PasswordForm._initButton();

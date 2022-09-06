@@ -1,6 +1,6 @@
-import BaseComponent, { DefaultProps } from '../components/BaseComponent';
+import BaseComponent from '../components/BaseComponent';
 
-const renderDOM = <T extends DefaultProps>(query: string, block: BaseComponent<T>): Element => {
+const renderDOM = (query: string, block: BaseComponent): Element => {
   const root = document.querySelector(query);
 
   if (!root) {

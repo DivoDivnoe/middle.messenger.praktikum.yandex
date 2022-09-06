@@ -8,18 +8,11 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import '../../utils/helpers/condition';
 
-type BaseAvatarFormProps = {
-  styles: Record<string, string>;
-  button: Button;
-  input: Input;
-  isError: boolean;
-};
-
 type AvatarFormProps = {
   isError?: boolean;
 };
 
-class AvatarForm extends BaseComponent<BaseAvatarFormProps> {
+class AvatarForm extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<AvatarFormProps>) {
     const { isError = false } = props;
     const button = AvatarForm._initButton();

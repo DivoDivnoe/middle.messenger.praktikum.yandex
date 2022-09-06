@@ -8,14 +8,6 @@ export enum AvatarSize {
   LARGE = 'large',
 }
 
-type BaseAvatarProps = {
-  className: string;
-  size: AvatarSize;
-  styles: Record<string, string>;
-  isEditable: boolean;
-  src?: string;
-};
-
 type AvatarProps = {
   className?: string;
   size?: AvatarSize;
@@ -23,7 +15,7 @@ type AvatarProps = {
   isEditable?: boolean;
 };
 
-class Avatar extends BaseComponent<BaseAvatarProps> {
+class Avatar extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<AvatarProps>) {
     const { className = '', size = AvatarSize.SMALL, isEditable = false } = props;
     const avatarProps = {

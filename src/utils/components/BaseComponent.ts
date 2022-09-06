@@ -3,13 +3,13 @@ import deepClone from '../helpers/deepClone';
 import EventEmitter, { CallbackType } from './EventEmitter';
 import { nanoid } from 'nanoid';
 
-export type DefaultProps = Record<string, unknown>;
+export type PropsTypes = Record<string, unknown>;
 
 export type ListenersType = Record<string, CallbackType[]>;
-type ChildrenType = Record<string, BaseComponent>;
+type ChildrenType = Record<string, { name: string; element: BaseComponent }>;
 
-export interface ComponentProps<PropsTypes = Record<string, never>> {
-  props: PropsTypes;
+export interface ComponentProps<T = Record<string, never>> {
+  props: T;
   listeners?: ListenersType;
 }
 
@@ -20,7 +20,7 @@ enum EventType {
   UPDATE = 'update',
 }
 
-class BaseComponent<PropsTypes extends DefaultProps = Record<string, never>> {
+class BaseComponent {
   private _eventEmitter: EventEmitter;
   private _template: TemplateDelegate;
   private _element: Element;
@@ -56,7 +56,7 @@ class BaseComponent<PropsTypes extends DefaultProps = Record<string, never>> {
 
         this._children = {
           ...this._children,
-          [id]: value,
+          [id]: { name: key, element: value },
         };
       } else {
         this._props = {
@@ -79,14 +79,17 @@ class BaseComponent<PropsTypes extends DefaultProps = Record<string, never>> {
     // paste children
     for (const [id, child] of Object.entries(this._children)) {
       const curSpan = newElement.querySelector(`[data-id="${id}"]`)!;
-      curSpan.replaceWith(child.getContent());
+      curSpan.replaceWith(child.element.getContent());
     }
 
     if (this._element) {
+      this._subscribe(false);
       this._element.replaceWith(newElement);
     }
 
     this._element = newElement;
+
+    this._subscribe();
 
     this._eventEmitter.emit(EventType.RENDER);
   }
@@ -119,8 +122,6 @@ class BaseComponent<PropsTypes extends DefaultProps = Record<string, never>> {
   };
 
   private _componentDidRender = (): void => {
-    this._subscribe();
-
     this.componentDidRender();
   };
 
@@ -143,14 +144,16 @@ class BaseComponent<PropsTypes extends DefaultProps = Record<string, never>> {
     this._eventEmitter.on(EventType.UPDATE, this._componentDidUpdate);
   }
 
-  private _subscribe(): void {
+  private _subscribe(addListeners = true): void {
     const events = Object.keys(this._listeners);
 
     for (const evt of events) {
       const callbacks = this._listeners[evt]!;
 
+      const method = addListeners ? 'addEventListener' : 'removeEventListener';
+
       for (const callback of callbacks) {
-        this._element.addEventListener(evt, callback);
+        this._element[method](evt, callback);
       }
     }
   }
@@ -183,7 +186,15 @@ class BaseComponent<PropsTypes extends DefaultProps = Record<string, never>> {
   public dispatchComponentDidMount(): void {
     this._eventEmitter.emit(EventType.MOUNT);
 
-    Object.values(this._children).forEach((child) => child.dispatchComponentDidMount());
+    Object.values(this._children).forEach((child) => child.element.dispatchComponentDidMount());
+  }
+
+  protected getChild(key: string): BaseComponent | null {
+    const child = Object.values(this._children).find((item) => item.name === key);
+
+    if (!child) return null;
+
+    return child.element;
   }
 }
 

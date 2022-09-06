@@ -13,17 +13,6 @@ export enum InputType {
   FILE = 'file',
 }
 
-type BaseInputProps = {
-  id?: string;
-  type: string;
-  styles: Record<string, string>;
-  placeholder?: string;
-  name?: string;
-  value: string;
-  required: boolean;
-  disabled: boolean;
-};
-
 type InputProps = {
   id?: string;
   type?: string;
@@ -34,7 +23,7 @@ type InputProps = {
   disabled?: boolean;
 };
 
-class Input extends BaseComponent<BaseInputProps> {
+class Input extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<InputProps>) {
     const { type = InputType.DATE, value = '', required = false, disabled = false } = props;
 

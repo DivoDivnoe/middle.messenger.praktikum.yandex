@@ -7,14 +7,7 @@ import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 
-type BaseLoginFormProps = {
-  styles: Record<string, string>;
-  button: Button;
-  loginInput: Input;
-  passwordInput: Input;
-};
-
-class LoginForm extends BaseComponent<BaseLoginFormProps> {
+class LoginForm extends BaseComponent {
   constructor({ listeners = {} }: ComponentProps) {
     const button = LoginForm._initButton();
     const loginInput = LoginForm._initLoginInput();

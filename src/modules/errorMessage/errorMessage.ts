@@ -3,18 +3,12 @@ import template from './ErrorMessage.hbs';
 import styles from './ErrorMessage.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 
-type BaseErrorMessageProps = {
-  errorCode: number;
-  errorText: string;
-  styles: Record<string, string>;
-};
-
 type ErrorMessageProps = {
   errorCode: number;
   errorText: string;
 };
 
-class ErrorMessage extends BaseComponent<BaseErrorMessageProps> {
+class ErrorMessage extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<ErrorMessageProps>) {
     super({ props: { ...props, styles }, listeners });
   }

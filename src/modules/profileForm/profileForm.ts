@@ -9,25 +9,18 @@ import { UserProps } from '../UserData/UserData';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 
-type BaseProfileFormProps = {
-  styles: Record<string, string>;
-  avatar: Avatar;
-  userData: UserData;
-  button: Button;
-};
-
 type ProfileFormProps = {
   user: UserProps;
 };
 
-class ProfileForm extends BaseComponent<BaseProfileFormProps> {
+class ProfileForm extends BaseComponent {
   constructor({ props: { user }, listeners = {} }: ComponentProps<ProfileFormProps>) {
     const avatar = ProfileForm._initAvatar();
     const userData = ProfileForm._initUserData(user);
     const button = ProfileForm._initButton();
 
     super({
-      props: { styles, avatar, userData, button },
+      props: { styles, avatar, userData, button, user },
       listeners,
     });
   }
@@ -69,6 +62,15 @@ class ProfileForm extends BaseComponent<BaseProfileFormProps> {
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  protected override componentDidUpdate(
+    oldTarget: ProfileFormProps,
+    target: ProfileFormProps,
+  ): void {
+    if (oldTarget.user !== target.user) {
+      this.getChild('userData')?.updateProps({ user: target.user });
+    }
   }
 }
 

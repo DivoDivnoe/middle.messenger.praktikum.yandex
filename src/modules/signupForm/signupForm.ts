@@ -7,18 +7,6 @@ import { InputType } from '@/components/Input/Input';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 
-type BaseSignupFormProps = {
-  styles: Record<string, string>;
-  emailInput: Input;
-  loginInput: Input;
-  firstNameInput: Input;
-  secondNameInput: Input;
-  phoneInput: Input;
-  passwordInput: Input;
-  passwordExtraInput: Input;
-  button: Button;
-};
-
 type InputProps = {
   id: string;
   name: string;
@@ -27,7 +15,7 @@ type InputProps = {
   required: boolean;
 };
 
-class SignupForm extends BaseComponent<BaseSignupFormProps> {
+class SignupForm extends BaseComponent {
   private static _inputsProps: InputProps[] = [
     {
       id: 'email',

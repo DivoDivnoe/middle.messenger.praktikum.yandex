@@ -14,18 +14,6 @@ export type UserProps = {
   phone?: string;
 };
 
-type BaseUserDataProps = {
-  styles: Record<string, string>;
-  emailInput: Input;
-  loginInput: Input;
-  firstNameInput: Input;
-  secondNameInput: Input;
-  displayNameInput: Input;
-  phoneInput: Input;
-  isEditable: boolean;
-  className: string;
-};
-
 type UserDataProps = {
   isEditable?: boolean;
   user: UserProps;
@@ -40,7 +28,7 @@ type InputProps = {
   required: boolean;
 };
 
-class UserData extends BaseComponent<BaseUserDataProps> {
+class UserData extends BaseComponent {
   private static _inputsProps: InputProps[] = [
     {
       id: 'email',
@@ -102,6 +90,7 @@ class UserData extends BaseComponent<BaseUserDataProps> {
         displayNameInput: displayNameInput!,
         phoneInput: phoneInput!,
         isEditable,
+        user,
         className,
       },
       listeners,
@@ -124,6 +113,36 @@ class UserData extends BaseComponent<BaseUserDataProps> {
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  protected override componentDidUpdate(oldTarget: UserDataProps, target: UserDataProps): void {
+    if (oldTarget.user === target.user) return;
+
+    const [oldUser, newUser] = [oldTarget.user, target.user];
+
+    if (oldUser.email !== newUser.email) {
+      this.getChild('emailInput')?.updateProps({ value: newUser.email });
+    }
+
+    if (oldUser.login !== newUser.login) {
+      this.getChild('loginInput')?.updateProps({ value: newUser.login });
+    }
+
+    if (oldUser.first_name !== newUser.first_name) {
+      this.getChild('firstNameInput')?.updateProps({ value: newUser.first_name });
+    }
+
+    if (oldUser.second_name !== newUser.second_name) {
+      this.getChild('secondNameInput')?.updateProps({ value: newUser.second_name });
+    }
+
+    if (oldUser.display_name !== newUser.display_name) {
+      this.getChild('displayNameInput')?.updateProps({ value: newUser.display_name });
+    }
+
+    if (oldUser.phone !== newUser.phone) {
+      this.getChild('phoneInput')?.updateProps({ value: newUser.phone });
+    }
   }
 }
 

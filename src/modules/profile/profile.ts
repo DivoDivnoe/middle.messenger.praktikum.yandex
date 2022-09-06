@@ -7,23 +7,17 @@ import { AvatarSize } from '@/components/Avatar/Avatar';
 import UserData from '../UserData';
 import { UserProps } from '../UserData/UserData';
 
-type BaseProfileProps = {
-  styles: Record<string, string>;
-  avatar: Avatar;
-  userData: UserData;
-};
-
 type ProfileProps = {
   user: UserProps;
 };
 
-class Profile extends BaseComponent<BaseProfileProps> {
+class Profile extends BaseComponent {
   constructor({ props: { user }, listeners = {} }: ComponentProps<ProfileProps>) {
     const avatar = Profile._initAvatar();
     const userData = Profile._initUserData(user);
 
     super({
-      props: { styles, avatar, userData },
+      props: { styles, avatar, userData, user },
       listeners,
     });
   }
@@ -54,6 +48,12 @@ class Profile extends BaseComponent<BaseProfileProps> {
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  protected override componentDidUpdate(oldTarget: ProfileProps, target: ProfileProps): void {
+    if (oldTarget.user !== target.user) {
+      this.getChild('userData')?.updateProps({ user: target.user });
+    }
   }
 }
 
