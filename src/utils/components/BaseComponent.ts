@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 export type PropsTypes = Record<string, unknown>;
 
 export type ListenersType = Record<string, CallbackType[]>;
-type ChildrenType = Record<string, { name: string; element: BaseComponent }>;
+type ChildrenType = Record<string, BaseComponent>;
 
 export interface ComponentProps<T = Record<string, never>> {
   props: T;
@@ -23,10 +23,11 @@ enum EventType {
 class BaseComponent {
   private _eventEmitter: EventEmitter;
   private _template: TemplateDelegate;
-  private _element: Element;
-  private _props: PropsTypes;
+  private _element: HTMLElement;
   private _listeners: ListenersType;
   private _children: ChildrenType;
+  protected _props: PropsTypes;
+  public id = nanoid(6);
 
   constructor({
     props = {} as PropsTypes,
@@ -34,52 +35,43 @@ class BaseComponent {
   }: ComponentProps<PropsTypes>) {
     this._template = this.getTemplate();
     this._listeners = listeners;
+    this._children = {};
 
-    this._initPropsAndChildren(props);
     this._initEventEmitter();
-
-    this._eventEmitter.emit(EventType.INIT);
+    this._eventEmitter.emit(EventType.INIT, props);
   }
 
-  private _initPropsAndChildren(props: PropsTypes) {
-    this._props = {} as PropsTypes;
-    this._children = {} as ChildrenType;
+  private _init = (props: PropsTypes): void => {
+    this._initProps(props);
+    this.init();
 
-    for (const [key, value] of Object.entries(props)) {
-      if (value instanceof BaseComponent) {
-        const id = nanoid();
+    this._eventEmitter.emit(EventType.RENDER);
+  };
 
-        this._props = {
-          ...this._props,
-          [key]: `<span data-id="${id}"></span>`,
-        };
+  // eslint-disable-next-line
+  protected init(): void {}
 
-        this._children = {
-          ...this._children,
-          [id]: { name: key, element: value },
-        };
-      } else {
-        this._props = {
-          ...this._props,
-          [key]: value,
-        };
-      }
+  _initProps(props: PropsTypes): void {
+    this._props = this._makePropsProxy(props);
+  }
+
+  private _render = (): void => {
+    const children = {} as Record<string, string>;
+
+    for (const [name, component] of Object.entries(this._children)) {
+      children[name] = `<span data-id="${component.id}"></span>`;
     }
 
-    this._props = this._makePropsProxy(this._props);
-  }
-
-  private _render(): void {
     // create element
     const div = document.createElement('div');
-    div.innerHTML = this._template({ ...this._props });
+    div.innerHTML = this._template({ ...this._props, ...children });
 
-    const newElement = div.firstElementChild!;
+    const newElement = div.firstElementChild as HTMLElement;
 
     // paste children
-    for (const [id, child] of Object.entries(this._children)) {
-      const curSpan = newElement.querySelector(`[data-id="${id}"]`)!;
-      curSpan.replaceWith(child.element.getContent());
+    for (const child of Object.values(this._children)) {
+      const curSpan = newElement.querySelector(`[data-id="${child.id}"]`)!;
+      curSpan.replaceWith(child.getContent());
     }
 
     if (this._element) {
@@ -90,9 +82,7 @@ class BaseComponent {
     this._element = newElement;
 
     this._subscribe();
-
-    this._eventEmitter.emit(EventType.RENDER);
-  }
+  };
 
   private _makePropsProxy(props: PropsTypes) {
     return new Proxy(props, {
@@ -115,31 +105,21 @@ class BaseComponent {
     });
   }
 
-  private _componentDidInit = (): void => {
-    this.componentDidInit();
-
-    this._render();
-  };
-
-  private _componentDidRender = (): void => {
-    this.componentDidRender();
-  };
-
   private _componentDidMount = (): void => {
     this.componentDidMount();
   };
 
   private _componentDidUpdate = (oldTarget: PropsTypes, target: PropsTypes): void => {
-    this.componentDidUpdate(oldTarget, target);
-
-    this._render();
+    if (this.componentDidUpdate(oldTarget, target)) {
+      this._eventEmitter.emit(EventType.RENDER);
+    }
   };
 
   private _initEventEmitter(): void {
     this._eventEmitter = new EventEmitter();
 
-    this._eventEmitter.on(EventType.INIT, this._componentDidInit);
-    this._eventEmitter.on(EventType.RENDER, this._componentDidRender);
+    this._eventEmitter.on(EventType.INIT, this._init);
+    this._eventEmitter.on(EventType.RENDER, this._render);
     this._eventEmitter.on(EventType.MOUNT, this._componentDidMount);
     this._eventEmitter.on(EventType.UPDATE, this._componentDidUpdate);
   }
@@ -158,7 +138,7 @@ class BaseComponent {
     }
   }
 
-  public getContent(): Element {
+  public getContent(): HTMLElement {
     return this._element;
   }
 
@@ -171,30 +151,35 @@ class BaseComponent {
   }
 
   // eslint-disable-next-line
-  protected componentDidInit(): void {}
-
-  // eslint-disable-next-line
-  protected componentDidRender(): void {}
-
-  // eslint-disable-next-line
   protected componentDidMount(): void {}
 
-  protected componentDidUpdate(oldTarget: PropsTypes, target: PropsTypes): void {
-    console.log(oldTarget, target);
+  protected componentDidUpdate(_oldTarget: PropsTypes, _target: PropsTypes): boolean {
+    return true;
   }
 
   public dispatchComponentDidMount(): void {
     this._eventEmitter.emit(EventType.MOUNT);
 
-    Object.values(this._children).forEach((child) => child.element.dispatchComponentDidMount());
+    Object.values(this._children).forEach((child) => child.dispatchComponentDidMount());
   }
 
   protected getChild(key: string): BaseComponent | null {
-    const child = Object.values(this._children).find((item) => item.name === key);
+    return this._children[key] || null;
+  }
 
-    if (!child) return null;
+  protected addChildren(children: Record<string, BaseComponent>) {
+    this._children = {
+      ...this._children,
+      ...children,
+    };
+  }
 
-    return child.element;
+  show() {
+    this.getContent().style.display = 'block';
+  }
+
+  hide() {
+    this.getContent().style.display = 'none';
   }
 }
 

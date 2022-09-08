@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
-    "dev": "parcel ./src/pages/profileWithPopup/index.html",
+    "dev": "parcel ./src/pages/signup/index.html",
     "build": "parcel build ./src/pages/{*,**/*}.html",
     "start": "npm run build && node ./server.js",
     "stylelint": "stylelint  \"**/*.css\" --fix",

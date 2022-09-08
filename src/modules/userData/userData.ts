@@ -77,23 +77,23 @@ class UserData extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<UserDataProps>) {
     const { user, isEditable = true, className = '' } = props;
 
-    const [emailInput, loginInput, firstNameInput, secondNameInput, displayNameInput, phoneInput] =
-      UserData._initInputs(user, !isEditable);
-
     super({
-      props: {
-        styles,
-        emailInput: emailInput!,
-        loginInput: loginInput!,
-        firstNameInput: firstNameInput!,
-        secondNameInput: secondNameInput!,
-        displayNameInput: displayNameInput!,
-        phoneInput: phoneInput!,
-        isEditable,
-        user,
-        className,
-      },
+      props: { styles, isEditable, user, className },
       listeners,
+    });
+  }
+
+  protected override init(): void {
+    const [emailInput, loginInput, firstNameInput, secondNameInput, displayNameInput, phoneInput] =
+      UserData._initInputs(this._props.user as UserProps, !this._props.isEditable);
+
+    this.addChildren({
+      emailInput: emailInput!,
+      loginInput: loginInput!,
+      firstNameInput: firstNameInput!,
+      secondNameInput: secondNameInput!,
+      displayNameInput: displayNameInput!,
+      phoneInput: phoneInput!,
     });
   }
 
@@ -115,9 +115,7 @@ class UserData extends BaseComponent {
     return template;
   }
 
-  protected override componentDidUpdate(oldTarget: UserDataProps, target: UserDataProps): void {
-    if (oldTarget.user === target.user) return;
-
+  protected override componentDidUpdate(oldTarget: UserDataProps, target: UserDataProps): boolean {
     const [oldUser, newUser] = [oldTarget.user, target.user];
 
     if (oldUser.email !== newUser.email) {
@@ -143,6 +141,8 @@ class UserData extends BaseComponent {
     if (oldUser.phone !== newUser.phone) {
       this.getChild('phoneInput')?.updateProps({ value: newUser.phone });
     }
+
+    return true;
   }
 }
 

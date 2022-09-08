@@ -15,10 +15,15 @@ type AvatarFormProps = {
 class AvatarForm extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<AvatarFormProps>) {
     const { isError = false } = props;
+
+    super({ props: { styles, isError }, listeners });
+  }
+
+  protected override init(): void {
     const button = AvatarForm._initButton();
     const input = AvatarForm._initInput();
 
-    super({ props: { styles, button, input, isError }, listeners });
+    this.addChildren({ button, input });
   }
 
   private static _initButton(): Button {

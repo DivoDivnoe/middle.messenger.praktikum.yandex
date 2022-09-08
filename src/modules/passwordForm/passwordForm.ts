@@ -11,16 +11,20 @@ import { AvatarSize } from '@/components/Avatar/Avatar';
 
 class PasswordForm extends BaseComponent {
   constructor({ listeners = {} }: ComponentProps) {
+    super({
+      props: { styles },
+      listeners,
+    });
+  }
+
+  protected override init(): void {
     const avatar = PasswordForm._initAvatar();
     const button = PasswordForm._initButton();
     const oldPasswordInput = PasswordForm._initOldPasswordInput();
     const newPasswordInput = PasswordForm._initNewPasswordInput();
     const newPasswordExtraInput = PasswordForm._initNewPasswordExtraInput();
 
-    super({
-      props: { styles, avatar, button, oldPasswordInput, newPasswordInput, newPasswordExtraInput },
-      listeners,
-    });
+    this.addChildren({ avatar, button, oldPasswordInput, newPasswordInput, newPasswordExtraInput });
   }
 
   private static _initAvatar(): Avatar {

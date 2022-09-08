@@ -9,11 +9,15 @@ import { InputType } from '@/components/Input/Input';
 
 class LoginForm extends BaseComponent {
   constructor({ listeners = {} }: ComponentProps) {
+    super({ props: { styles }, listeners });
+  }
+
+  protected override init(): void {
     const button = LoginForm._initButton();
     const loginInput = LoginForm._initLoginInput();
     const passwordInput = LoginForm._initPasswordInput();
 
-    super({ props: { styles, button, loginInput, passwordInput }, listeners });
+    this.addChildren({ button, loginInput, passwordInput });
   }
 
   private static _initButton(): Button {

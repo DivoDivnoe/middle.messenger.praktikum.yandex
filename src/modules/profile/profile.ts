@@ -13,13 +13,17 @@ type ProfileProps = {
 
 class Profile extends BaseComponent {
   constructor({ props: { user }, listeners = {} }: ComponentProps<ProfileProps>) {
-    const avatar = Profile._initAvatar();
-    const userData = Profile._initUserData(user);
-
     super({
-      props: { styles, avatar, userData, user },
+      props: { styles, user },
       listeners,
     });
+  }
+
+  protected override init(): void {
+    const avatar = Profile._initAvatar();
+    const userData = Profile._initUserData(this._props.user as UserProps);
+
+    this.addChildren({ avatar, userData });
   }
 
   private static _initAvatar(): Avatar {
@@ -50,10 +54,12 @@ class Profile extends BaseComponent {
     return template;
   }
 
-  protected override componentDidUpdate(oldTarget: ProfileProps, target: ProfileProps): void {
+  protected override componentDidUpdate(oldTarget: ProfileProps, target: ProfileProps): boolean {
     if (oldTarget.user !== target.user) {
       this.getChild('userData')?.updateProps({ user: target.user });
     }
+
+    return true;
   }
 }
 

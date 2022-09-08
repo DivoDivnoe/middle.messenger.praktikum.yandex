@@ -69,6 +69,10 @@ class SignupForm extends BaseComponent {
   ];
 
   constructor({ listeners = {} }: ComponentProps) {
+    super({ props: { styles }, listeners });
+  }
+
+  protected override init(): void {
     const [
       emailInput,
       loginInput,
@@ -81,19 +85,15 @@ class SignupForm extends BaseComponent {
 
     const button = SignupForm._initButton();
 
-    super({
-      props: {
-        styles,
-        button,
-        emailInput: emailInput!,
-        loginInput: loginInput!,
-        firstNameInput: firstNameInput!,
-        secondNameInput: secondNameInput!,
-        phoneInput: phoneInput!,
-        passwordInput: passwordInput!,
-        passwordExtraInput: passwordExtraInput!,
-      },
-      listeners,
+    this.addChildren({
+      button,
+      emailInput: emailInput!,
+      loginInput: loginInput!,
+      firstNameInput: firstNameInput!,
+      secondNameInput: secondNameInput!,
+      phoneInput: phoneInput!,
+      passwordInput: passwordInput!,
+      passwordExtraInput: passwordExtraInput!,
     });
   }
 

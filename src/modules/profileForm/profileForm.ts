@@ -15,14 +15,15 @@ type ProfileFormProps = {
 
 class ProfileForm extends BaseComponent {
   constructor({ props: { user }, listeners = {} }: ComponentProps<ProfileFormProps>) {
+    super({ props: { styles, user }, listeners });
+  }
+
+  protected override init(): void {
     const avatar = ProfileForm._initAvatar();
-    const userData = ProfileForm._initUserData(user);
+    const userData = ProfileForm._initUserData(this._props.user as UserProps);
     const button = ProfileForm._initButton();
 
-    super({
-      props: { styles, avatar, userData, button, user },
-      listeners,
-    });
+    this.addChildren({ avatar, userData, button });
   }
 
   private static _initAvatar(): Avatar {
@@ -67,10 +68,12 @@ class ProfileForm extends BaseComponent {
   protected override componentDidUpdate(
     oldTarget: ProfileFormProps,
     target: ProfileFormProps,
-  ): void {
+  ): boolean {
     if (oldTarget.user !== target.user) {
       this.getChild('userData')?.updateProps({ user: target.user });
     }
+
+    return true;
   }
 }
 
