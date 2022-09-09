@@ -1,0 +1,64 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  height: 71px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.container {
+  display: flex;
+  width: 290px;
+}
+
+.avatar {
+  margin-right: 10px;
+}
+
+.content {
+  max-width: 193px;
+}
+
+.top,
+.dialog {
+  display: flex;
+}
+
+.userName {
+  flex-grow: 1;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 13px;
+  text-overflow: ellipsis;
+}
+
+.date {
+  margin-left: 8px;
+  font-size: 9px;
+  line-height: 13px;
+}
+
+.userMessage {
+  flex-grow: 1;
+  font-size: 12px;
+  line-height: 15px;
+  color: var(--c-gray-0);
+  text-overflow: ellipsis;
+}
+
+.messages {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  line-height: 12px;
+  color: var(--c-white);
+  background-color: var(--c-primary);
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none;
+}
