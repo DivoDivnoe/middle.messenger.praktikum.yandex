@@ -1,21 +1,28 @@
 import { TemplateDelegate } from 'handlebars';
-import template from './AvatarForm.hbs';
-import styles from './AvatarForm.module.css';
+import template from './ChatItem.hbs';
+import styles from './ChatItem.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Avatar from '@/components/Avatar';
 import '@/utils/helpers/condition';
 
-type ChatItemProps = {
+export interface ChatItemProps {
   userName: string;
   date?: string;
   messageText?: string;
   newMessagesAmount?: number;
   src?: string;
-};
+  isActive?: boolean;
+}
 
 class ChatItem extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<ChatItemProps>) {
-    const { newMessagesAmount = 0, src = '', messageText = '', date = '' } = props;
+    const {
+      newMessagesAmount = 0,
+      src = '',
+      messageText = '',
+      date = '',
+      isActive = false,
+    } = props;
 
     super({
       props: {
@@ -25,6 +32,7 @@ class ChatItem extends BaseComponent {
         src,
         messageText,
         date,
+        isActive,
         isMessagesCounterHidden: newMessagesAmount === 0,
       },
       listeners,

@@ -7,12 +7,15 @@
   --c-black-transparent-0: rgb(0 0 0 / 40%);
   --c-black-transparent-1: rgb(0 0 0 / 25%);
   --c-black-transparent-2: rgb(0 0 0 / 14%);
+  --c-black-transparent-3: rgb(0 0 0 / 5%);
   --c-white: #ffffff;
   --c-gray-0: #999999;
   --c-gray-1: #eaeaea;
   --c-gray-2: #efefef;
   --c-gray-3: #fbfbfb;
+  --c-gray-4: #f8f8f8;
   --c-red: #ff2f2f;
+  --c-blue: #e4edfd;
 }
 
 html,

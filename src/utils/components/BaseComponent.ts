@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 export type PropsTypes = Record<string, unknown>;
 
 export type ListenersType = Record<string, CallbackType[]>;
-type ChildrenType = Record<string, BaseComponent>;
+type ChildrenType = Record<string, BaseComponent | BaseComponent[]>;
 
 export interface ComponentProps<T = Record<string, never>> {
   props: T;
@@ -56,10 +56,18 @@ class BaseComponent {
   }
 
   private _render = (): void => {
-    const children = {} as Record<string, string>;
+    const children = {} as Record<string, string | string[]>;
 
     for (const [name, component] of Object.entries(this._children)) {
-      children[name] = `<span data-id="${component.id}"></span>`;
+      if (Array.isArray(component)) {
+        children[name] = [] as string[];
+
+        for (const item of component) {
+          (children[name] as string[]).push(`<span data-id="${item.id}"></span>`);
+        }
+      } else {
+        children[name] = `<span data-id="${component.id}"></span>`;
+      }
     }
 
     // create element
@@ -70,8 +78,15 @@ class BaseComponent {
 
     // paste children
     for (const child of Object.values(this._children)) {
-      const curSpan = newElement.querySelector(`[data-id="${child.id}"]`)!;
-      curSpan.replaceWith(child.getContent());
+      if (Array.isArray(child)) {
+        for (const item of child) {
+          const curSpan = newElement.querySelector(`[data-id="${item.id}"]`)!;
+          curSpan.replaceWith(item.getContent());
+        }
+      } else {
+        const curSpan = newElement.querySelector(`[data-id="${child.id}"]`)!;
+        curSpan.replaceWith(child.getContent());
+      }
     }
 
     if (this._element) {
@@ -160,14 +175,22 @@ class BaseComponent {
   public dispatchComponentDidMount(): void {
     this._eventEmitter.emit(EventType.MOUNT);
 
-    Object.values(this._children).forEach((child) => child.dispatchComponentDidMount());
+    Object.values(this._children).forEach((child) => {
+      if (Array.isArray(child)) {
+        for (const item of child) {
+          item.dispatchComponentDidMount();
+        }
+      } else {
+        child.dispatchComponentDidMount();
+      }
+    });
   }
 
-  protected getChild(key: string): BaseComponent | null {
+  protected getChild(key: string): BaseComponent | BaseComponent[] | null {
     return this._children[key] || null;
   }
 
-  protected addChildren(children: Record<string, BaseComponent>) {
+  protected addChildren(children: Record<string, BaseComponent | BaseComponent[]>) {
     this._children = {
       ...this._children,
       ...children,

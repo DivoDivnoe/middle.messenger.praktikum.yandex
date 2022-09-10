@@ -1,14 +1,33 @@
 .wrapper {
-  display: flex;
-  align-items: center;
+  position: relative;
   height: 71px;
   padding-left: 10px;
   padding-right: 10px;
+  cursor: pointer;
+
+  &:hover {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--c-black-transparent-3);
+    }
+  }
 }
 
 .container {
   display: flex;
   width: 290px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-top: 1px solid var(--c-gray-1);
+
+  * {
+    flex-shrink: 0;
+  }
 }
 
 .avatar {
@@ -16,16 +35,25 @@
 }
 
 .content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.userName,
+.userMessage {
   max-width: 193px;
 }
 
 .top,
 .dialog {
   display: flex;
+  justify-content: space-between;
 }
 
 .userName {
   flex-grow: 1;
+  margin: 0 0 4px;
   font-size: 13px;
   font-weight: 600;
   line-height: 13px;
@@ -39,11 +67,15 @@
 }
 
 .userMessage {
-  flex-grow: 1;
+  width: 193px;
+  max-height: 30px;
+  margin: 0;
   font-size: 12px;
   line-height: 15px;
   color: var(--c-gray-0);
+  overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .messages {

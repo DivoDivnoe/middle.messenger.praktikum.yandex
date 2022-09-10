@@ -56,7 +56,7 @@ class Profile extends BaseComponent {
 
   protected override componentDidUpdate(oldTarget: ProfileProps, target: ProfileProps): boolean {
     if (oldTarget.user !== target.user) {
-      this.getChild('userData')?.updateProps({ user: target.user });
+      (this.getChild('userData') as BaseComponent)?.updateProps({ user: target.user });
     }
 
     return true;

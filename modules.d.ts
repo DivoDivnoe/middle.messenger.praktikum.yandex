@@ -17,3 +17,8 @@ declare module 'handlebars/dist/handlebars.runtime' {
 
   export default Handlebars;
 }
+
+declare module '*.svg' {
+  const content: string;
+  export default content;
+}

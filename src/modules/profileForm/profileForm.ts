@@ -70,7 +70,7 @@ class ProfileForm extends BaseComponent {
     target: ProfileFormProps,
   ): boolean {
     if (oldTarget.user !== target.user) {
-      this.getChild('userData')?.updateProps({ user: target.user });
+      (this.getChild('userData') as BaseComponent).updateProps({ user: target.user });
     }
 
     return true;
