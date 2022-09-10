@@ -1,0 +1,12 @@
+.title {
+  margin: 0 0 30px;
+  font-size: 12px;
+  line-height: 12px;
+  color: var(--c-gray-0);
+  text-align: center;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,8 +1,11 @@
 import styles from './chats.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
-import ContactsBlock from '@/modules/ContactsBlock/ContactsBlock';
+import ContactsBlock from '@/modules/ContactsBlock';
 import { ChatItemProps } from '@/modules/ChatItem/ChatItem';
 import image from '/static/avatar.svg';
+import MessagesBlock from '@/modules/MessagesBlock';
+import { ConversationBlockProps } from '@/modules/ConversationBlock/ConversationBlock';
+import { UserMessageType } from '@/components/Message/Message';
 
 const mockUsers: ChatItemProps[] = [
   {
@@ -17,9 +20,32 @@ const mockUsers: ChatItemProps[] = [
   },
 ];
 
+const mockMessagesData: ConversationBlockProps[] = [
+  {
+    date: '15 ноября',
+    messagesData: [
+      {
+        text: 'Привет! Сегодня хороший день, чтобы сгонять на пляж! Ай да со мной!',
+        userType: UserMessageType.INTERLOCUTOR,
+        time: '17:54',
+      },
+      {
+        text: 'Привет! Го',
+        userType: UserMessageType.DEFAULT,
+        time: '17:55',
+      },
+    ],
+  },
+];
+
 window.addEventListener('DOMContentLoaded', () => {
   const contactsBlock = new ContactsBlock({ props: { users: mockUsers } });
+  const messagesBlock = new MessagesBlock({
+    props: { isEmpty: false, src: image, userName: 'Vadim', data: mockMessagesData },
+  });
+
   const app = renderDOM('#app', contactsBlock);
+  renderDOM('#app', messagesBlock);
 
   app.classList.add(String(styles.chatsPage));
 });

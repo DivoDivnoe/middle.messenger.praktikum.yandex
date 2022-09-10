@@ -3,7 +3,7 @@ import template from './ArrowButton.hbs';
 import styles from './ArrowButton.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 
-enum ArrowButtonSide {
+export enum ArrowButtonSide {
   LEFT = 'left',
   RIGHT = 'right',
 }
