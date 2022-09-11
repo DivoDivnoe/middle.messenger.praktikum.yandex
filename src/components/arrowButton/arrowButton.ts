@@ -8,7 +8,7 @@ export enum ArrowButtonSide {
   RIGHT = 'right',
 }
 
-enum ArrowButtonType {
+export enum ArrowButtonType {
   DEFAULT = 'default',
   SIDE = 'side',
 }

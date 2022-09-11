@@ -9,20 +9,35 @@ import { InputType } from '@/components/Input/Input';
 import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
 
+type PasswordFormProps = {
+  onSubmit: (oldPassword: string, newPassword: string, newPasswordExtra: string) => void;
+};
+
 class PasswordForm extends BaseComponent {
-  constructor({ listeners = {} }: ComponentProps) {
+  private _old_password = '';
+  private _new_password = '';
+  private _new_password_extra = '';
+
+  constructor({ props: { onSubmit } }: ComponentProps<PasswordFormProps>) {
     super({
       props: { styles },
-      listeners,
+      listeners: {
+        submit: [
+          (evt) => {
+            evt.preventDefault();
+            onSubmit(this._old_password, this._new_password, this._new_password_extra);
+          },
+        ],
+      },
     });
   }
 
   protected override init(): void {
     const avatar = PasswordForm._initAvatar();
     const button = PasswordForm._initButton();
-    const oldPasswordInput = PasswordForm._initOldPasswordInput();
-    const newPasswordInput = PasswordForm._initNewPasswordInput();
-    const newPasswordExtraInput = PasswordForm._initNewPasswordExtraInput();
+    const oldPasswordInput = this._initOldPasswordInput();
+    const newPasswordInput = this._initNewPasswordInput();
+    const newPasswordExtraInput = this._initNewPasswordExtraInput();
 
     this.addChildren({ avatar, button, oldPasswordInput, newPasswordInput, newPasswordExtraInput });
   }
@@ -48,7 +63,7 @@ class PasswordForm extends BaseComponent {
     return button;
   }
 
-  private static _initOldPasswordInput(): Input {
+  private _initOldPasswordInput(): Input {
     const input = new Input({
       props: {
         id: 'old_password',
@@ -57,12 +72,19 @@ class PasswordForm extends BaseComponent {
         placeholder: 'Старый пароль',
         required: true,
       },
+      listeners: {
+        change: [
+          (evt) => {
+            this._old_password = evt.target.value;
+          },
+        ],
+      },
     });
 
     return input;
   }
 
-  private static _initNewPasswordInput(): Input {
+  private _initNewPasswordInput(): Input {
     const input = new Input({
       props: {
         id: 'new_password',
@@ -71,12 +93,19 @@ class PasswordForm extends BaseComponent {
         placeholder: 'Новый пароль',
         required: true,
       },
+      listeners: {
+        change: [
+          (evt) => {
+            this._new_password = evt.target.value;
+          },
+        ],
+      },
     });
 
     return input;
   }
 
-  private static _initNewPasswordExtraInput(): Input {
+  private _initNewPasswordExtraInput(): Input {
     const input = new Input({
       props: {
         id: 'new_password_extra',
@@ -84,6 +113,13 @@ class PasswordForm extends BaseComponent {
         type: InputType.PASSWORD,
         placeholder: 'Повторите новый пароль',
         required: true,
+      },
+      listeners: {
+        change: [
+          (evt) => {
+            this._new_password_extra = evt.target.value;
+          },
+        ],
       },
     });
 
