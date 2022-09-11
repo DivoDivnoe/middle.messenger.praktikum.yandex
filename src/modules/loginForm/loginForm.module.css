@@ -7,32 +7,8 @@
   color: var(--c-red);
 }
 
-.error {
-  .errorMessage {
-    display: inline;
-  }
-}
-
-.formItem {
-  position: relative;
-  margin-top: 0;
-  margin-bottom: 26px;
-  border-bottom: 1px solid var(--c-primary);
-
-  label {
-    font-size: 9px;
-    line-height: 9px;
-    color: var(--c-gray-0);
-  }
-
-  input {
-    display: block;
-    width: 100%;
-  }
-
-  .errorMessage {
-    top: calc(100% + 8px);
-  }
+.formItem .errorMessage {
+  top: calc(100% + 8px);
 }
 
 .loginForm {
@@ -62,6 +38,28 @@
   button {
     margin-top: auto;
     margin-bottom: 14px;
+  }
+}
+
+.formItem {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--c-primary);
+
+  label {
+    font-size: 9px;
+    line-height: 9px;
+    color: var(--c-gray-0);
+  }
+
+  input {
+    display: block;
+    width: 100%;
+
+    &:global(.error) + .errorMessage {
+      display: inline;
+    }
   }
 }
 

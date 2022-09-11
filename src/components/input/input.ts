@@ -59,9 +59,13 @@ class Input extends BaseComponent {
     return template;
   }
 
-  public validate() {
+  public validate(): boolean {
     if (this._props.validationRule) {
-      return (this._props.validationRule as RegExp).test(this._props.value as string);
+      const isValid = (this._props.validationRule as RegExp).test(this._props.value as string);
+
+      this.getContent().classList.toggle('error', !isValid);
+
+      return isValid;
     }
 
     return true;

@@ -23,7 +23,10 @@ class LoginForm extends BaseComponent {
         submit: [
           (evt) => {
             evt.preventDefault();
-            onSubmit(this._login as string, this._password as string);
+
+            if (this._validate()) {
+              onSubmit(this._login as string, this._password as string);
+            }
           },
         ],
       },
@@ -49,16 +52,10 @@ class LoginForm extends BaseComponent {
     return button;
   }
 
-  private _validateInput = (input: Input) => {
-    const isValidInput = input.validate();
-    input
-      .getContent()
-      .closest(`.${styles.formItem}`)
-      ?.classList.toggle(String(styles.error), !isValidInput);
-  };
-
   private _initLoginInput(value = ''): Input {
-    const validate = (): void => this._validateInput(input);
+    const validate = (): void => {
+      input.validate();
+    };
 
     const input = new Input({
       props: {
@@ -85,7 +82,9 @@ class LoginForm extends BaseComponent {
   }
 
   private _initPasswordInput(value = ''): Input {
-    const validate = (): void => this._validateInput(input);
+    const validate = (): void => {
+      input.validate();
+    };
 
     const input = new Input({
       props: {
@@ -109,6 +108,13 @@ class LoginForm extends BaseComponent {
     });
 
     return input;
+  }
+
+  private _validate(): boolean {
+    return (
+      (this.getChild('loginInput') as Input).validate() &&
+      (this.getChild('passwordInput') as Input).validate()
+    );
   }
 
   protected override getTemplate(): TemplateDelegate {

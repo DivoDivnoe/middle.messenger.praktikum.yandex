@@ -4,7 +4,13 @@
     "color-hex-case": "lower",
     "selector-class-pattern": "^.*$",
     "string-quotes": "single",
-    "color-hex-length": "long"
+    "color-hex-length": "long",
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ]
   },
   "ignoreFiles": ["dist/*"]
 }
