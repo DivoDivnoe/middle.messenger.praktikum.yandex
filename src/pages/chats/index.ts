@@ -1,11 +1,11 @@
 import styles from './chats.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
-import ContactsBlock from '../../modules/ContactsBlock';
-import { ChatItemProps } from '../../modules/ChatItem/ChatItem';
+import ContactsBlock from '@/modules/ContactsBlock';
+import { ChatItemProps } from '@/modules/ChatItem/ChatItem';
 import image from '/static/avatar.svg';
-import MessagesBlock from '../../modules/MessagesBlock';
-import { ConversationBlockProps } from '../../modules/ConversationBlock/ConversationBlock';
-import { UserMessageType } from '../../components/Message/Message';
+import MessagesBlock from '@/modules/MessagesBlock';
+import { ConversationBlockProps } from '@/modules/ConversationBlock/ConversationBlock';
+import { UserMessageType } from '@/components/Message/Message';
 
 const mockUsers: ChatItemProps[] = [
   {

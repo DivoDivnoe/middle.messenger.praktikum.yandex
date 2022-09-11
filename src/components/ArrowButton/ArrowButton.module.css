@@ -1,0 +1,48 @@
+.button {
+  border: none;
+  cursor: pointer;
+
+  &.default {
+    padding: 0;
+    background-color: none;
+    border-radius: 50%;
+  }
+
+  .arrow {
+    --size: 28px;
+
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: var(--c-primary) url('/static/arrow_left.svg') center center no-repeat;
+  }
+
+  &:hover {
+    .arrow {
+      background-color: var(--c-primary-hover);
+    }
+  }
+
+  &:active {
+    .arrow {
+      background-color: var(--c-primary-active);
+    }
+  }
+}
+
+.side {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 64px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--c-gray-3);
+  border-right: 1px solid var(--c-gray-1);
+}
+
+.right {
+  transform: scaleX(-1);
+}

@@ -1,0 +1,13 @@
+{{#if isEditable}}
+  <div class='{{className}} {{styles.avatar}} {{lookup styles size}} {{styles.isEditable}}'>
+    {{#if src}}
+      <img src='{{src}}' alt='your avatar' />
+    {{/if}}
+  </div>
+{{else}}
+  <div class='{{className}} {{styles.avatar}} {{lookup styles size}}'>
+    {{#if src}}
+      <img class='{{avatarStyles.image}}' src='{{src}}' alt='your avatar' />
+    {{/if}}
+  </div>
+{{/if}}

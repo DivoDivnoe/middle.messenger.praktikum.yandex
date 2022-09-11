@@ -34,10 +34,6 @@
     "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/modules/*": ["./src/modules/*"],
-      "@/configs/*": ["./src/configs/*"],
-      "@/utils/*": ["./src/utils/*"],
       "@/styles/*": ["./styles/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
