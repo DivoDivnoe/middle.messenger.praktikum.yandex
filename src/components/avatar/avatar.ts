@@ -8,7 +8,7 @@ export enum AvatarSize {
   LARGE = 'large',
 }
 
-type AvatarProps = {
+export type AvatarProps = {
   className?: string;
   size?: AvatarSize;
   src?: string;

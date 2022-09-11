@@ -8,12 +8,12 @@ import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
 import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';
 
-interface MessagesBlockProps {
+type MessagesBlockProps = {
   isEmpty?: boolean;
   src?: string;
   userName?: string;
   data?: ConversationBlockProps[];
-}
+};
 
 class MessagesBlock extends BaseComponent {
   constructor({
@@ -68,6 +68,22 @@ class MessagesBlock extends BaseComponent {
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  protected override componentDidUpdate(
+    oldTarget: MessagesBlockProps,
+    target = [] as MessagesBlockProps,
+  ): boolean {
+    if (oldTarget.data !== target.data) {
+      const messagesBlocks = MessagesBlock._initBlocks(target.data as ConversationBlockProps[]);
+      this.addChildren({ messagesBlocks });
+    }
+
+    if (oldTarget.src !== target.src) {
+      (this.getChild('avatar') as Avatar).updateProps({ src: target.src });
+    }
+
+    return true;
   }
 }
 

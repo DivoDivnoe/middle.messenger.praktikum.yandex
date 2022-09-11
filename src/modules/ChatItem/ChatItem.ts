@@ -5,14 +5,14 @@ import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent'
 import Avatar from '@/components/Avatar';
 import '@/utils/helpers/condition';
 
-export interface ChatItemProps {
+export type ChatItemProps = {
   userName: string;
   date?: string;
   messageText?: string;
   newMessagesAmount?: number;
   src?: string;
   isActive?: boolean;
-}
+};
 
 class ChatItem extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<ChatItemProps>) {
@@ -54,6 +54,14 @@ class ChatItem extends BaseComponent {
     });
 
     return avatar;
+  }
+
+  protected override componentDidUpdate(oldTarget: ChatItemProps, target: ChatItemProps): boolean {
+    if (oldTarget.src !== target.src) {
+      (this.getChild('avatar') as BaseComponent).updateProps({ src: target.src });
+    }
+
+    return true;
   }
 
   protected override getTemplate(): TemplateDelegate {

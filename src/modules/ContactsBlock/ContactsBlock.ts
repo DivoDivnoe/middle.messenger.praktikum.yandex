@@ -6,9 +6,9 @@ import '@/utils/helpers/condition';
 import ChatItem from '../ChatItem';
 import { ChatItemProps } from '../ChatItem/ChatItem';
 
-interface FriendsBlockProps {
+export type FriendsBlockProps = {
   users?: ChatItemProps[];
-}
+};
 
 class ContactsBlock extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<FriendsBlockProps>) {
@@ -40,6 +40,18 @@ class ContactsBlock extends BaseComponent {
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  protected override componentDidUpdate(
+    oldTarget: FriendsBlockProps,
+    target = [] as FriendsBlockProps,
+  ): boolean {
+    if (oldTarget.users !== target.users) {
+      const contacts = ContactsBlock._initContacts(target.users as ChatItemProps[]);
+      this.addChildren({ contacts });
+    }
+
+    return true;
   }
 }
 

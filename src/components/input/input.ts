@@ -13,7 +13,7 @@ export enum InputType {
   FILE = 'file',
 }
 
-type InputProps = {
+export type InputProps = {
   id?: string;
   type?: string;
   placeholder?: string;

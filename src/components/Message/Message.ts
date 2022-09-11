@@ -8,11 +8,11 @@ export enum UserMessageType {
   INTERLOCUTOR = 'interlocutor',
 }
 
-export interface MessageProps {
+export type MessageProps = {
   text: string;
   userType: UserMessageType;
   time: string;
-}
+};
 
 class Message extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<MessageProps>) {

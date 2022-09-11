@@ -13,10 +13,10 @@ enum ArrowButtonType {
   SIDE = 'side',
 }
 
-interface ArrowButtonProps {
+type ArrowButtonProps = {
   type?: ArrowButtonType;
   side?: ArrowButtonSide;
-}
+};
 
 class ArrowButton extends BaseComponent {
   constructor({

@@ -4,10 +4,10 @@ import styles from './ConversationBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Message, { MessageProps } from '@/components/Message/Message';
 
-export interface ConversationBlockProps {
+export type ConversationBlockProps = {
   date: string;
   messagesData: MessageProps[];
-}
+};
 
 class ConversationBlock extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<ConversationBlockProps>) {
@@ -35,6 +35,22 @@ class ConversationBlock extends BaseComponent {
     });
 
     return messages;
+  }
+
+  protected override componentDidUpdate(
+    oldTarget: ConversationBlockProps,
+    target: ConversationBlockProps,
+  ): boolean {
+    if (oldTarget.messagesData !== target.messagesData) {
+      // (this.getChild('messages') as BaseComponent[]).forEach((child, index) => {
+      //   child.updateProps({ ...target.messagesData[index] });
+      // });
+
+      const messages = ConversationBlock._initMessages(target.messagesData as MessageProps[]);
+      this.addChildren({ messages });
+    }
+
+    return true;
   }
 
   protected override getTemplate(): TemplateDelegate {

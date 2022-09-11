@@ -8,7 +8,7 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import '../../utils/helpers/condition';
 
-type AvatarFormProps = {
+export type AvatarFormProps = {
   isError?: boolean;
 };
 
