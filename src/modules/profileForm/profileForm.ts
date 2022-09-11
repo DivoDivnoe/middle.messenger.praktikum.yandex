@@ -26,7 +26,10 @@ class ProfileForm extends BaseComponent {
         submit: [
           (evt) => {
             evt.preventDefault();
-            onSubmit(this._inputsData);
+
+            if ((this.getChild('userData') as UserData).validate()) {
+              onSubmit(this._inputsData);
+            }
           },
         ],
       },

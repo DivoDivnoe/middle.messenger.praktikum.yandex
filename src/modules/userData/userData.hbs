@@ -3,7 +3,7 @@
     <label for='email'>Почта</label>
     {{{emailInput}}}
     {{#if isEditable}}
-      <span class={{styles.errorMessage}}>Введите почту</span>
+      <span class={{styles.errorMessage}}>Неверный формат email</span>
     {{/if}}
   </p>
 
@@ -11,7 +11,7 @@
     <label for='login'>Логин</label>
     {{{loginInput}}}
     {{#if isEditable}}
-      <span class={{styles.errorMessage}}>Введите логин</span>
+      <span class={{styles.errorMessage}}>Неверный формат логина</span>
     {{/if}}
   </p>
 
@@ -19,7 +19,7 @@
     <label for='first_name'>Имя</label>
     {{{firstNameInput}}}
     {{#if isEditable}}
-      <span class={{styles.errorMessage}}>Введите имя</span>
+      <span class={{styles.errorMessage}}>Неверный формат имени</span>
     {{/if}}
   </p>
 
@@ -27,7 +27,7 @@
     <label for='second_name'>Фамилия</label>
     {{{secondNameInput}}}
     {{#if isEditable}}
-      <span class={{styles.errorMessage}}>Введите фамилию</span>
+      <span class={{styles.errorMessage}}>Неверный формат фамилии</span>
     {{/if}}
   </p>
 
@@ -35,12 +35,15 @@
     <label for='display_name'>Имя в чате</label>
     {{{displayNameInput}}}
     {{#if isEditable}}
-      <span class={{styles.errorMessage}}>Введите имя в чате</span>
+      <span class={{styles.errorMessage}}>Неверный формат отображаемого имени</span>
     {{/if}}
   </p>
 
   <p class={{styles.item}}>
     <label for='phone'>Телефон</label>
     {{{phoneInput}}}
+    {{#if isEditable}}
+      <span class={{styles.errorMessage}}>Неверный формат телефона</span>
+    {{/if}}
   </p>
 </div>

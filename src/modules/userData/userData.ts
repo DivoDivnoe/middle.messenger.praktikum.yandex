@@ -117,6 +117,10 @@ class UserData extends BaseComponent {
 
   private _initInputs(user: UserProps, disabled: boolean): Input[] {
     return UserData._inputsProps.map((options) => {
+      const validate = (): void => {
+        input.validate();
+      };
+
       const input = new Input({
         props: {
           ...options,
@@ -131,6 +135,8 @@ class UserData extends BaseComponent {
               }
             },
           ],
+          focus: [validate],
+          blur: [validate],
         },
       });
 
@@ -174,6 +180,16 @@ class UserData extends BaseComponent {
     }
 
     return true;
+  }
+
+  public validate(): boolean {
+    const inputs = Object.values(this.getChildren()).filter(
+      (item) => item instanceof Input,
+    ) as Input[];
+
+    return inputs.reduce((acc, cur) => {
+      return acc && cur.validate();
+    }, true);
   }
 }
 
