@@ -1,5 +1,5 @@
 import styles from './login.module.css';
-import LoginForm from '@/modules/LoginForm';
+import LoginForm from '../../modules/LoginForm';
 import renderDOM from '@/utils/helpers/renderDOM';
 
 window.addEventListener('DOMContentLoaded', () => {

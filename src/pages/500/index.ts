@@ -1,5 +1,5 @@
 import styles from './500.module.css';
-import ErrorMessage from '@/modules/ErrorMessage/ErrorMessage';
+import ErrorMessage from '../../modules/ErrorMessage';
 import renderDOM from '@/utils/helpers/renderDOM';
 
 window.addEventListener('DOMContentLoaded', () => {

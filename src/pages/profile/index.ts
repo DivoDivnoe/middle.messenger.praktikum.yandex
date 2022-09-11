@@ -1,8 +1,8 @@
 import styles from './profile.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
 import ArrowButton from '@/components/ArrowButton';
-import Profile from '@/modules/Profile';
-import { UserProps } from '@/modules/UserData/UserData';
+import Profile from '../../modules/Profile';
+import { UserProps } from '../../modules/UserData/UserData';
 import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
 
 const mockUser: UserProps = {
