@@ -34,6 +34,10 @@
     "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/modules/*": ["./src/modules/*"],
+      "@/configs/*": ["./src/configs/*"],
+      "@/utils/*": ["./src/utils/*"],
       "@/styles/*": ["./styles/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
@@ -83,7 +87,7 @@
     /* Type Checking */
     "strict": true /* Enable all strict type-checking options. */,
     "noImplicitAny": true /* Enable error reporting for expressions and declarations with an implied `any` type.. */,
-    // "strictNullChecks": true,                         /* When type checking, take into account `null` and `undefined`. */
+    "strictNullChecks": true /* When type checking, take into account `null` and `undefined`. */,
     // "strictFunctionTypes": true,                      /* When assigning functions, check to ensure parameters and the return values are subtype-compatible. */
     // "strictBindCallApply": true,                      /* Check that the arguments for `bind`, `call`, and `apply` methods match the original function. */
     "strictPropertyInitialization": false /* Check for class properties that are declared but not set in the constructor. */,
@@ -105,6 +109,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["**/*.ts", "modules.d.ts"],
+  "include": ["modules.d.ts"],
   "exclude": ["node_modules"]
 }
