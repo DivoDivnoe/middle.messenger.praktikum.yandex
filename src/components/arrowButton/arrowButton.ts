@@ -1,6 +1,6 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ArrowButton.hbs';
-import styles from './ArrowButton.module.css';
+import * as styles from './ArrowButton.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 
 export enum ArrowButtonSide {

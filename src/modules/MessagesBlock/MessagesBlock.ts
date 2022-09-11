@@ -3,7 +3,6 @@ import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Avatar from '@/components/Avatar';
-import '@/utils/helpers/condition';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
 import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';

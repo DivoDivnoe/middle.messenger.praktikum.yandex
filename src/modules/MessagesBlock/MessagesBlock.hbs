@@ -27,7 +27,11 @@
       {{/each}}
     </div>
     <form class='{{styles.controls}}'>
-      <button class='{{styles.addFileButton}} {{condition isActiveUserButton styles.active}}'>
+      {{#if isActiveUserButton}}
+        <button class='{{styles.addFileButton}} {{styles.active}}' type="button">
+      {{else}}
+        <button class='{{styles.addFileButton}}' type="button">
+      {{/if}}
         <svg
           width='30'
           height='30'
