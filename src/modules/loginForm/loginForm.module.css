@@ -1,9 +1,16 @@
 .errorMessage {
   position: absolute;
   left: 0;
+  display: none;
   font-size: 8px;
   line-height: 8px;
   color: var(--c-red);
+}
+
+.error {
+  .errorMessage {
+    display: inline;
+  }
 }
 
 .formItem {

@@ -1,4 +1,4 @@
-import Handlebars, { TemplateDelegate } from 'handlebars';
+import { TemplateDelegate } from 'handlebars';
 import template from './Input.hbs';
 import styles from './Input.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
@@ -20,15 +20,18 @@ export type InputProps = {
   value?: string;
   required?: boolean;
   disabled?: boolean;
+  validationRule?: RegExp;
 };
 
 class Input extends BaseComponent {
   constructor({ props, listeners = {} }: ComponentProps<InputProps>) {
-    const { type = InputType.DATE, value = '', required = false, disabled = false } = props;
-
-    Handlebars.registerHelper('condition', (condition: boolean, value: string) =>
-      condition ? value : '',
-    );
+    const {
+      type = InputType.DATE,
+      value = '',
+      required = false,
+      disabled = false,
+      validationRule,
+    } = props;
 
     const inputProps = {
       ...props,
@@ -37,12 +40,37 @@ class Input extends BaseComponent {
       required,
       disabled,
       styles,
+      validationRule,
     };
-    super({ props: inputProps, listeners });
+    super({
+      props: inputProps,
+      listeners: {
+        ...listeners,
+        input: [
+          (evt) => {
+            this._props.value = evt.target.value;
+          },
+        ],
+      },
+    });
   }
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  public validate() {
+    if (this._props.validationRule) {
+      return (this._props.validationRule as RegExp).test(this._props.value as string);
+    }
+
+    return true;
+  }
+
+  protected override componentDidUpdate(oldTarget: InputProps, target: InputProps): boolean {
+    if (oldTarget.disabled !== target.disabled) return true;
+
+    return false;
   }
 }
 

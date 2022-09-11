@@ -6,6 +6,7 @@ import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
+import RegularExp from '@/configs/RegularExp';
 
 type LoginFormProps = {
   onSubmit: (login: string, password: string) => void;
@@ -48,7 +49,17 @@ class LoginForm extends BaseComponent {
     return button;
   }
 
+  private _validateInput = (input: Input) => {
+    const isValidInput = input.validate();
+    input
+      .getContent()
+      .closest(`.${styles.formItem}`)
+      ?.classList.toggle(String(styles.error), !isValidInput);
+  };
+
   private _initLoginInput(value = ''): Input {
+    const validate = (): void => this._validateInput(input);
+
     const input = new Input({
       props: {
         id: 'login',
@@ -57,6 +68,7 @@ class LoginForm extends BaseComponent {
         placeholder: 'Логин',
         value,
         required: true,
+        validationRule: RegularExp.LOGIN,
       },
       listeners: {
         change: [
@@ -64,6 +76,8 @@ class LoginForm extends BaseComponent {
             this._login = evt.target.value;
           },
         ],
+        focus: [validate],
+        blur: [validate],
       },
     });
 
@@ -71,6 +85,8 @@ class LoginForm extends BaseComponent {
   }
 
   private _initPasswordInput(value = ''): Input {
+    const validate = (): void => this._validateInput(input);
+
     const input = new Input({
       props: {
         id: 'password',
@@ -79,6 +95,7 @@ class LoginForm extends BaseComponent {
         placeholder: 'Пароль',
         value,
         required: true,
+        validationRule: RegularExp.PASSWORD,
       },
       listeners: {
         change: [
@@ -86,6 +103,8 @@ class LoginForm extends BaseComponent {
             this._password = evt.target.value;
           },
         ],
+        focus: [validate],
+        blur: [validate],
       },
     });
 
