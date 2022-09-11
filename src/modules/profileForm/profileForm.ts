@@ -5,22 +5,46 @@ import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent'
 import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
 import UserData from '../UserData';
-import { UserProps } from '../UserData/UserData';
+import { UserDataInputType, UserProps } from '../UserData/UserData';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 
+type InputsProps = Record<UserDataInputType, string>;
+
 type ProfileFormProps = {
   user: UserProps;
+  onSubmit: (data: InputsProps) => void;
 };
 
 class ProfileForm extends BaseComponent {
-  constructor({ props: { user }, listeners = {} }: ComponentProps<ProfileFormProps>) {
-    super({ props: { styles, user }, listeners });
+  private _inputsData: InputsProps;
+
+  constructor({ props: { user, onSubmit } }: ComponentProps<ProfileFormProps>) {
+    super({
+      props: { styles, user, onSubmit },
+      listeners: {
+        submit: [
+          (evt) => {
+            evt.preventDefault();
+            onSubmit(this._inputsData);
+          },
+        ],
+      },
+    });
+
+    this._inputsData = {
+      email: user.email,
+      login: user.login,
+      first_name: user.first_name,
+      second_name: user.second_name,
+      display_name: user.display_name ?? '',
+      phone: user.phone ?? '',
+    };
   }
 
   protected override init(): void {
     const avatar = ProfileForm._initAvatar();
-    const userData = ProfileForm._initUserData(this._props.user as UserProps);
+    const userData = this._initUserData();
     const button = ProfileForm._initButton();
 
     this.addChildren({ avatar, userData, button });
@@ -49,12 +73,15 @@ class ProfileForm extends BaseComponent {
     return button;
   }
 
-  private static _initUserData(user: UserProps): UserData {
+  private _initUserData(): UserData {
     const userData = new UserData({
       props: {
-        user,
+        user: this._props.user as UserProps,
         isEditable: true,
         className: String(styles.userData),
+        onChange: (name: UserDataInputType, value: string) => {
+          this._inputsData[name] = value;
+        },
       },
     });
 

@@ -14,18 +14,29 @@ export type UserProps = {
   phone?: string;
 };
 
-type UserDataProps = {
-  isEditable?: boolean;
-  user: UserProps;
-  className?: string;
-};
-
 type InputProps = {
   id: string;
   name: keyof UserProps;
   type: InputType;
   placeholder: string;
   required: boolean;
+};
+
+export type UserDataInputType =
+  | 'email'
+  | 'login'
+  | 'first_name'
+  | 'second_name'
+  | 'display_name'
+  | 'phone';
+
+type onChangeType = (name: UserDataInputType, value: string) => void;
+
+type UserDataProps = {
+  isEditable?: boolean;
+  user: UserProps;
+  className?: string;
+  onChange?: onChangeType;
 };
 
 class UserData extends BaseComponent {
@@ -75,17 +86,17 @@ class UserData extends BaseComponent {
   ];
 
   constructor({ props, listeners = {} }: ComponentProps<UserDataProps>) {
-    const { user, isEditable = true, className = '' } = props;
+    const { user, isEditable = true, className = '', onChange } = props;
 
     super({
-      props: { styles, isEditable, user, className },
+      props: { styles, isEditable, user, className, onChange },
       listeners,
     });
   }
 
   protected override init(): void {
     const [emailInput, loginInput, firstNameInput, secondNameInput, displayNameInput, phoneInput] =
-      UserData._initInputs(this._props.user as UserProps, !this._props.isEditable);
+      this._initInputs(this._props.user as UserProps, !this._props.isEditable);
 
     this.addChildren({
       emailInput: emailInput!,
@@ -97,13 +108,22 @@ class UserData extends BaseComponent {
     });
   }
 
-  private static _initInputs(user: UserProps, disabled: boolean): Input[] {
+  private _initInputs(user: UserProps, disabled: boolean): Input[] {
     return UserData._inputsProps.map((options) => {
       const input = new Input({
         props: {
           ...options,
           value: user[options.name]!,
           disabled,
+        },
+        listeners: {
+          change: [
+            (evt) => {
+              if (this._props.isEditable) {
+                (this._props.onChange as onChangeType)(options.name, evt.target.value);
+              }
+            },
+          ],
         },
       });
 
