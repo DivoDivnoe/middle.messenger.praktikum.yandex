@@ -10,7 +10,7 @@ import '../../utils/helpers/condition';
 
 export type AvatarFormProps = {
   isError?: boolean;
-  onSubmit: () => void;
+  onSubmit: (value: FormDataEntryValue) => void;
 };
 
 class AvatarForm extends BaseComponent {
@@ -23,7 +23,9 @@ class AvatarForm extends BaseComponent {
         submit: [
           (evt) => {
             evt.preventDefault();
-            onSubmit();
+
+            const formData = new FormData(this.getContent().querySelector('form')!);
+            onSubmit(formData.get('file') as FormDataEntryValue);
           },
         ],
       },

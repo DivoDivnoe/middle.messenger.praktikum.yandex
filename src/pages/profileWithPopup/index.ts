@@ -16,7 +16,9 @@ const mockUser: UserProps = {
 window.addEventListener('DOMContentLoaded', () => {
   const profile = new Profile({ props: { user: mockUser } });
   const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
-  const avatarForm = new AvatarForm({ props: { onSubmit: () => console.log('send file') } });
+  const avatarForm = new AvatarForm({
+    props: { onSubmit: (value: FormDataEntryValue) => console.log(value) },
+  });
 
   const app = renderDOM('#app', profile);
   renderDOM('#app', arrowButton);
