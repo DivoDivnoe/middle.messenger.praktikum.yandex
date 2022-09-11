@@ -1,10 +1,20 @@
 <input
-  id='{{id}}'
+  {{#if id}}
+    id='{{id}}'
+  {{/if}}
   class='{{styles.input}}'
   type='{{type}}'
-  placeholder='{{placeholder}}'
+  {{#if id}}
+    placeholder='{{placeholder}}'
+  {{/if}}
   name='{{name}}'
-  value='{{value}}'
-  {{condition required 'required'}}
-  {{condition disabled 'disabled'}}
+  {{#if value}}
+    value='{{value}}'
+  {{/if}}
+  {{#if required}}
+    required
+  {{/if}}
+  {{#if disabled}}
+    disabled
+  {{/if}}
 />

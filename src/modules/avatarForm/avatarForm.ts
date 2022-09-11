@@ -10,13 +10,24 @@ import '../../utils/helpers/condition';
 
 export type AvatarFormProps = {
   isError?: boolean;
+  onSubmit: () => void;
 };
 
 class AvatarForm extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<AvatarFormProps>) {
-    const { isError = false } = props;
+  constructor({ props }: ComponentProps<AvatarFormProps>) {
+    const { isError = false, onSubmit } = props;
 
-    super({ props: { styles, isError }, listeners });
+    super({
+      props: { styles, isError, onSubmit },
+      listeners: {
+        submit: [
+          (evt) => {
+            evt.preventDefault();
+            onSubmit();
+          },
+        ],
+      },
+    });
   }
 
   protected override init(): void {
@@ -42,7 +53,7 @@ class AvatarForm extends BaseComponent {
       props: {
         name: 'file',
         type: InputType.FILE,
-        required: true,
+        required: false,
       },
     });
 

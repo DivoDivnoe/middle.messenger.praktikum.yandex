@@ -2,7 +2,6 @@ import Handlebars, { TemplateDelegate } from 'handlebars';
 import template from './Input.hbs';
 import styles from './Input.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import '@/utils/helpers/condition';
 
 export enum InputType {
   TEXT = 'text',
