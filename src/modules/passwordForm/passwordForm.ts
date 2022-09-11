@@ -8,6 +8,7 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
+import RegularExp from '@/configs/RegularExp';
 
 type PasswordFormProps = {
   onSubmit: (oldPassword: string, newPassword: string, newPasswordExtra: string) => void;
@@ -25,7 +26,10 @@ class PasswordForm extends BaseComponent {
         submit: [
           (evt) => {
             evt.preventDefault();
-            onSubmit(this._old_password, this._new_password, this._new_password_extra);
+
+            if (this._validate()) {
+              onSubmit(this._old_password, this._new_password, this._new_password_extra);
+            }
           },
         ],
       },
@@ -64,6 +68,10 @@ class PasswordForm extends BaseComponent {
   }
 
   private _initOldPasswordInput(): Input {
+    const validate = (): void => {
+      input.validate();
+    };
+
     const input = new Input({
       props: {
         id: 'old_password',
@@ -71,6 +79,7 @@ class PasswordForm extends BaseComponent {
         type: InputType.PASSWORD,
         placeholder: 'Старый пароль',
         required: true,
+        validationRule: RegularExp.PASSWORD,
       },
       listeners: {
         change: [
@@ -78,6 +87,8 @@ class PasswordForm extends BaseComponent {
             this._old_password = evt.target.value;
           },
         ],
+        focus: [validate],
+        blur: [validate],
       },
     });
 
@@ -85,6 +96,10 @@ class PasswordForm extends BaseComponent {
   }
 
   private _initNewPasswordInput(): Input {
+    const validate = (): void => {
+      input.validate();
+    };
+
     const input = new Input({
       props: {
         id: 'new_password',
@@ -92,6 +107,7 @@ class PasswordForm extends BaseComponent {
         type: InputType.PASSWORD,
         placeholder: 'Новый пароль',
         required: true,
+        validationRule: RegularExp.PASSWORD,
       },
       listeners: {
         change: [
@@ -99,6 +115,8 @@ class PasswordForm extends BaseComponent {
             this._new_password = evt.target.value;
           },
         ],
+        focus: [validate],
+        blur: [validate],
       },
     });
 
@@ -106,6 +124,10 @@ class PasswordForm extends BaseComponent {
   }
 
   private _initNewPasswordExtraInput(): Input {
+    const validate = (): void => {
+      input.validate();
+    };
+
     const input = new Input({
       props: {
         id: 'new_password_extra',
@@ -113,6 +135,7 @@ class PasswordForm extends BaseComponent {
         type: InputType.PASSWORD,
         placeholder: 'Повторите новый пароль',
         required: true,
+        validationRule: RegularExp.PASSWORD,
       },
       listeners: {
         change: [
@@ -120,14 +143,28 @@ class PasswordForm extends BaseComponent {
             this._new_password_extra = evt.target.value;
           },
         ],
+        focus: [validate],
+        blur: [validate],
       },
     });
+
+    input.extraValidate = (): boolean => {
+      return this._new_password_extra === this._new_password;
+    };
 
     return input;
   }
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  private _validate(): boolean {
+    return (
+      (this.getChild('oldPasswordInput') as Input).validate() &&
+      (this.getChild('newPasswordInput') as Input).validate() &&
+      (this.getChild('newPasswordExtraInput') as Input).validate()
+    );
   }
 }
 
