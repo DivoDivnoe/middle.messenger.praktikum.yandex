@@ -190,6 +190,10 @@ class BaseComponent {
     return this._children[key] || null;
   }
 
+  public getChildren(): ChildrenType {
+    return this._children;
+  }
+
   protected addChildren(children: Record<string, BaseComponent | BaseComponent[]>) {
     this._children = {
       ...this._children,

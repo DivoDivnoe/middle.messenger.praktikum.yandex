@@ -38,7 +38,7 @@ class ProfileForm extends BaseComponent {
       first_name: user.first_name,
       second_name: user.second_name,
       display_name: user.display_name ?? '',
-      phone: user.phone ?? '',
+      phone: user.phone,
     };
   }
 

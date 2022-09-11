@@ -61,13 +61,19 @@ class Input extends BaseComponent {
 
   public validate(): boolean {
     if (this._props.validationRule) {
-      const isValid = (this._props.validationRule as RegExp).test(this._props.value as string);
+      const isValid =
+        this.extraValidate() &&
+        (this._props.validationRule as RegExp).test(this._props.value as string);
 
       this.getContent().classList.toggle('error', !isValid);
 
       return isValid;
     }
 
+    return true;
+  }
+
+  public extraValidate(): boolean {
     return true;
   }
 

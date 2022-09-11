@@ -6,6 +6,7 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
+import RegularExp from '@/configs/RegularExp';
 
 type InputProps = {
   id: string;
@@ -13,16 +14,7 @@ type InputProps = {
   type: InputType;
   placeholder: string;
   required: boolean;
-};
-
-export type SubmitDataProps = {
-  email: string;
-  login: string;
-  first_name: string;
-  second_name: string;
-  phone: string | null;
-  password: string;
-  password_extra: string;
+  validationRule: RegExp;
 };
 
 type InputsProps = {
@@ -34,6 +26,8 @@ type InputsProps = {
   password: string;
   password_extra: string;
 };
+
+export type SubmitDataProps = InputsProps;
 
 type SignupFormProps = {
   onSubmit: (data: SubmitDataProps) => void;
@@ -57,6 +51,7 @@ class SignupForm extends BaseComponent {
       type: InputType.EMAIL,
       placeholder: 'Почта',
       required: true,
+      validationRule: RegularExp.EMAIL,
     },
     {
       id: 'login',
@@ -64,6 +59,7 @@ class SignupForm extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Логин',
       required: true,
+      validationRule: RegularExp.LOGIN,
     },
     {
       id: 'first_name',
@@ -71,6 +67,7 @@ class SignupForm extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Имя',
       required: true,
+      validationRule: RegularExp.NAME,
     },
     {
       id: 'second_name',
@@ -78,13 +75,15 @@ class SignupForm extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Фамилия',
       required: true,
+      validationRule: RegularExp.NAME,
     },
     {
       id: 'phone',
       name: 'phone',
       type: InputType.TEXT,
       placeholder: 'Телефон',
-      required: false,
+      required: true,
+      validationRule: RegularExp.PHONE,
     },
     {
       id: 'password',
@@ -92,6 +91,7 @@ class SignupForm extends BaseComponent {
       type: InputType.PASSWORD,
       placeholder: 'Пароль',
       required: true,
+      validationRule: RegularExp.PASSWORD,
     },
     {
       id: 'password_extra',
@@ -99,6 +99,7 @@ class SignupForm extends BaseComponent {
       type: InputType.PASSWORD,
       placeholder: 'Пароль (ещё раз)',
       required: true,
+      validationRule: RegularExp.PASSWORD,
     },
   ];
 
@@ -110,7 +111,9 @@ class SignupForm extends BaseComponent {
           (evt) => {
             evt.preventDefault();
 
-            onSubmit(this._inputs);
+            if (this._validate()) {
+              onSubmit(this._inputs);
+            }
           },
         ],
       },
@@ -155,6 +158,16 @@ class SignupForm extends BaseComponent {
 
   private _initInputs(): Input[] {
     return SignupForm._inputsProps.map((options) => {
+      const validate = (): void => {
+        if (options.name === 'password_extra') {
+          input.extraValidate = (): boolean => {
+            return this._inputs.password_extra === this._inputs.password;
+          };
+        }
+
+        input.validate();
+      };
+
       const input = new Input({
         props: {
           ...options,
@@ -168,6 +181,8 @@ class SignupForm extends BaseComponent {
               this._inputs[key] = evt.target.value;
             },
           ],
+          focus: [validate],
+          blur: [validate],
         },
       });
 
@@ -177,6 +192,16 @@ class SignupForm extends BaseComponent {
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  private _validate(): boolean {
+    const inputs = Object.values(this.getChildren()).filter(
+      (item) => item instanceof Input,
+    ) as Input[];
+
+    return inputs.reduce((acc, cur) => {
+      return acc && cur.validate();
+    }, true);
   }
 }
 

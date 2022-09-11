@@ -11,6 +11,7 @@ const mockUser: UserProps = {
   login: 'login',
   first_name: 'Andrey',
   second_name: 'Ivanov',
+  phone: '+79999999999',
 };
 
 window.addEventListener('DOMContentLoaded', () => {

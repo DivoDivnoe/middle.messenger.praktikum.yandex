@@ -4,6 +4,7 @@ import styles from './UserData.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
+import RegularExp from '@/configs/RegularExp';
 
 export type UserProps = {
   email: string;
@@ -11,7 +12,7 @@ export type UserProps = {
   first_name: string;
   second_name: string;
   display_name?: string;
-  phone?: string;
+  phone: string;
 };
 
 type InputProps = {
@@ -20,6 +21,7 @@ type InputProps = {
   type: InputType;
   placeholder: string;
   required: boolean;
+  validationRule?: RegExp;
 };
 
 export type UserDataInputType =
@@ -47,6 +49,7 @@ class UserData extends BaseComponent {
       type: InputType.EMAIL,
       placeholder: 'Почта',
       required: true,
+      validationRule: RegularExp.EMAIL,
     },
     {
       id: 'login',
@@ -54,6 +57,7 @@ class UserData extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Логин',
       required: true,
+      validationRule: RegularExp.LOGIN,
     },
     {
       id: 'first_name',
@@ -61,6 +65,7 @@ class UserData extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Имя',
       required: true,
+      validationRule: RegularExp.NAME,
     },
     {
       id: 'second_name',
@@ -68,6 +73,7 @@ class UserData extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Фамилия',
       required: true,
+      validationRule: RegularExp.NAME,
     },
     {
       id: 'display_name',
@@ -82,6 +88,7 @@ class UserData extends BaseComponent {
       type: InputType.TEXT,
       placeholder: 'Телефон',
       required: false,
+      validationRule: RegularExp.PHONE,
     },
   ];
 
