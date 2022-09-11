@@ -15,7 +15,41 @@ type InputProps = {
   required: boolean;
 };
 
+export type SubmitDataProps = {
+  email: string;
+  login: string;
+  first_name: string;
+  second_name: string;
+  phone: string | null;
+  password: string;
+  password_extra: string;
+};
+
+type InputsProps = {
+  email: string;
+  login: string;
+  first_name: string;
+  second_name: string;
+  phone: string | null;
+  password: string;
+  password_extra: string;
+};
+
+type SignupFormProps = {
+  onSubmit: (data: SubmitDataProps) => void;
+};
+
 class SignupForm extends BaseComponent {
+  private _inputs: InputsProps = {
+    email: '',
+    login: '',
+    first_name: '',
+    second_name: '',
+    phone: '',
+    password: '',
+    password_extra: '',
+  };
+
   private static _inputsProps: InputProps[] = [
     {
       id: 'email',
@@ -68,8 +102,19 @@ class SignupForm extends BaseComponent {
     },
   ];
 
-  constructor({ listeners = {} }: ComponentProps) {
-    super({ props: { styles }, listeners });
+  constructor({ props: { onSubmit } }: ComponentProps<SignupFormProps>) {
+    super({
+      props: { styles },
+      listeners: {
+        submit: [
+          (evt) => {
+            evt.preventDefault();
+
+            onSubmit(this._inputs);
+          },
+        ],
+      },
+    });
   }
 
   protected override init(): void {
@@ -81,7 +126,7 @@ class SignupForm extends BaseComponent {
       phoneInput,
       passwordInput,
       passwordExtraInput,
-    ] = SignupForm._initInputs();
+    ] = this._initInputs();
 
     const button = SignupForm._initButton();
 
@@ -108,13 +153,21 @@ class SignupForm extends BaseComponent {
     return button;
   }
 
-  private static _initInputs(): Input[] {
+  private _initInputs(): Input[] {
     return SignupForm._inputsProps.map((options) => {
       const input = new Input({
         props: {
           ...options,
           value: '',
           disabled: false,
+        },
+        listeners: {
+          change: [
+            (evt) => {
+              const key = options.name as keyof InputsProps;
+              this._inputs[key] = evt.target.value;
+            },
+          ],
         },
       });
 

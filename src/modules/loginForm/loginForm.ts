@@ -7,15 +7,32 @@ import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 
+type LoginFormProps = {
+  onSubmit: (login: string, password: string) => void;
+};
+
 class LoginForm extends BaseComponent {
-  constructor({ listeners = {} }: ComponentProps) {
-    super({ props: { styles }, listeners });
+  private _login = '';
+  private _password = '';
+
+  constructor({ props: { onSubmit } }: ComponentProps<LoginFormProps>) {
+    super({
+      props: { onSubmit, styles },
+      listeners: {
+        submit: [
+          (evt) => {
+            evt.preventDefault();
+            onSubmit(this._login as string, this._password as string);
+          },
+        ],
+      },
+    });
   }
 
   protected override init(): void {
     const button = LoginForm._initButton();
-    const loginInput = LoginForm._initLoginInput();
-    const passwordInput = LoginForm._initPasswordInput();
+    const loginInput = this._initLoginInput();
+    const passwordInput = this._initPasswordInput();
 
     this.addChildren({ button, loginInput, passwordInput });
   }
@@ -31,28 +48,44 @@ class LoginForm extends BaseComponent {
     return button;
   }
 
-  private static _initLoginInput(): Input {
+  private _initLoginInput(value = ''): Input {
     const input = new Input({
       props: {
         id: 'login',
         name: 'login',
         type: InputType.TEXT,
         placeholder: 'Логин',
+        value,
         required: true,
+      },
+      listeners: {
+        change: [
+          (evt) => {
+            this._login = evt.target.value;
+          },
+        ],
       },
     });
 
     return input;
   }
 
-  private static _initPasswordInput(): Input {
+  private _initPasswordInput(value = ''): Input {
     const input = new Input({
       props: {
         id: 'password',
         name: 'password',
         type: InputType.PASSWORD,
         placeholder: 'Пароль',
+        value,
         required: true,
+      },
+      listeners: {
+        change: [
+          (evt) => {
+            this._password = evt.target.value;
+          },
+        ],
       },
     });
 
