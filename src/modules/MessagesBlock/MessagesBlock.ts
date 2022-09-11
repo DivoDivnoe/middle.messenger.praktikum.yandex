@@ -7,22 +7,37 @@ import '@/utils/helpers/condition';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
 import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';
+import Input from '@/components/Input';
+import { InputType } from '@/components/Input/Input';
+import RegularExp from '@/configs/RegularExp';
 
 type MessagesBlockProps = {
   isEmpty?: boolean;
   src?: string;
   userName?: string;
   data?: ConversationBlockProps[];
+  onSubmit: (message: string) => void;
 };
 
 class MessagesBlock extends BaseComponent {
+  private _message = '';
+
   constructor({
-    props: { isEmpty = false, src = '', userName = '', data = [] },
-    listeners = {},
+    props: { isEmpty = false, src = '', userName = '', data = [], onSubmit },
   }: ComponentProps<MessagesBlockProps>) {
     super({
-      props: { styles, isEmpty, src, userName, data, isActiveUserButton: false },
-      listeners,
+      props: { styles, isEmpty, src, userName, data, onSubmit, isActiveUserButton: false },
+      listeners: {
+        submit: [
+          (evt) => {
+            evt.preventDefault();
+
+            if (this._validate()) {
+              onSubmit(this._message);
+            }
+          },
+        ],
+      },
     });
   }
 
@@ -33,8 +48,9 @@ class MessagesBlock extends BaseComponent {
       const messagesBlocks = MessagesBlock._initBlocks(
         this._props.data as ConversationBlockProps[],
       );
+      const input = this._initInput();
 
-      this.addChildren({ avatar, arrowButton, messagesBlocks });
+      this.addChildren({ avatar, arrowButton, messagesBlocks, input });
     }
   }
 
@@ -48,7 +64,7 @@ class MessagesBlock extends BaseComponent {
 
   private static _initArrowButton(): ArrowButton {
     const arrowButton = new ArrowButton({
-      props: { side: ArrowButtonSide.RIGHT },
+      props: { side: ArrowButtonSide.RIGHT, isSubmit: true },
     });
 
     return arrowButton;
@@ -66,16 +82,47 @@ class MessagesBlock extends BaseComponent {
     return messages;
   }
 
+  private _initInput(value = ''): Input {
+    const validate = (): void => {
+      input.validate();
+    };
+
+    const input = new Input({
+      props: {
+        id: 'message',
+        name: 'message',
+        type: InputType.TEXT,
+        placeholder: 'Сообщение',
+        value,
+        required: false,
+        validationRule: RegularExp.MESSAGE,
+      },
+      listeners: {
+        change: [
+          (evt) => {
+            this._message = evt.target.value;
+          },
+        ],
+        focus: [validate],
+        blur: [validate],
+      },
+    });
+
+    return input;
+  }
+
   protected override getTemplate(): TemplateDelegate {
     return template;
   }
 
   protected override componentDidUpdate(
     oldTarget: MessagesBlockProps,
-    target = [] as MessagesBlockProps,
+    target: MessagesBlockProps,
   ): boolean {
     if (oldTarget.data !== target.data) {
-      const messagesBlocks = MessagesBlock._initBlocks(target.data as ConversationBlockProps[]);
+      const messagesBlocks = MessagesBlock._initBlocks(
+        (target.data ?? []) as ConversationBlockProps[],
+      );
       this.addChildren({ messagesBlocks });
     }
 
@@ -84,6 +131,10 @@ class MessagesBlock extends BaseComponent {
     }
 
     return true;
+  }
+
+  private _validate(): boolean {
+    return (this.getChild('input') as Input).validate();
   }
 }
 

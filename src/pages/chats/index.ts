@@ -41,7 +41,13 @@ const mockMessagesData: ConversationBlockProps[] = [
 window.addEventListener('DOMContentLoaded', () => {
   const contactsBlock = new ContactsBlock({ props: { users: mockUsers } });
   const messagesBlock = new MessagesBlock({
-    props: { isEmpty: false, src: image, userName: 'Vadim', data: mockMessagesData },
+    props: {
+      isEmpty: false,
+      src: image,
+      userName: 'Vadim',
+      data: mockMessagesData,
+      onSubmit: (message: string) => console.log(message),
+    },
   });
 
   const app = renderDOM('#app', contactsBlock);

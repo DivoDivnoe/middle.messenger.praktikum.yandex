@@ -26,7 +26,7 @@
         {{{this}}}
       {{/each}}
     </div>
-    <div class='{{styles.controls}}'>
+    <form class='{{styles.controls}}'>
       <button class='{{styles.addFileButton}} {{condition isActiveUserButton styles.active}}'>
         <svg
           width='30'
@@ -72,8 +72,11 @@
           ></path>
         </svg>
       </button>
-      <input class='{{styles.input}}' name='message' id='message' placeholder='Сообщение' />
+      <div class='{{styles.input}}'>
+        {{{input}}}
+        <span class={{styles.errorMessage}}>Введите сообщение</span>
+      </div>
       {{{arrowButton}}}
-    </div>
+    </form>
   </div>
 {{/if}}

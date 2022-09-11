@@ -16,14 +16,15 @@ export enum ArrowButtonType {
 type ArrowButtonProps = {
   type?: ArrowButtonType;
   side?: ArrowButtonSide;
+  isSubmit?: boolean;
 };
 
 class ArrowButton extends BaseComponent {
   constructor({
-    props: { type = ArrowButtonType.DEFAULT, side = ArrowButtonSide.LEFT },
+    props: { type = ArrowButtonType.DEFAULT, side = ArrowButtonSide.LEFT, isSubmit = false },
     listeners = {},
   }: ComponentProps<ArrowButtonProps>) {
-    super({ props: { type, side, styles }, listeners });
+    super({ props: { type, side, styles, isSubmit }, listeners });
   }
 
   protected override getTemplate(): TemplateDelegate {
