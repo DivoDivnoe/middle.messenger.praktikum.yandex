@@ -5,7 +5,7 @@ import { ChatItemProps } from '../../modules/ChatItem/ChatItem';
 import image from '/static/avatar.svg';
 import MessagesBlock from '../../modules/MessagesBlock';
 import { ConversationBlockProps } from '../../modules/ConversationBlock/ConversationBlock';
-import { UserMessageType } from '@/components/Message/Message';
+import { UserMessageType } from '../../components/Message/Message';
 
 const mockUsers: ChatItemProps[] = [
   {

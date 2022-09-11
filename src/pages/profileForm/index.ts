@@ -1,9 +1,9 @@
 import styles from './profileForm.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
-import ArrowButton from '@/components/ArrowButton';
+import ArrowButton from '../../components/ArrowButton';
 import { UserProps } from '../../modules/UserData/UserData';
 import ProfileForm from '../../modules/ProfileForm';
-import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
+import { ArrowButtonType } from '../../components/ArrowButton/ArrowButton';
 
 const mockUser: UserProps = {
   email: 'some.email@gmail.com',
