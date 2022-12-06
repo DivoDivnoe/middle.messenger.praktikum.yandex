@@ -1,11 +1,12 @@
 import styles from './chats.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
-import ContactsBlock from '@/modules/ContactsBlock';
+// import ContactsBlock from '@/modules/ContactsBlock';
 import { ChatItemProps } from '@/modules/ChatItem/ChatItem';
 import image from '/static/avatar.svg';
-import MessagesBlock from '@/modules/MessagesBlock';
+// import MessagesBlock from '@/modules/MessagesBlock';
 import { ConversationBlockProps } from '@/modules/ConversationBlock/ConversationBlock';
 import { UserMessageType } from '@/components/Message/Message';
+import ChatsBlock from '@/modules/ChatsBlock/ChatsBlock';
 
 const mockUsers: ChatItemProps[] = [
   {
@@ -39,19 +40,19 @@ const mockMessagesData: ConversationBlockProps[] = [
 ];
 
 window.addEventListener('DOMContentLoaded', () => {
-  const contactsBlock = new ContactsBlock({ props: { users: mockUsers } });
-  const messagesBlock = new MessagesBlock({
-    props: {
+  const props = {
+    users: mockUsers,
+    messages: {
       isEmpty: false,
       src: image,
       userName: 'Vadim',
       data: mockMessagesData,
       onSubmit: (message: string) => console.log(message),
     },
-  });
+  };
 
-  const app = renderDOM('#app', contactsBlock);
-  renderDOM('#app', messagesBlock);
+  const chatsBlock = new ChatsBlock({ props });
+  const app = renderDOM('#app', chatsBlock);
 
   app.classList.add(String(styles.chatsPage));
 });

@@ -10,7 +10,7 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
 
-type MessagesBlockProps = {
+export type MessagesBlockProps = {
   isEmpty?: boolean;
   src?: string;
   userName?: string;
