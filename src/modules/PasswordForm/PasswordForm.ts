@@ -10,7 +10,7 @@ import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
 import RegularExp from '@/configs/RegularExp';
 
-type PasswordFormProps = {
+export type PasswordFormProps = {
   onSubmit: (oldPassword: string, newPassword: string, newPasswordExtra: string) => void;
 };
 
