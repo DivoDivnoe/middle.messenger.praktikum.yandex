@@ -32,7 +32,7 @@ class PasswordFormBlock extends BaseComponent {
     target: PasswordFormProps,
   ): boolean {
     if (oldTarget.onSubmit !== target.onSubmit) {
-      const passwordForm = new PasswordForm({ props: this._props as PasswordFormProps });
+      const passwordForm = new PasswordForm({ props: target });
       this.addChildren({ passwordForm });
     }
 

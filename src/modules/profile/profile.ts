@@ -7,7 +7,7 @@ import { AvatarSize } from '@/components/Avatar/Avatar';
 import UserData from '../UserData';
 import { UserProps } from '../UserData/UserData';
 
-type ProfileProps = {
+export type ProfileProps = {
   user: UserProps;
 };
 
