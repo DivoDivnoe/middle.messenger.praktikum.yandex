@@ -1,9 +1,6 @@
-import styles from './profileForm.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
-import ArrowButton from '@/components/ArrowButton';
 import { UserProps } from '@/modules/UserData/UserData';
-import ProfileForm from '@/modules/ProfileForm';
-import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
+import ProfileFormBlock from '@/modules/ProfileFormBlock';
 
 const mockUser: UserProps = {
   email: 'some.email@gmail.com',
@@ -14,7 +11,7 @@ const mockUser: UserProps = {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  const profileForm = new ProfileForm({
+  const profileForm = new ProfileFormBlock({
     props: {
       user: mockUser,
       onSubmit: (...args) => {
@@ -22,10 +19,6 @@ window.addEventListener('DOMContentLoaded', () => {
       },
     },
   });
-  const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
 
-  const app = renderDOM('#app', profileForm);
-  renderDOM('#app', arrowButton);
-
-  app.classList.add(String(styles.profileFormPage));
+  renderDOM('#app', profileForm);
 });

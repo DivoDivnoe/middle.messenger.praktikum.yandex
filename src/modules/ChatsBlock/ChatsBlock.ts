@@ -4,7 +4,7 @@ import styles from './ChatsBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import { ChatItemProps } from '@/modules/ChatItem/ChatItem';
 import MessagesBlock, { MessagesBlockProps } from '@/modules/MessagesBlock/MessagesBlock';
-import ContactsBlock from '../ContactsBlock';
+import ContactsBlock from '@/modules/ContactsBlock';
 
 export type ChatBlockProps = {
   users?: ChatItemProps[];

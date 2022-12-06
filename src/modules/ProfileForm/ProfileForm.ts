@@ -11,7 +11,7 @@ import { ButtonType } from '@/components/Button/Button';
 
 type InputsProps = Record<UserDataInputType, string>;
 
-type ProfileFormProps = {
+export type ProfileFormProps = {
   user: UserProps;
   onSubmit: (data: InputsProps) => void;
 };
