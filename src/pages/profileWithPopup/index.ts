@@ -1,10 +1,6 @@
-import styles from './profileWithPopup.module.css';
 import renderDOM from '@/utils/helpers/renderDOM';
-import ArrowButton from '@/components/ArrowButton/ArrowButton';
 import { UserProps } from '@/modules/UserData/UserData';
-import Profile from '@/modules/Profile';
-import AvatarForm from '@/modules/AvatarForm';
-import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
+import ProfileWithPopup from '@/modules/ProfileWithPopup';
 
 const mockUser: UserProps = {
   email: 'some.email@gmail.com',
@@ -15,15 +11,12 @@ const mockUser: UserProps = {
 };
 
 window.addEventListener('DOMContentLoaded', () => {
-  const profile = new Profile({ props: { user: mockUser } });
-  const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
-  const avatarForm = new AvatarForm({
-    props: { onSubmit: (value: FormDataEntryValue) => console.log(value) },
+  const profileWithPopup = new ProfileWithPopup({
+    props: {
+      profile: { user: mockUser },
+      avatar: { onSubmit: (value: FormDataEntryValue) => console.log(value) },
+    },
   });
 
-  const app = renderDOM('#app', profile);
-  renderDOM('#app', arrowButton);
-  renderDOM('#app', avatarForm);
-
-  app.classList.add(String(styles.profilePage));
+  renderDOM('#app', profileWithPopup);
 });
