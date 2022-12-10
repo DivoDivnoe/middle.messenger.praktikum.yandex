@@ -42,10 +42,6 @@ class ConversationBlock extends BaseComponent {
     target: ConversationBlockProps,
   ): boolean {
     if (oldTarget.messagesData !== target.messagesData) {
-      // (this.getChild('messages') as BaseComponent[]).forEach((child, index) => {
-      //   child.updateProps({ ...target.messagesData[index] });
-      // });
-
       const messages = ConversationBlock._initMessages(target.messagesData as MessageProps[]);
       this.addChildren({ messages });
     }
