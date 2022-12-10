@@ -1,0 +1,15 @@
+<div class='{{styles.wrapper}} {{condition isActive styles.active}}'>
+  <div class="{{styles.container}}">
+    {{{avatar}}}
+    <div class='{{styles.content}}'>
+      <div class='{{styles.top}}'>
+        <h2 class="{{styles.userName}}">{{userName}}</h2>
+        <span class='{{styles.date}}'>{{date}}</s>
+      </div>
+      <div class='{{styles.dialog}}'>
+        <p class="{{styles.userMessage}}">{{messageText}}</p>
+        <span class='{{styles.messages}} {{condition isMessagesCounterHidden styles.hidden}}'>{{newMessagesAmount}}</span>
+      </div>
+    </div>
+  </div>
+</div>

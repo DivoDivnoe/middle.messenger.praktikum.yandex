@@ -1,0 +1,16 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "color-hex-case": "lower",
+    "selector-class-pattern": "^.*$",
+    "string-quotes": "single",
+    "color-hex-length": "long",
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ]
+  },
+  "ignoreFiles": ["dist/*"]
+}

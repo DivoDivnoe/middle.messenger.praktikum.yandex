@@ -2,25 +2,25 @@
   --c-primary: #3369f3;
   --c-primary-hover: #4174f4;
   --c-primary-active: #255ef2;
-
   --c-black: #000000;
   --c-text-black: #1e1e1e;
-  --c-black-transparent-0: rgba(0, 0, 0, 0.4);
-  --c-black-transparent-1: rgba(0, 0, 0, 0.25);
-  --c-black-transparent-2: rgba(0, 0, 0, 0.14);
+  --c-black-transparent-0: rgb(0 0 0 / 40%);
+  --c-black-transparent-1: rgb(0 0 0 / 25%);
+  --c-black-transparent-2: rgb(0 0 0 / 14%);
+  --c-black-transparent-3: rgb(0 0 0 / 5%);
   --c-white: #ffffff;
-
   --c-gray-0: #999999;
   --c-gray-1: #eaeaea;
   --c-gray-2: #efefef;
   --c-gray-3: #fbfbfb;
-
+  --c-gray-4: #f8f8f8;
   --c-red: #ff2f2f;
+  --c-blue: #e4edfd;
 }
 
 html,
 body {
-  font-family: 'Inter', 'Arial', sans-serif;
+  font-family: Inter, Arial, sans-serif;
   font-weight: 500;
   font-size: 13px;
   color: var(--c-text-black);
