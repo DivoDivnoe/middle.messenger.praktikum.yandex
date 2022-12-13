@@ -1,4 +1,4 @@
-enum Method {
+export enum Method {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
@@ -6,10 +6,10 @@ enum Method {
 }
 
 interface OptionsProps {
-  method: Method;
-  data: Record<string, unknown>;
-  timeout: number;
-  headers: Record<string, string>;
+  method?: Method;
+  data?: Record<string, unknown>;
+  timeout?: number;
+  headers?: Record<string, string>;
 }
 
 function queryStringify(data: Record<string, string>) {
@@ -19,24 +19,38 @@ function queryStringify(data: Record<string, string>) {
 }
 
 class HTTPTransport {
-  get = (url: string, options = {} as OptionsProps) => {
+  static API_URL = 'https://ya-praktikum.tech/api/v2';
+  protected _endpoint: string;
+
+  constructor(endpoint: string) {
+    this._endpoint = `${HTTPTransport.API_URL}${endpoint}`;
+  }
+
+  get = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
     const data = queryStringify(options.data as Record<string, string>);
-    const getUrl = `${url}${data}`;
 
-    return this.request(getUrl, { ...options, method: Method.GET }, options.timeout);
+    return this._request(`${path}${data}`, { ...options, method: Method.GET });
   };
-  post = (url: string, options = {} as OptionsProps) => {
-    return this.request(url, { ...options, method: Method.POST }, options.timeout);
+  post = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+    return this._request(path, { ...options, method: Method.POST });
   };
-  put = (url: string, options = {} as OptionsProps) => {
-    return this.request(url, { ...options, method: Method.PUT }, options.timeout);
+  put = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+    return this._request(path, { ...options, method: Method.PUT });
   };
-  delete = (url: string, options = {} as OptionsProps) => {
-    return this.request(url, { ...options, method: Method.DELETE }, options.timeout);
+  delete = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+    return this._request(path, { ...options, method: Method.DELETE });
   };
 
-  request = (url: string, options: OptionsProps, timeout = 5000) => {
-    const { headers = {}, method, data } = options;
+  _request = <Response>(pathName: string, options: OptionsProps): Promise<Response> => {
+    const url = `${this._endpoint}${pathName}`;
+
+    return HTTPTransport.request<Response>(url, options);
+  };
+
+  static request = <Response>(url: string, options: OptionsProps): Promise<Response> => {
+    const DEFAULT_TIMEOUT = 5000;
+
+    const { headers = {}, method = Method.GET, data, timeout = DEFAULT_TIMEOUT } = options;
 
     return new Promise((resolve, reject) => {
       if (!method) {
@@ -47,8 +61,13 @@ class HTTPTransport {
       const xhr = new XMLHttpRequest();
       const isGet = method === Method.GET;
 
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.withCredentials = true;
+      xhr.responseType = 'json';
+
       if (headers) {
-        for (const [key, value] of Object.entries(options.headers)) {
+        for (const [key, value] of Object.entries(headers)) {
           xhr.setRequestHeader(key, value);
         }
       }
@@ -56,12 +75,16 @@ class HTTPTransport {
       xhr.timeout = timeout;
 
       xhr.onload = () => {
-        resolve(xhr);
+        if (xhr.status < 400) {
+          resolve(xhr.response);
+        } else {
+          reject(xhr.response);
+        }
       };
 
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-      xhr.ontimeout = reject;
+      xhr.onabort = () => reject({ reason: 'abort' });
+      xhr.onerror = () => reject({ reason: 'network error' });
+      xhr.ontimeout = () => reject({ reason: 'timeout' });
 
       xhr.open(method, url);
 
@@ -74,11 +97,12 @@ class HTTPTransport {
   };
 }
 
-export const myFetch = (url: string, options: OptionsProps) =>
-  new HTTPTransport().request(url, options);
+export const myFetch = (path: string, options: OptionsProps) =>
+  HTTPTransport.request(path, options);
 
 export const fetchWithRetry = (
-  url: string,
+  endpoint: string,
+  path: string,
   options = {} as OptionsProps & { tries?: number },
 ): Promise<unknown> => {
   const { tries = 1 } = options;
@@ -90,10 +114,10 @@ export const fetchWithRetry = (
       throw err;
     }
 
-    return fetchWithRetry(url, { ...options, tries: triesLeft });
+    return fetchWithRetry(endpoint, path, { ...options, tries: triesLeft });
   };
 
-  return myFetch(url, options as OptionsProps).catch(onError);
+  return myFetch(path, options as OptionsProps).catch(onError);
 };
 
 export default HTTPTransport;

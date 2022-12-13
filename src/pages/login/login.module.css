@@ -6,3 +6,87 @@
     transform: translate(-50%, -50%);
   }
 }
+
+.errorMessage {
+  position: absolute;
+  left: 0;
+  display: none;
+  font-size: 8px;
+  line-height: 8px;
+  color: var(--c-red);
+}
+
+.formItem .errorMessage {
+  top: calc(100% + 8px);
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  height: 460px;
+  padding: 50px 30px 30px;
+  border-radius: 12px;
+  background: var(--c-white);
+  box-shadow: 0 0 6px var(--c-black-transparent-2);
+
+  fieldset {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+
+    & > .errorMessage {
+      width: 100%;
+      font-size: 11px;
+      line-height: 11px;
+      text-align: center;
+    }
+  }
+
+  button {
+    margin-top: auto;
+    margin-bottom: 14px;
+  }
+}
+
+.formItem {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--c-primary);
+
+  label {
+    font-size: 9px;
+    line-height: 9px;
+    color: var(--c-gray-0);
+  }
+
+  input {
+    display: block;
+    width: 100%;
+
+    &:global(.error) + .errorMessage {
+      display: inline;
+    }
+  }
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: 51px;
+  font-size: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.link {
+  font-size: 11px;
+  line-height: 11px;
+  color: var(--c-primary);
+  text-align: center;
+}
+
+.link:hover {
+  color: var(--c-primary-hover);
+}

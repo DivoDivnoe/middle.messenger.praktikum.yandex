@@ -1,12 +1,16 @@
 import { TemplateDelegate } from 'handlebars';
-import template from './SignupForm.hbs';
-import styles from './SignupForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import template from './signup.hbs';
+import styles from './signup.module.css';
+import BaseComponent from '@/utils/components/BaseComponent';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import RegularExp from '@/configs/RegularExp';
+
+const onSubmit = (...args: any[]) => {
+  console.log(...args);
+};
 
 type InputProps = {
   id: string;
@@ -29,11 +33,11 @@ type InputsProps = {
 
 export type SubmitDataProps = InputsProps;
 
-type SignupFormProps = {
-  onSubmit: (data: SubmitDataProps) => void;
-};
+// type SignupFormProps = {
+//   onSubmit: (data: SubmitDataProps) => void;
+// };
 
-class SignupForm extends BaseComponent {
+class SignupPage extends BaseComponent {
   private _inputs: InputsProps = {
     email: '',
     login: '',
@@ -103,7 +107,8 @@ class SignupForm extends BaseComponent {
     },
   ];
 
-  constructor({ props: { onSubmit } }: ComponentProps<SignupFormProps>) {
+  // constructor({ props: { onSubmit } }: ComponentProps<SignupFormProps>) {
+  constructor() {
     super({
       props: { styles },
       listeners: {
@@ -131,7 +136,7 @@ class SignupForm extends BaseComponent {
       passwordExtraInput,
     ] = this._initInputs();
 
-    const button = SignupForm._initButton();
+    const button = SignupPage._initButton();
 
     this.addChildren({
       button,
@@ -157,7 +162,7 @@ class SignupForm extends BaseComponent {
   }
 
   private _initInputs(): Input[] {
-    return SignupForm._inputsProps.map((options) => {
+    return SignupPage._inputsProps.map((options) => {
       const validate = (): void => {
         if (options.name === 'password_extra') {
           input.extraValidate = (): boolean => {
@@ -205,4 +210,4 @@ class SignupForm extends BaseComponent {
   }
 }
 
-export default SignupForm;
+export default SignupPage;

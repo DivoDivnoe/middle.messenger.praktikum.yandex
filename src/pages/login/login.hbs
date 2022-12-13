@@ -1,0 +1,26 @@
+<div class='{{styles.loginPage}}'>
+  <form class='{{styles.loginForm}}'>
+    <h1 class='{{styles.title}}'>Вход</h1>
+
+    <fieldset>
+      <legend class='visually-hidden'>Логин и пароль</legend>
+
+      <p class='{{styles.formItem}}'>
+        <label for='login'>Логин</label>
+        {{{loginInput}}}
+        <span class='{{styles.errorMessage}}'>Неверный формат логина</span>
+      </p>
+
+      <p class='{{styles.formItem}}'>
+        <label for='password'>Пароль</label>
+        {{{passwordInput}}}
+        <span class='{{styles.errorMessage}}'>Неверный формат пароля</span>
+      </p>
+
+      <span class='{{styles.errorMessage}}'>Неверный логин или пароль</span>
+    </fieldset>
+
+    {{{button}}}
+    <a class='{{styles.link}}' href='/signup'>Нет аккаунта?</a>
+  </form>
+</div>

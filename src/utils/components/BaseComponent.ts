@@ -202,11 +202,11 @@ class BaseComponent {
   }
 
   show() {
-    this.getContent().style.display = 'block';
+    this.getContent().hidden = false;
   }
 
   hide() {
-    this.getContent().style.display = 'none';
+    this.getContent().hidden = true;
   }
 }
 
