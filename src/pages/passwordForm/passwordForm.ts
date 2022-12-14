@@ -1,19 +1,21 @@
 import { TemplateDelegate } from 'handlebars';
-import template from './PasswordFormBlock.hbs';
-import styles from './PasswordFormBlock.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import PasswordForm, { PasswordFormProps } from '../PasswordForm/PasswordForm';
+import template from './passwordForm.hbs';
+import styles from './passwordForm.module.css';
+import BaseComponent from '@/utils/components/BaseComponent';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
+import PasswordForm, { PasswordFormProps } from '@/modules/PasswordForm';
 
-class PasswordFormBlock extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<PasswordFormProps>) {
-    const { onSubmit } = props;
+const onSubmit = (...args: any[]) => {
+  console.log(...args);
+};
 
-    super({
-      props: { onSubmit, styles },
-      listeners,
-    });
+class PasswordFormPage extends BaseComponent {
+  // constructor({ props, listeners = {} }: ComponentProps<PasswordFormProps>) {
+  constructor() {
+    // const { onSubmit } = props;
+
+    super({ props: { onSubmit, styles } });
   }
 
   protected override init(): void {
@@ -40,4 +42,4 @@ class PasswordFormBlock extends BaseComponent {
   }
 }
 
-export default PasswordFormBlock;
+export default PasswordFormPage;

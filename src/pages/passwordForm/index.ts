@@ -1,14 +1,3 @@
-import renderDOM from '@/utils/helpers/renderDOM';
-import PasswordFormBlock from '@/modules/PasswordFormBlock';
+import PasswordFormPage from './passwordForm';
 
-window.addEventListener('DOMContentLoaded', () => {
-  const passwordFormBlock = new PasswordFormBlock({
-    props: {
-      onSubmit: (...args) => {
-        console.log(...args);
-      },
-    },
-  });
-
-  renderDOM('#app', passwordFormBlock);
-});
+export default PasswordFormPage;

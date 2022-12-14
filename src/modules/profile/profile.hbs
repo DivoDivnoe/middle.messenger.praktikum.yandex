@@ -7,8 +7,12 @@
   {{{userData}}}
 
   <div class='{{styles.links}}'>
-    <a href='/profileForm'>Изменить данные</a>
-    <a href='/passwordForm'>Изменить пароль</a>
+    <a href='/edit/profile'>Изменить данные</a>
+    <a href='/edit/password'>Изменить пароль</a>
     <a class='{{styles.logout}}' href='/logout'>Выйти</a>
   </div>
+
+  {{#if isVisiblePopup}}
+    {{{avatarForm}}}
+  {{/if}}
 </div>
