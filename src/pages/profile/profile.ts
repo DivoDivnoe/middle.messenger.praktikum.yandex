@@ -2,11 +2,10 @@ import { TemplateDelegate } from 'handlebars';
 import template from './profile.hbs';
 import styles from './profile.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
-import ArrowButton from '@/components/ArrowButton';
-import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
 import Profile, { ProfileProps } from '@/modules/Profile';
 import { UserProps } from '@/modules/UserData/UserData';
 import AvatarForm, { AvatarFormProps } from '@/modules/AvatarForm';
+import BackArrow from '@/modules/BackArrow/BackArrow';
 
 const mockUser: UserProps = {
   email: 'some.email@gmail.com',
@@ -31,7 +30,8 @@ class ProfilePage extends BaseComponent {
 
   protected override init(): void {
     const profile = new Profile({ props: this._props as ProfileProps });
-    const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
+    // const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
+    const arrowButton = new BackArrow() as BaseComponent;
     const avatarForm = new AvatarForm({
       props: this._props.avatar as AvatarFormProps,
     });

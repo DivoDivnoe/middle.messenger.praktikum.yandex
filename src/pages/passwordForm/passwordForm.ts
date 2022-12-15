@@ -2,9 +2,8 @@ import { TemplateDelegate } from 'handlebars';
 import template from './passwordForm.hbs';
 import styles from './passwordForm.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
-import ArrowButton from '@/components/ArrowButton';
-import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
 import PasswordForm, { PasswordFormProps } from '@/modules/PasswordForm';
+import BackArrow from '@/modules/BackArrow/BackArrow';
 
 const onSubmit = (...args: any[]) => {
   console.log(...args);
@@ -20,7 +19,8 @@ class PasswordFormPage extends BaseComponent {
 
   protected override init(): void {
     const passwordForm = new PasswordForm({ props: this._props as PasswordFormProps });
-    const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
+    // const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
+    const arrowButton = new BackArrow() as BaseComponent;
 
     this.addChildren({ passwordForm, arrowButton });
   }

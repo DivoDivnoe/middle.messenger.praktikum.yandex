@@ -4,6 +4,7 @@ import ChatsPage from './pages/chats';
 import LoginPage from './pages/login';
 import PasswordFormPage from './pages/passwordForm';
 import ProfilePage from './pages/profile';
+import ProfileFormPage from './pages/profileForm';
 import SignupPage from './pages/signup';
 import router from './utils/components/Router';
 
@@ -12,6 +13,7 @@ enum Routes {
   LOGIN = '/login',
   SIGNUP = '/signup',
   PROFILE = '/profile',
+  EDIT_PROFILE = '/edit/profile',
   EDIT_PASSWORD = '/edit/password',
   CHATS = '/chats',
   NOT_FOUND = '/notfound',
@@ -41,6 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
     .use(Routes.LOGIN, LoginPage)
     .use(Routes.CHATS, ChatsPage)
     .use(Routes.PROFILE, ProfilePage)
+    .use(Routes.EDIT_PROFILE, ProfileFormPage)
     .use(Routes.EDIT_PASSWORD, PasswordFormPage)
     .use(Routes.NOT_FOUND, NotFoundPage)
     .use(Routes.SERVER_ERROR, ServerErrorPage);
