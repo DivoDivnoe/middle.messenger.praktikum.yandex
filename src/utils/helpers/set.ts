@@ -2,7 +2,9 @@
 //   [key in string]: T;
 // };
 
-type Indexed = Record<string, any>;
+import { isObject } from './isObject';
+
+type Indexed = Record<string, unknown>;
 
 const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
   for (const p in rhs) {
@@ -11,7 +13,7 @@ const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
     }
 
     try {
-      if (rhs[p]?.constructor === Object) {
+      if (isObject(rhs[p])) {
         rhs[p] = merge(lhs[p] as Indexed, rhs[p] as Indexed);
       } else {
         lhs[p] = rhs[p];
