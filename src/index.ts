@@ -47,7 +47,6 @@ window.addEventListener('DOMContentLoaded', () => {
     .use(Routes.EDIT_PASSWORD, PasswordFormPage)
     .use(Routes.NOT_FOUND, NotFoundPage)
     .use(Routes.SERVER_ERROR, ServerErrorPage);
-  router.start();
 
-  // router.go(Routes.CHATS);
+  router.start();
 });

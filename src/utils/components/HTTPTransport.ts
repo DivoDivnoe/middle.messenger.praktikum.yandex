@@ -61,7 +61,9 @@ class HTTPTransport {
       const xhr = new XMLHttpRequest();
       const isGet = method === Method.GET;
 
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      if (!(data instanceof FormData)) {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      }
 
       xhr.withCredentials = true;
       xhr.responseType = 'json';

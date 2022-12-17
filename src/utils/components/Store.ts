@@ -1,3 +1,4 @@
+import set from '../helpers/set';
 import EventEmitter from './EventEmitter';
 
 export enum StoreEvent {
@@ -7,10 +8,10 @@ export enum StoreEvent {
 export class Store extends EventEmitter {
   private _state: Record<string, unknown> = {};
 
-  // public set(keyPath: string, data: unknown) {
-  //   set(this._state, keyPath, data);
-  //   this.emit(StoreEvent.UPDATED, this.getState());
-  // }
+  public set(keyPath: string, data: unknown) {
+    set(this._state, keyPath, data);
+    this.emit(StoreEvent.UPDATED, this.getState());
+  }
 
   public getState() {
     return this._state;
