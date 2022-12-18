@@ -10,7 +10,7 @@ export class Store extends EventEmitter {
 
   public set(keyPath: string, data: unknown) {
     set(this._state, keyPath, data);
-    this.emit(StoreEvent.UPDATED, this.getState());
+    // this.emit(StoreEvent.UPDATED, this.getState());
   }
 
   public getState() {

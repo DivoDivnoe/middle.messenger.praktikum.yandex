@@ -8,9 +8,11 @@ class AuthController {
 
   public async signin(signinData: SigninData) {
     store.set('user.loading', true);
+    console.log('signin');
 
     try {
       await this._api.signin(signinData);
+      console.log('sign in get answer');
       await this._getUser();
 
       router.go('/profile');
