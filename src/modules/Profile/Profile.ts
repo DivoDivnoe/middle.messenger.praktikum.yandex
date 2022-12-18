@@ -6,6 +6,7 @@ import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
 import UserData from '../UserData';
 import { UserProps } from '../UserData/UserData';
+import LogoutButton from '../LogoutButton';
 
 export type ProfileProps = {
   user: UserProps;
@@ -22,8 +23,9 @@ class Profile extends BaseComponent {
   protected override init(): void {
     const avatar = Profile._initAvatar();
     const userData = Profile._initUserData(this._props.user as UserProps);
+    const logoutButton = Profile._initLogoutButton();
 
-    this.addChildren({ avatar, userData });
+    this.addChildren({ avatar, userData, logoutButton });
   }
 
   private static _initAvatar(): Avatar {
@@ -48,6 +50,12 @@ class Profile extends BaseComponent {
     });
 
     return userData;
+  }
+
+  private static _initLogoutButton(): LogoutButton {
+    const logoutButton = new LogoutButton();
+
+    return logoutButton;
   }
 
   protected override getTemplate(): TemplateDelegate {

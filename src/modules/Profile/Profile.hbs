@@ -9,7 +9,9 @@
   <div class='{{styles.links}}'>
     <a href='/edit/profile'>Изменить данные</a>
     <a href='/edit/password'>Изменить пароль</a>
-    <a class='{{styles.logout}}' href='/logout'>Выйти</a>
+    {{!-- <a class='{{styles.logout}}' href='/logout'>Выйти</a> --}}
+    {{{logoutButton}}}
+    {{!-- <button class='{{styles.logout}}'>Выйти</button> --}}
   </div>
 
   {{#if isVisiblePopup}}

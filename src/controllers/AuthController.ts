@@ -48,7 +48,7 @@ class AuthController {
     try {
       await this._api.logout();
 
-      router.go('/');
+      router.go('/login');
     } catch (err) {
       if (err instanceof Error) {
         store.set('user.error', `logout error ${err.message}`);
