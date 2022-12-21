@@ -3,16 +3,19 @@ import template from './profile.hbs';
 import styles from './profile.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
 import Profile, { ProfileProps } from '@/modules/Profile';
-import { UserProps } from '@/modules/UserData/UserData';
 import AvatarForm, { AvatarFormProps } from '@/modules/AvatarForm';
 import BackArrow from '@/modules/BackArrow/BackArrow';
+import { User } from '@/api/types';
 
-const mockUser: UserProps = {
+const mockUser: User = {
+  id: 111,
   email: 'some.email@gmail.com',
   login: 'login',
   first_name: 'Andrey',
   second_name: 'Ivanov',
+  display_name: 'Andrey Ivanov',
   phone: '+79999999999',
+  avatar: '',
 };
 
 const onSubmit = (value: FormDataEntryValue) => console.log(value);
@@ -30,7 +33,6 @@ class ProfilePage extends BaseComponent {
 
   protected override init(): void {
     const profile = new Profile({ props: this._props as ProfileProps });
-    // const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
     const arrowButton = new BackArrow() as BaseComponent;
     const avatarForm = new AvatarForm({
       props: this._props.avatar as AvatarFormProps,

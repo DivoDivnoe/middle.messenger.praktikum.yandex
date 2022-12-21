@@ -5,24 +5,9 @@ import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent'
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
+import { User } from '@/api/types';
 
-export type UserProps = {
-  email: string;
-  login: string;
-  first_name: string;
-  second_name: string;
-  display_name?: string;
-  phone: string;
-};
-
-type InputProps = {
-  id: string;
-  name: keyof UserProps;
-  type: InputType;
-  placeholder: string;
-  required: boolean;
-  validationRule?: RegExp;
-};
+export type UserProps = User;
 
 export type UserDataInputType =
   | 'email'
@@ -31,6 +16,15 @@ export type UserDataInputType =
   | 'second_name'
   | 'display_name'
   | 'phone';
+
+type InputProps = {
+  id: string;
+  name: UserDataInputType;
+  type: InputType;
+  placeholder: string;
+  required: boolean;
+  validationRule?: RegExp;
+};
 
 type onChangeType = (name: UserDataInputType, value: string) => void;
 
@@ -124,7 +118,7 @@ class UserData extends BaseComponent {
       const input = new Input({
         props: {
           ...options,
-          value: user[options.name]!,
+          value: String(user[options.name])!,
           disabled,
         },
         listeners: {

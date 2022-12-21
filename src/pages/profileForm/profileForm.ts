@@ -3,15 +3,18 @@ import template from './profileForm.hbs';
 import styles from './profileForm.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
 import ProfileForm, { ProfileFormProps } from '@/modules/ProfileForm';
-import { UserProps } from '@/modules/UserData/UserData';
 import BackArrow from '@/modules/BackArrow/BackArrow';
+import { User } from '@/api/types';
 
-const mockUser: UserProps = {
+const mockUser: User = {
+  id: 111,
   email: 'some.email@gmail.com',
   login: 'login',
   first_name: 'Andrey',
   second_name: 'Ivanov',
+  display_name: 'Andrey Ivanov',
   phone: '+79999999999',
+  avatar: '',
 };
 
 const onSubmit = (...args: any[]) => {

@@ -7,65 +7,39 @@ class AuthController {
   private _api = new AuthApi();
 
   public async signin(signinData: SigninData) {
-    store.set('user.loading', true);
-    console.log('signin');
-
-    try {
-      await this._api.signin(signinData);
-      console.log('sign in get answer');
-      await this._getUser();
-
-      router.go('/profile');
-    } catch (err) {
-      if (err instanceof Error) {
-        store.set('user.error', `signin error ${err.message}`);
-      }
-    } finally {
-      store.set('user.loading', false);
-    }
+    await this._request(() => this._signin(signinData), 'signin error');
   }
 
   public async signup(signupData: SignupData) {
-    store.set('user.loading', true);
-
-    try {
-      await this._api.signup(signupData);
-      await this._getUser();
-
-      router.go('/profile');
-    } catch (err) {
-      if (err instanceof Error) {
-        store.set('user.error', `signup error ${err.message}`);
-      }
-    } finally {
-      store.set('user.loading', false);
-    }
+    await this._request(() => this._signup(signupData), 'signup error');
   }
 
   public async logout() {
-    store.set('user.loading', true);
+    await this._request(this._logout.bind(this), 'logout error');
+  }
 
-    try {
-      await this._api.logout();
+  private async _signin(signinData: SigninData) {
+    await this._api.signin(signinData);
+    await this._getUser();
 
-      router.go('/login');
-    } catch (err) {
-      if (err instanceof Error) {
-        store.set('user.error', `logout error ${err.message}`);
-      }
-    } finally {
-      store.set('user.loading', false);
-    }
+    router.go('/profile');
+  }
+
+  private async _signup(signupData: SignupData) {
+    await this._api.signup(signupData);
+    await this._getUser();
+
+    router.go('/profile');
+  }
+
+  private async _logout() {
+    await this._api.logout();
+
+    router.go('/login');
   }
 
   public async getUser() {
-    store.set('user.loading', true);
-
-    try {
-      await this._getUser();
-    } finally {
-      store.set('user.loading', false);
-    }
+    await this._request(this._getUser.bind(this), 'get user error');
   }
 
   private async _getUser() {
@@ -76,6 +50,21 @@ class AuthController {
       if (err instanceof Error) {
         store.set('user.error', `get user data error ${err.message}`);
       }
+    }
+  }
+
+  private async _request(req: () => Promise<void>, errorMessage = '') {
+    store.set('user.loading', true);
+    store.set('user.error', null);
+
+    try {
+      await req();
+    } catch (err) {
+      if (err instanceof Error) {
+        store.set('user.error', `${errorMessage} ${err.message}`);
+      }
+    } finally {
+      store.set('user.loading', false);
     }
   }
 }

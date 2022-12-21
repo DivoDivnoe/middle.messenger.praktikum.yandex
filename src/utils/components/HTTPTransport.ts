@@ -27,7 +27,7 @@ class HTTPTransport {
   }
 
   get = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
-    const data = queryStringify(options.data as Record<string, string>);
+    const data = options.data ? queryStringify(options.data as Record<string, string>) : '';
 
     return this._request(`${path}${data}`, { ...options, method: Method.GET });
   };
@@ -80,6 +80,7 @@ class HTTPTransport {
 
       xhr.onload = () => {
         if (xhr.status < 400) {
+          console.log('resolver', xhr.response);
           resolve(xhr.response);
         } else {
           reject(xhr.response);
