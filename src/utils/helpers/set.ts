@@ -1,29 +1,25 @@
-// export type Indexed<T = any> = {
-//   [key in string]: T;
-// };
-
 import { isObject } from './isObject';
 
 type Indexed = Record<string, unknown>;
 
-const merge = (lhs: Indexed, rhs: Indexed): Indexed => {
-  for (const p in rhs) {
-    if (!Object.prototype.hasOwnProperty.call(rhs, p)) {
+const merge = (left: Indexed, right: Indexed): Indexed => {
+  for (const key in right) {
+    if (!Object.prototype.hasOwnProperty.call(right, key)) {
       continue;
     }
 
     try {
-      if (isObject(rhs[p])) {
-        rhs[p] = merge(lhs[p] as Indexed, rhs[p] as Indexed);
+      if (isObject(right[key])) {
+        left[key] = merge(left[key] as Indexed, right[key] as Indexed);
       } else {
-        lhs[p] = rhs[p];
+        left[key] = right[key];
       }
     } catch (e) {
-      lhs[p] = rhs[p];
+      left[key] = right[key];
     }
   }
 
-  return lhs;
+  return left;
 };
 
 const set = (object: Indexed | unknown, path: string, value: unknown): Indexed | unknown => {

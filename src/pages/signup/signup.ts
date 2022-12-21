@@ -7,10 +7,8 @@ import { InputType } from '@/components/Input/Input';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import RegularExp from '@/configs/RegularExp';
-
-const onSubmit = (...args: any[]) => {
-  console.log(...args);
-};
+import { SignupData } from '@/api/types';
+import AuthController from '@/controllers/AuthController';
 
 type InputProps = {
   id: string;
@@ -21,21 +19,9 @@ type InputProps = {
   validationRule: RegExp;
 };
 
-type InputsProps = {
-  email: string;
-  login: string;
-  first_name: string;
-  second_name: string;
-  phone: string | null;
-  password: string;
+type InputsProps = SignupData & {
   password_extra: string;
 };
-
-export type SubmitDataProps = InputsProps;
-
-// type SignupFormProps = {
-//   onSubmit: (data: SubmitDataProps) => void;
-// };
 
 class SignupPage extends BaseComponent {
   private _inputs: InputsProps = {
@@ -117,7 +103,8 @@ class SignupPage extends BaseComponent {
             evt.preventDefault();
 
             if (this._validate()) {
-              onSubmit(this._inputs);
+              const { password_extra, ...options } = this._inputs;
+              SignupPage._onSubmit(options);
             }
           },
         ],
@@ -208,6 +195,10 @@ class SignupPage extends BaseComponent {
       return acc && cur.validate();
     }, true);
   }
+
+  private static _onSubmit = (data: SignupData) => {
+    AuthController.signup(data);
+  };
 }
 
 export default SignupPage;
