@@ -16,7 +16,7 @@ class EventEmitter {
 
     if (!listeners) return;
 
-    const newListeners = listeners.filter(listener => listener !== callback);
+    const newListeners = listeners.filter((listener) => listener !== callback);
 
     if (!newListeners.length) {
       delete this._listeners[eventName];
@@ -29,7 +29,8 @@ class EventEmitter {
     const listeners = this._listeners[eventName];
 
     if (!listeners) {
-      throw new Error(`no event ${eventName}`);
+      // throw new Error(`no event ${eventName}`);
+      return;
     }
 
     for (const listener of listeners) {

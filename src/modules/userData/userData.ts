@@ -118,7 +118,7 @@ class UserData extends BaseComponent {
       const input = new Input({
         props: {
           ...options,
-          value: String(user[options.name])!,
+          value: user[options.name] || '',
           disabled,
         },
         listeners: {

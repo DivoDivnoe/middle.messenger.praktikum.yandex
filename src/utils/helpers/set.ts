@@ -1,4 +1,4 @@
-import { isObject } from './isObject';
+import { isObject, isObjectOrArray } from './isObject';
 
 type Indexed = Record<string, unknown>;
 
@@ -23,7 +23,7 @@ const merge = (left: Indexed, right: Indexed): Indexed => {
 };
 
 const set = (object: Indexed | unknown, path: string, value: unknown): Indexed | unknown => {
-  if (typeof object !== 'object' || object === null) {
+  if (!isObjectOrArray(object)) {
     return object;
   }
 

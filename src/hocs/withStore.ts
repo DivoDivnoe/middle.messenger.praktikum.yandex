@@ -3,7 +3,9 @@ import store, { StoreEvent } from '@/utils/components/Store';
 import isEqual from '@/utils/helpers/isEqual';
 
 const withStore = (
-  mapStateToProps: (state: Record<string, unknown>) => Record<string, unknown>,
+  mapStateToProps: (
+    state: Record<string, unknown> & { user: { data: Record<string, unknown> } },
+  ) => Record<string, unknown>,
 ) => {
   return (Component: typeof BaseComponent) => {
     let currentState: Record<string, unknown>;
@@ -20,6 +22,7 @@ const withStore = (
 
           if (!isEqual(currentState, state)) {
             this.updateProps({ ...state });
+            currentState = state;
           }
         });
       }

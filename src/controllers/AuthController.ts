@@ -1,5 +1,6 @@
 import AuthApi from '@/api/AuthApi';
 import { SigninData, SignupData } from '@/api/types';
+import { Routes } from '@/configs/Routes';
 import router from '@/utils/components/Router';
 import store from '@/utils/components/Store';
 
@@ -22,30 +23,31 @@ class AuthController {
     await this._api.signin(signinData);
     await this._getUser();
 
-    router.go('/profile');
+    router.go(Routes.PROFILE);
   }
 
   private async _signup(signupData: SignupData) {
     await this._api.signup(signupData);
     await this._getUser();
 
-    router.go('/profile');
+    router.go(Routes.PROFILE);
   }
 
   private async _logout() {
     await this._api.logout();
 
-    router.go('/login');
+    router.go(Routes.LOGIN);
   }
 
   public async getUser() {
-    await this._request(this._getUser.bind(this), 'get user error');
+    const user = await this._api.getUser();
+    store.set('user.data', user);
   }
 
   private async _getUser() {
     try {
       const user = await this._api.getUser();
-      store.set('user', user);
+      store.set('user.data', user);
     } catch (err) {
       if (err instanceof Error) {
         store.set('user.error', `get user data error ${err.message}`);

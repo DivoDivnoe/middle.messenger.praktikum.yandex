@@ -1,6 +1,6 @@
 import { isObject } from './isObject';
 
-type FuncType = (...props: any[]) => void;
+type FuncType = (...props: unknown[]) => void;
 type PrimitiveType = string | number | undefined | boolean | null | bigint;
 type ObjType = Record<string, unknown>;
 

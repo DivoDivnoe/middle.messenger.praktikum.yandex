@@ -1,3 +1,5 @@
+import { Routes, publicRoutes } from './configs/Routes';
+import AuthController from './controllers/AuthController';
 import NotFoundPage from './pages/404';
 import ServerErrorPage from './pages/500';
 import ChatsPage from './pages/chats';
@@ -8,19 +10,7 @@ import ProfileFormPage from './pages/profileForm';
 import SignupPage from './pages/signup';
 import router from './utils/components/Router';
 
-enum Routes {
-  INDEX = '/',
-  LOGIN = '/login',
-  SIGNUP = '/signup',
-  PROFILE = '/profile',
-  EDIT_PROFILE = '/edit/profile',
-  EDIT_PASSWORD = '/edit/password',
-  CHATS = '/chats',
-  NOT_FOUND = '/notfound',
-  SERVER_ERROR = '/servererror',
-}
-
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('click', (evt) => {
     const target = evt.target as HTMLElement;
 
@@ -48,5 +38,21 @@ window.addEventListener('DOMContentLoaded', () => {
     .use(Routes.NOT_FOUND, NotFoundPage)
     .use(Routes.SERVER_ERROR, ServerErrorPage);
 
-  router.start();
+  const isProtectedRoute = !publicRoutes.includes(window.location.pathname as Routes);
+
+  try {
+    await AuthController.getUser();
+
+    router.start();
+
+    if (!isProtectedRoute) {
+      router.go(Routes.PROFILE);
+    }
+  } catch {
+    router.start();
+
+    if (isProtectedRoute) {
+      router.go(Routes.LOGIN);
+    }
+  }
 });

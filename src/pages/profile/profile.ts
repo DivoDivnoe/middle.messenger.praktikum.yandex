@@ -5,28 +5,14 @@ import BaseComponent from '@/utils/components/BaseComponent';
 import Profile, { ProfileProps } from '@/modules/Profile';
 import AvatarForm, { AvatarFormProps } from '@/modules/AvatarForm';
 import BackArrow from '@/modules/BackArrow/BackArrow';
-import { User } from '@/api/types';
-
-const mockUser: User = {
-  id: 111,
-  email: 'some.email@gmail.com',
-  login: 'login',
-  first_name: 'Andrey',
-  second_name: 'Ivanov',
-  display_name: 'Andrey Ivanov',
-  phone: '+79999999999',
-  avatar: '',
-};
+import withUserStore from '@/hocs/withUserStore';
 
 const onSubmit = (value: FormDataEntryValue) => console.log(value);
 
 class ProfilePage extends BaseComponent {
-  // constructor({ props, listeners = {} }: ComponentProps<ProfileProps>) {
-  constructor({ listeners = {} }) {
-    // const { user } = props;
-
+  constructor({ props = {}, listeners = {} }) {
     super({
-      props: { user: mockUser, styles, isVisiblePopup: false, avatar: { onSubmit } },
+      props: { ...props, styles, isVisiblePopup: false, avatar: { onSubmit } },
       listeners,
     });
   }
@@ -55,4 +41,4 @@ class ProfilePage extends BaseComponent {
   }
 }
 
-export default ProfilePage;
+export default withUserStore(ProfilePage);

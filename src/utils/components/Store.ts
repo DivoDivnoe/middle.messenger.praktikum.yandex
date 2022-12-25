@@ -6,7 +6,7 @@ export enum StoreEvent {
 }
 
 export class Store extends EventEmitter {
-  private _state: Record<string, unknown> = {};
+  private _state: any = {};
 
   public set(keyPath: string, data: unknown) {
     set(this._state, keyPath, data);
