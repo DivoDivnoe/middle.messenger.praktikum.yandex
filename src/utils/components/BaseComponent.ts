@@ -204,7 +204,7 @@ class BaseComponent<
     });
   }
 
-  protected getChild(key: string): any {
+  protected getChild(key: string): IBaseComponent | IBaseComponent[] | null {
     return this._children[key] || null;
   }
 
