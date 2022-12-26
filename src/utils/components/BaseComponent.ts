@@ -3,19 +3,6 @@ import deepClone from '../helpers/deepClone';
 import EventEmitter, { CallbackType } from './EventEmitter';
 import { nanoid } from 'nanoid';
 
-export type PropsTypes = Record<string, unknown>;
-export type ListenersType = Record<string, CallbackType[]>;
-
-// временное решение
-// пока не придумал, как правильно затипизировать экземпляры классов,
-// наследуемых от BaseComponent с учетом дженериков
-type ChildrenType = Record<string, any>;
-
-export interface ComponentProps<T = Record<string, never>> {
-  props: T;
-  listeners?: ListenersType;
-}
-
 enum EventType {
   INIT = 'init',
   RENDER = 'render',
@@ -23,7 +10,19 @@ enum EventType {
   UPDATE = 'update',
 }
 
+export type PropsTypes = Record<string, unknown>;
+export type ListenersType = Record<string, CallbackType[]>;
+
+export interface ComponentProps<T = Record<string, never>> {
+  props: T;
+  listeners?: ListenersType;
+}
+
+type ChildrenType = Record<string, IBaseComponent | IBaseComponent[]>;
+
 export interface IBaseComponent<P extends PropsTypes = PropsTypes> {
+  id: string;
+
   getContent: () => HTMLElement;
   updateProps: <T extends Partial<P>>(newProps: T) => void;
   dispatchComponentDidMount: () => void;
