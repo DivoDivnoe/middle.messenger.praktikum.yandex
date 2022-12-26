@@ -1,16 +1,20 @@
 import renderDOM from '../helpers/renderDOM';
-import BaseComponent from './BaseComponent';
+import BaseComponent, {
+  BaseComponentConstructor,
+  IBaseComponent,
+  PropsTypes,
+} from './BaseComponent';
 
 type RouteProps = {
   rootQuery: string;
 };
 
-class Route {
-  private _block: BaseComponent | null = null;
+class Route<P extends PropsTypes = PropsTypes> {
+  private _block: IBaseComponent<P> | null = null;
 
   constructor(
     private _pathname: string,
-    private readonly _blockClass: typeof BaseComponent,
+    private readonly _blockClass: BaseComponentConstructor<P>,
     private _props: RouteProps,
   ) {}
 
@@ -32,7 +36,7 @@ class Route {
 
   render() {
     if (!this._block) {
-      this._block = new this._blockClass({ props: {} });
+      this._block = new this._blockClass({ props: {} as P });
       renderDOM(this._props.rootQuery, this._block as BaseComponent);
       return;
     }

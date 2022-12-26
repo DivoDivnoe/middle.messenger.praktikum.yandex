@@ -4,9 +4,12 @@ import EventEmitter, { CallbackType } from './EventEmitter';
 import { nanoid } from 'nanoid';
 
 export type PropsTypes = Record<string, unknown>;
-
 export type ListenersType = Record<string, CallbackType[]>;
-type ChildrenType = Record<string, BaseComponent | BaseComponent[]>;
+
+// временное решение
+// пока не придумал, как правильно затипизировать экземпляры классов,
+// наследуемых от BaseComponent с учетом дженериков
+type ChildrenType = Record<string, any>;
 
 export interface ComponentProps<T = Record<string, never>> {
   props: T;
@@ -20,19 +23,35 @@ enum EventType {
   UPDATE = 'update',
 }
 
-class BaseComponent {
+export interface IBaseComponent<P extends PropsTypes = PropsTypes> {
+  getContent: () => HTMLElement;
+  updateProps: <T extends Partial<P>>(newProps: T) => void;
+  dispatchComponentDidMount: () => void;
+  getChildren: () => ChildrenType;
+  show: () => void;
+  hide: () => void;
+}
+export interface BaseComponentConstructor<
+  P extends PropsTypes = PropsTypes,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> {
+  new (data: O): IBaseComponent<P>;
+}
+
+class BaseComponent<
+  P extends PropsTypes = PropsTypes,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> implements IBaseComponent<P>
+{
   private _eventEmitter: EventEmitter;
   private _template: TemplateDelegate;
   private _element: HTMLElement;
   private _listeners: ListenersType;
   private _children: ChildrenType;
-  protected _props: PropsTypes;
+  protected _props: P;
   public id = nanoid(6);
 
-  constructor({
-    props = {} as PropsTypes,
-    listeners = {} as ListenersType,
-  }: ComponentProps<PropsTypes>) {
+  constructor({ props = {} as P, listeners = {} as ListenersType }: O) {
     this._template = this.getTemplate();
     this._listeners = listeners;
     this._children = {};
@@ -41,7 +60,7 @@ class BaseComponent {
     this._eventEmitter.emit(EventType.INIT, props);
   }
 
-  private _init = (props: PropsTypes): void => {
+  private _init = (props: P): void => {
     this._initProps(props);
     this.init();
 
@@ -51,7 +70,7 @@ class BaseComponent {
   // eslint-disable-next-line
   protected init(): void {}
 
-  _initProps(props: PropsTypes): void {
+  _initProps(props: P): void {
     this._props = this._makePropsProxy(props);
   }
 
@@ -99,16 +118,16 @@ class BaseComponent {
     this._subscribe();
   };
 
-  private _makePropsProxy(props: PropsTypes) {
+  private _makePropsProxy(props: P) {
     return new Proxy(props, {
       get: (target, prop) => {
-        const value = target[prop as keyof PropsTypes];
+        const value = target[prop as keyof P];
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set: (target, prop, value) => {
         const oldTarget = deepClone(target);
 
-        target[prop as keyof PropsTypes] = value;
+        target[prop as keyof P] = value;
 
         this._eventEmitter.emit(EventType.UPDATE, oldTarget, target);
 
@@ -124,7 +143,7 @@ class BaseComponent {
     this.componentDidMount();
   };
 
-  private _componentDidUpdate = (oldTarget: PropsTypes, target: PropsTypes): void => {
+  private _componentDidUpdate = (oldTarget: P, target: P): void => {
     if (this.componentDidUpdate(oldTarget, target)) {
       this._eventEmitter.emit(EventType.RENDER);
     }
@@ -157,7 +176,7 @@ class BaseComponent {
     return this._element;
   }
 
-  public updateProps(newProps: PropsTypes): void {
+  public updateProps<T extends Partial<P>>(newProps: T): void {
     Object.assign(this._props, newProps);
   }
 
@@ -168,7 +187,7 @@ class BaseComponent {
   // eslint-disable-next-line
   protected componentDidMount(): void {}
 
-  protected componentDidUpdate(_oldTarget: PropsTypes, _target: PropsTypes): boolean {
+  protected componentDidUpdate(_oldTarget: P, _target: P): boolean {
     return true;
   }
 
@@ -186,7 +205,7 @@ class BaseComponent {
     });
   }
 
-  protected getChild(key: string): BaseComponent | BaseComponent[] | null {
+  protected getChild(key: string): any {
     return this._children[key] || null;
   }
 
@@ -194,7 +213,7 @@ class BaseComponent {
     return this._children;
   }
 
-  protected addChildren(children: Record<string, BaseComponent | BaseComponent[]>) {
+  protected addChildren(children: ChildrenType) {
     this._children = {
       ...this._children,
       ...children,

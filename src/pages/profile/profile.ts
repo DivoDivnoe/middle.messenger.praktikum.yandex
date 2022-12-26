@@ -1,28 +1,50 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './profile.hbs';
 import styles from './profile.module.css';
-import BaseComponent from '@/utils/components/BaseComponent';
+import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Profile, { ProfileProps } from '@/modules/Profile';
-import AvatarForm, { AvatarFormProps } from '@/modules/AvatarForm';
+import AvatarForm from '@/modules/AvatarForm';
 import BackArrow from '@/modules/BackArrow/BackArrow';
 import withUserStore from '@/hocs/withUserStore';
+import { User } from '@/api/types';
 
-const onSubmit = (value: FormDataEntryValue) => console.log(value);
+type SubmitType = (value: FormDataEntryValue) => void;
 
-class ProfilePage extends BaseComponent {
-  constructor({ props = {}, listeners = {} }) {
+const onSubmit: SubmitType = (value) => console.log(value);
+
+type ProfilePageType = {
+  user: User;
+};
+
+type ProfilePageProps = ProfilePageType & {
+  styles: typeof styles;
+  isVisiblePopup: boolean;
+  avatar: {
+    src: string;
+    onSubmit: SubmitType;
+  };
+};
+
+export class ProfilePage<
+  P extends ProfilePageType = ProfilePageType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ProfilePageProps> {
+  constructor({ props, listeners = {} }: O) {
     super({
-      props: { ...props, styles, isVisiblePopup: false, avatar: { onSubmit } },
+      props: {
+        ...props,
+        styles,
+        isVisiblePopup: false,
+        avatar: { src: props.user.avatar, onSubmit },
+      },
       listeners,
     });
   }
 
   protected override init(): void {
-    const profile = new Profile({ props: this._props as ProfileProps });
+    const profile = new Profile({ props: { user: this._props.user } });
     const arrowButton = new BackArrow() as BaseComponent;
-    const avatarForm = new AvatarForm({
-      props: this._props.avatar as AvatarFormProps,
-    });
+    const avatarForm = new AvatarForm({ props: this._props.avatar });
 
     this.addChildren({ profile, arrowButton, avatarForm });
   }
@@ -41,4 +63,4 @@ class ProfilePage extends BaseComponent {
   }
 }
 
-export default withUserStore(ProfilePage);
+export default withUserStore<ProfilePageProps>(ProfilePage);

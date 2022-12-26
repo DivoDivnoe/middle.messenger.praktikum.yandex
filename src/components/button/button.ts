@@ -8,16 +8,18 @@ export enum ButtonType {
   SUBMIT = 'submit',
 }
 
-export type ButtonProps = {
+export type ButtonPropsType = {
   content?: string;
   type?: ButtonType;
 };
 
-class Button extends BaseComponent {
-  constructor({
-    props: { content = '', type = ButtonType.BUTTON },
-    listeners = {},
-  }: ComponentProps<ButtonProps>) {
+export type ButtonProps = ButtonPropsType & { styles: typeof styles };
+
+class Button<
+  P extends ButtonPropsType = ButtonPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ButtonProps> {
+  constructor({ props: { content = '', type = ButtonType.BUTTON }, listeners = {} }: O) {
     super({ props: { content, styles, type }, listeners });
   }
 

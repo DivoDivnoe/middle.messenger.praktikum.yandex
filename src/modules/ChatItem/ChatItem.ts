@@ -4,8 +4,9 @@ import styles from './ChatItem.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Avatar from '@/components/Avatar';
 import '@/utils/helpers/condition';
+import { AvatarProps } from '@/components/Avatar/Avatar';
 
-export type ChatItemProps = {
+export type ChatItemPropsType = {
   userName: string;
   date?: string;
   messageText?: string;
@@ -14,8 +15,16 @@ export type ChatItemProps = {
   isActive?: boolean;
 };
 
-class ChatItem extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<ChatItemProps>) {
+export type ChatItemProps = ChatItemPropsType & {
+  styles: typeof styles;
+  isMessagesCounterHidden: boolean;
+};
+
+class ChatItem<
+  P extends ChatItemPropsType = ChatItemPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ChatItemProps> {
+  constructor({ props, listeners = {} }: O) {
     const {
       newMessagesAmount = 0,
       src = '',
@@ -45,15 +54,8 @@ class ChatItem extends BaseComponent {
     this.addChildren({ avatar });
   }
 
-  private static _initAvatar(src = ''): Avatar {
-    const avatar = new Avatar({
-      props: {
-        className: String(styles.avatar),
-        src,
-      },
-    });
-
-    return avatar;
+  private static _initAvatar(src = ''): BaseComponent<AvatarProps> {
+    return new Avatar({ props: { className: String(styles.avatar), src } });
   }
 
   protected override componentDidUpdate(oldTarget: ChatItemProps, target: ChatItemProps): boolean {

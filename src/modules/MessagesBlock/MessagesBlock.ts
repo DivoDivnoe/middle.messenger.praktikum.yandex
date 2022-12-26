@@ -10,22 +10,37 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
 
-export type MessagesBlockProps = {
+export type MessagesBlockPropsType = {
   isEmpty?: boolean;
-  src?: string;
+  src: string;
   userName?: string;
   data?: ConversationBlockProps[];
   onSubmit: (message: string) => void;
+  isActiveUserButton: boolean;
 };
 
-class MessagesBlock extends BaseComponent {
+export type MessagesBlockProps = Omit<MessagesBlockPropsType, 'onSubmit'> & {
+  styles: typeof styles;
+};
+
+class MessagesBlock<
+  P extends MessagesBlockPropsType = MessagesBlockPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<MessagesBlockProps> {
   private _message = '';
 
   constructor({
-    props: { isEmpty = false, src = '', userName = '', data = [], onSubmit },
-  }: ComponentProps<MessagesBlockProps>) {
+    props: {
+      isEmpty = false,
+      src = '',
+      userName = '',
+      data = [],
+      isActiveUserButton = false,
+      onSubmit,
+    },
+  }: O) {
     super({
-      props: { styles, isEmpty, src, userName, data, onSubmit, isActiveUserButton: false },
+      props: { styles, isEmpty, src, userName, data, isActiveUserButton },
       listeners: {
         submit: [
           (evt) => {

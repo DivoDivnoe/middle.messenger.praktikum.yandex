@@ -1,7 +1,7 @@
-import BaseComponent from './BaseComponent';
+import { BaseComponentConstructor, PropsTypes } from './BaseComponent';
 import Route from './Route';
 
-type RouteType = Record<string, Route>;
+type RouteType = Record<string, Route<any>>;
 
 class Router {
   private static _instance: Router;
@@ -32,7 +32,7 @@ class Router {
     this._history.back();
   }
 
-  use(pathname: string, block: typeof BaseComponent) {
+  use<P extends PropsTypes = PropsTypes>(pathname: string, block: BaseComponentConstructor<P>) {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery });
     this._routes[pathname] = route;
 
@@ -40,10 +40,7 @@ class Router {
   }
 
   _onRoute(pathname: string) {
-    console.log('pathname', pathname, 'routes', this._routes);
     const route = this._routes[pathname];
-
-    console.log('on route', route);
 
     if (!route) {
       return;

@@ -4,7 +4,7 @@ import styles from './500.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
 import ErrorMessage from '@/modules/ErrorMessage';
 
-class ServerErrorPage extends BaseComponent {
+class ServerErrorPage extends BaseComponent<{ styles: typeof styles }> {
   constructor() {
     super({ props: { styles } });
   }

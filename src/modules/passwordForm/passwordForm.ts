@@ -10,18 +10,27 @@ import Avatar from '@/components/Avatar';
 import { AvatarSize } from '@/components/Avatar/Avatar';
 import RegularExp from '@/configs/RegularExp';
 
-export type PasswordFormProps = {
+export type PasswordFormPropsType = {
+  src: string;
   onSubmit: (oldPassword: string, newPassword: string, newPasswordExtra: string) => void;
 };
 
-class PasswordForm extends BaseComponent {
+export type PasswordFormProps = {
+  src: string;
+  styles: typeof styles;
+};
+
+class PasswordForm<
+  P extends PasswordFormPropsType = PasswordFormPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<PasswordFormProps> {
   private _old_password = '';
   private _new_password = '';
   private _new_password_extra = '';
 
-  constructor({ props: { onSubmit } }: ComponentProps<PasswordFormProps>) {
+  constructor({ props: { onSubmit, src } }: O) {
     super({
-      props: { styles },
+      props: { styles, src },
       listeners: {
         submit: [
           (evt) => {
@@ -37,7 +46,7 @@ class PasswordForm extends BaseComponent {
   }
 
   protected override init(): void {
-    const avatar = PasswordForm._initAvatar();
+    const avatar = PasswordForm._initAvatar(this._props.src);
     const button = PasswordForm._initButton();
     const oldPasswordInput = this._initOldPasswordInput();
     const newPasswordInput = this._initNewPasswordInput();
@@ -46,9 +55,10 @@ class PasswordForm extends BaseComponent {
     this.addChildren({ avatar, button, oldPasswordInput, newPasswordInput, newPasswordExtraInput });
   }
 
-  private static _initAvatar(): Avatar {
+  private static _initAvatar(src: string): Avatar {
     const avatar = new Avatar({
       props: {
+        src,
         size: AvatarSize.LARGE,
       },
     });

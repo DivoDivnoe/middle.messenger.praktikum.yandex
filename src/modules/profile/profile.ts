@@ -8,32 +8,32 @@ import UserData from '../UserData';
 import { UserProps } from '../UserData/UserData';
 import LogoutButton from '../LogoutButton';
 
-export type ProfileProps = {
-  user: UserProps;
-};
+export type ProfilePropsType = { user: UserProps };
+export type ProfileProps = ProfilePropsType & { styles: typeof styles };
 
-class Profile extends BaseComponent {
-  constructor({ props: { user }, listeners = {} }: ComponentProps<ProfileProps>) {
-    super({
-      props: { styles, user },
-      listeners,
-    });
+class Profile<
+  P extends ProfilePropsType = ProfilePropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ProfileProps> {
+  constructor({ props: { user }, listeners = {} }: O) {
+    super({ props: { styles, user }, listeners });
   }
 
   protected override init(): void {
-    const avatar = Profile._initAvatar();
+    const avatar = Profile._initAvatar(this._props.user.avatar);
     const userData = Profile._initUserData(this._props.user as UserProps);
     const logoutButton = Profile._initLogoutButton();
 
     this.addChildren({ avatar, userData, logoutButton });
   }
 
-  private static _initAvatar(): Avatar {
+  private static _initAvatar(src: string): Avatar {
     const avatar = new Avatar({
       props: {
         className: String(styles.avatar),
         size: AvatarSize.LARGE,
         isEditable: true,
+        src,
       },
     });
 

@@ -12,7 +12,7 @@ export enum InputType {
   FILE = 'file',
 }
 
-export type InputProps = {
+export type InputPropsType = {
   id?: string;
   type?: string;
   placeholder?: string;
@@ -23,27 +23,17 @@ export type InputProps = {
   validationRule?: RegExp;
 };
 
-class Input extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<InputProps>) {
-    const {
-      type = InputType.DATE,
-      value = '',
-      required = false,
-      disabled = false,
-      validationRule,
-    } = props;
+export type InputProps = InputPropsType & { styles: typeof styles };
 
-    const inputProps = {
-      ...props,
-      type,
-      value,
-      required,
-      disabled,
-      styles,
-      validationRule,
-    };
+class Input<
+  P extends InputPropsType = InputPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<InputProps> {
+  constructor({ props, listeners = {} }: O) {
+    const { type = InputType.DATE, value = '', required = false, disabled = false } = props;
+
     super({
-      props: inputProps,
+      props: { ...props, styles, type, value, required, disabled },
       listeners: {
         ...listeners,
         input: [

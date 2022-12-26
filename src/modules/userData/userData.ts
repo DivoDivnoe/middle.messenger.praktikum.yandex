@@ -28,14 +28,19 @@ type InputProps = {
 
 type onChangeType = (name: UserDataInputType, value: string) => void;
 
-type UserDataProps = {
-  isEditable?: boolean;
+type UserDataPropsType = {
   user: UserProps;
   className?: string;
+  isEditable: boolean;
   onChange?: onChangeType;
 };
 
-class UserData extends BaseComponent {
+type UserDataProps = UserDataPropsType & { styles: typeof styles };
+
+class UserData<
+  P extends UserDataPropsType = UserDataPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<UserDataProps> {
   private static _inputsProps: InputProps[] = [
     {
       id: 'email',
@@ -86,11 +91,11 @@ class UserData extends BaseComponent {
     },
   ];
 
-  constructor({ props, listeners = {} }: ComponentProps<UserDataProps>) {
-    const { user, isEditable = true, className = '', onChange } = props;
+  constructor({ props, listeners = {} }: O) {
+    const { isEditable = true, className = '' } = props;
 
     super({
-      props: { styles, isEditable, user, className, onChange },
+      props: { ...props, styles, isEditable, className },
       listeners,
     });
   }

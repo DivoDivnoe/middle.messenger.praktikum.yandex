@@ -12,11 +12,18 @@ type LoginFormProps = {
   onSubmit: (login: string, password: string) => void;
 };
 
-class LoginForm extends BaseComponent {
+type LoginFormType = {
+  styles: typeof styles;
+};
+
+class LoginForm<
+  P extends LoginFormProps = LoginFormProps,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<LoginFormType> {
   private _login = '';
   private _password = '';
 
-  constructor({ props: { onSubmit } }: ComponentProps<LoginFormProps>) {
+  constructor({ props: { onSubmit } }: O) {
     super({
       props: { styles },
       listeners: {

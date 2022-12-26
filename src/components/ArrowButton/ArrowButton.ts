@@ -1,6 +1,6 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ArrowButton.hbs';
-import * as styles from './ArrowButton.module.css';
+import styles from './ArrowButton.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 
 export enum ArrowButtonSide {
@@ -13,17 +13,22 @@ export enum ArrowButtonType {
   SIDE = 'side',
 }
 
-type ArrowButtonProps = {
+type ArrowButtonPropsType = {
   type?: ArrowButtonType;
   side?: ArrowButtonSide;
   isSubmit?: boolean;
 };
 
-class ArrowButton extends BaseComponent {
+type ArrowButtonProps = ArrowButtonPropsType & { styles: typeof styles };
+
+class ArrowButton<
+  P extends ArrowButtonPropsType = ArrowButtonPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ArrowButtonProps> {
   constructor({
     props: { type = ArrowButtonType.DEFAULT, side = ArrowButtonSide.LEFT, isSubmit = false },
     listeners = {},
-  }: ComponentProps<ArrowButtonProps>) {
+  }: O) {
     super({ props: { type, side, styles, isSubmit }, listeners });
   }
 

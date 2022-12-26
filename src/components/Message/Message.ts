@@ -8,23 +8,22 @@ export enum UserMessageType {
   INTERLOCUTOR = 'interlocutor',
 }
 
-export type MessageProps = {
+export type MessagePropsType = {
   text: string;
   userType: UserMessageType;
   time: string;
 };
 
-class Message extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<MessageProps>) {
+export type MessageProps = MessagePropsType & { styles: typeof styles };
+
+class Message<
+  P extends MessagePropsType = MessagePropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<MessageProps> {
+  constructor({ props, listeners = {} }: O) {
     const { userType = UserMessageType.DEFAULT } = props;
 
-    const messageProps = {
-      ...props,
-      styles,
-      userType,
-    };
-
-    super({ props: messageProps, listeners });
+    super({ props: { ...props, styles, userType }, listeners });
   }
 
   protected override getTemplate(): TemplateDelegate {

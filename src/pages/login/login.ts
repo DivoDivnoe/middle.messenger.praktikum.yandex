@@ -9,7 +9,7 @@ import AuthController from '@/controllers/AuthController';
 //   console.log(login, password);
 // };
 
-class LoginPage extends BaseComponent {
+class LoginPage extends BaseComponent<{ styles: typeof styles }> {
   constructor() {
     super({ props: { styles } });
   }

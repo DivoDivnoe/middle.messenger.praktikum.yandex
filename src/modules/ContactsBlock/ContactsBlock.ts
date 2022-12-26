@@ -6,12 +6,17 @@ import '@/utils/helpers/condition';
 import ChatItem from '../ChatItem';
 import { ChatItemProps } from '../ChatItem/ChatItem';
 
-export type FriendsBlockProps = {
+export type FriendsBlockPropsType = {
   users?: ChatItemProps[];
 };
 
-class ContactsBlock extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<FriendsBlockProps>) {
+export type FriendsBlockProps = FriendsBlockPropsType & { styles: typeof styles };
+
+class ContactsBlock<
+  P extends FriendsBlockPropsType = FriendsBlockPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<FriendsBlockProps> {
+  constructor({ props, listeners = {} }: O) {
     const { users = [] } = props;
 
     super({
@@ -44,7 +49,7 @@ class ContactsBlock extends BaseComponent {
 
   protected override componentDidUpdate(
     oldTarget: FriendsBlockProps,
-    target = [] as FriendsBlockProps,
+    target: FriendsBlockProps,
   ): boolean {
     if (oldTarget.users !== target.users) {
       const contacts = ContactsBlock._initContacts(target.users as ChatItemProps[]);

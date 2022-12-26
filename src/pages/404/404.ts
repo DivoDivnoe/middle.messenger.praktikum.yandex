@@ -4,7 +4,7 @@ import styles from './404.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
 import ErrorMessage from '@/modules/ErrorMessage';
 
-class NotFoundPage extends BaseComponent {
+class NotFoundPage extends BaseComponent<{ styles: typeof styles }> {
   constructor() {
     super({ props: { styles } });
   }

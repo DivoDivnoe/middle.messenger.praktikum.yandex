@@ -1,27 +1,27 @@
-import BaseComponent, { ComponentProps, PropsTypes } from '@/utils/components/BaseComponent';
-import store, { StoreEvent } from '@/utils/components/Store';
+import {
+  BaseComponentConstructor,
+  ComponentProps,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
+import store, { StateProps, StoreEvent } from '@/utils/components/Store';
 import isEqual from '@/utils/helpers/isEqual';
 
-const withStore = (
-  mapStateToProps: (
-    state: Record<string, unknown> & { user: { data: Record<string, unknown> } },
-  ) => Record<string, unknown>,
-) => {
-  return (Component: typeof BaseComponent) => {
-    let currentState: Record<string, unknown>;
+const withStore = <T>(mapStateToProps: (state: StateProps) => T) => {
+  return <P extends PropsTypes = PropsTypes>(Component: BaseComponentConstructor<P>) => {
+    let currentState: T;
 
-    return class WithStore extends Component {
-      constructor(options: ComponentProps<PropsTypes>) {
+    return class extends Component {
+      constructor(options: ComponentProps<P>) {
         const { props, listeners = {} } = options;
         currentState = mapStateToProps(store.getState());
 
-        super({ props: { ...props, ...currentState }, listeners } as ComponentProps<PropsTypes>);
+        super({ props: { ...props, ...currentState }, listeners });
 
         store.on(StoreEvent.UPDATED, () => {
           const state = mapStateToProps(store.getState());
 
           if (!isEqual(currentState, state)) {
-            this.updateProps({ ...state });
+            this.updateProps({ ...state } as P & T);
             currentState = state;
           }
         });

@@ -8,17 +8,22 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import '../../utils/helpers/condition';
 
-export type AvatarFormProps = {
+export type AvatarFormPropsType = {
   isError?: boolean;
   onSubmit: (value: FormDataEntryValue) => void;
 };
 
-class AvatarForm extends BaseComponent {
-  constructor({ props }: ComponentProps<AvatarFormProps>) {
+export type AvatarFormProps = AvatarFormPropsType & { styles: typeof styles };
+
+class AvatarForm<
+  P extends AvatarFormPropsType = AvatarFormPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<AvatarFormProps> {
+  constructor({ props }: O) {
     const { isError = false, onSubmit } = props;
 
     super({
-      props: { styles, isError, onSubmit },
+      props: { ...props, styles, isError },
       listeners: {
         submit: [
           (evt) => {

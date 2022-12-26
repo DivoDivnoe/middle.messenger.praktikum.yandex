@@ -4,7 +4,11 @@ import styles from './LogoutButton.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
 import AuthController from '@/controllers/AuthController';
 
-class LogoutButton extends BaseComponent {
+type LogoutProps = {
+  styles: typeof styles;
+};
+
+class LogoutButton extends BaseComponent<LogoutProps> {
   constructor() {
     super({
       props: { styles },

@@ -11,17 +11,25 @@ import { ButtonType } from '@/components/Button/Button';
 
 type InputsProps = Record<UserDataInputType, string>;
 
-export type ProfileFormProps = {
+export type ProfileFormPropsType = {
   user: UserProps;
   onSubmit: (data: InputsProps) => void;
 };
 
-class ProfileForm extends BaseComponent {
+export type ProfileFormProps = {
+  user: UserProps;
+  styles: typeof styles;
+};
+
+class ProfileForm<
+  P extends ProfileFormPropsType = ProfileFormPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ProfileFormProps> {
   private _inputsData: InputsProps;
 
-  constructor({ props: { user, onSubmit } }: ComponentProps<ProfileFormProps>) {
+  constructor({ props: { user, onSubmit } }: O) {
     super({
-      props: { styles, user, onSubmit },
+      props: { styles, user },
       listeners: {
         submit: [
           (evt) => {
@@ -46,19 +54,20 @@ class ProfileForm extends BaseComponent {
   }
 
   protected override init(): void {
-    const avatar = ProfileForm._initAvatar();
+    const avatar = ProfileForm._initAvatar(this._props.user.avatar);
     const userData = this._initUserData();
     const button = ProfileForm._initButton();
 
     this.addChildren({ avatar, userData, button });
   }
 
-  private static _initAvatar(): Avatar {
+  private static _initAvatar(src: string): Avatar {
     const avatar = new Avatar({
       props: {
         className: String(styles.avatar),
         size: AvatarSize.LARGE,
         isEditable: false,
+        src,
       },
     });
 

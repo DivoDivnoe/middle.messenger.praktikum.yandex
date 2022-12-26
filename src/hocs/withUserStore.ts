@@ -1,14 +1,15 @@
-import BaseComponent from '@/utils/components/BaseComponent';
+import BaseComponent, { PropsTypes } from '@/utils/components/BaseComponent';
 import withStore from './withStore';
+import { StateProps } from '@/utils/components/Store';
 
-const mapUserStateToProps = (
-  state: Record<string, unknown> & { user: { data: Record<string, unknown> } },
-): { user: Record<string, unknown> } => ({
-  user: state.user?.data || {},
+type UserProps = { user: StateProps['user']['data'] };
+
+const mapUserStateToProps = (state: StateProps): UserProps => ({
+  user: state.user.data,
 });
 
-const withUserStore = (Component: typeof BaseComponent) => {
-  return withStore(mapUserStateToProps)(Component);
+const withUserStore = <P extends PropsTypes = PropsTypes>(Component: typeof BaseComponent<P>) => {
+  return withStore<UserProps>(mapUserStateToProps)(Component);
 };
 
 export default withUserStore;

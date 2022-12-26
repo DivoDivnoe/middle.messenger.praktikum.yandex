@@ -23,7 +23,7 @@ type InputsProps = SignupData & {
   password_extra: string;
 };
 
-class SignupPage extends BaseComponent {
+class SignupPage extends BaseComponent<{ styles: typeof styles }> {
   private _inputs: InputsProps = {
     email: '',
     login: '',

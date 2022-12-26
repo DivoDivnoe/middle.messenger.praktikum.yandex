@@ -4,13 +4,18 @@ import styles from './ConversationBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import Message, { MessageProps } from '@/components/Message/Message';
 
-export type ConversationBlockProps = {
+export type ConversationBlockPropsType = {
   date: string;
   messagesData: MessageProps[];
 };
 
-class ConversationBlock extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<ConversationBlockProps>) {
+export type ConversationBlockProps = ConversationBlockPropsType & { styles: typeof styles };
+
+class ConversationBlock<
+  P extends ConversationBlockPropsType = ConversationBlockPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ConversationBlockProps> {
+  constructor({ props, listeners = {} }: O) {
     const { date, messagesData } = props;
 
     super({
