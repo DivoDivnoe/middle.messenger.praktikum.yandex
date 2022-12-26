@@ -41,6 +41,7 @@ class AuthController {
 
   public async getUser() {
     const user = await this._api.getUser();
+    console.log('user', user);
     store.set('user.data', user);
   }
 

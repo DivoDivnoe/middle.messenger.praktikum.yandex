@@ -52,10 +52,10 @@ window.addEventListener('DOMContentLoaded', async () => {
       router.go(Routes.PROFILE);
     }
   } catch {
-    router.start();
-
     if (isProtectedRoute) {
       router.go(Routes.LOGIN);
     }
+
+    router.start();
   }
 });

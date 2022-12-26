@@ -20,7 +20,6 @@ class AuthApi extends BaseAPI {
   }
 
   public signin(signinData: SigninData) {
-    console.log('sign in api');
     return this._http.post(Path.SIGN_IN, { data: signinData });
   }
 
@@ -29,7 +28,6 @@ class AuthApi extends BaseAPI {
   }
 
   public getUser(): Promise<User> {
-    console.log('get user');
     return this._http.get<User>(Path.GET_USER);
   }
 
