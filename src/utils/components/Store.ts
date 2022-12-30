@@ -1,4 +1,4 @@
-import { User } from '@/api/types';
+import { ChatType, User } from '@/api/types';
 import set from '../helpers/set';
 import EventEmitter from './EventEmitter';
 
@@ -6,28 +6,29 @@ export enum StoreEvent {
   UPDATED = 'updated',
 }
 
-export type StateCoreType = {
+type StateCoreType<T> = {
   loading: boolean;
   error: string | null;
+  data: T;
 };
 
-export type UserStateProps = StateCoreType & {
-  data: User | null;
-  current: User | null;
-};
-
-export type UsersStateProps = StateCoreType & {
-  data: User[];
-};
+export type UserStateProps = StateCoreType<User | null> & { current: User | null };
+export type UsersStateProps = StateCoreType<User[]>;
+export type ChatsStateProps = StateCoreType<ChatType[]>;
+export type ChatStateProps = StateCoreType<ChatType | null>;
 
 export type StateProps = {
   user: UserStateProps;
   users: UsersStateProps;
+  chats: ChatsStateProps;
+  currentChat: ChatStateProps;
 };
 
 const initialState: StateProps = {
   user: { data: null, error: null, loading: false, current: null },
   users: { data: [], error: null, loading: false },
+  chats: { data: [], error: null, loading: false },
+  currentChat: { data: null, error: null, loading: false },
 };
 
 export class Store extends EventEmitter {

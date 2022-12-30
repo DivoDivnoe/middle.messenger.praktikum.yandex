@@ -1,6 +1,6 @@
 import BaseAPI from './BaseApi';
 import Endpoint from './Endpoint';
-import { ChatMainDataType, ChatType } from './types';
+import { ChatMainDataType, ChatToken, ChatType } from './types';
 
 enum Path {
   ROOT = '/',
@@ -10,13 +10,13 @@ enum Path {
   TOKEN = '/token',
 }
 
-type GetChatsListType = {
+export type GetChatsListType = {
   offset?: number;
   limit?: number;
   title?: string;
 };
 
-type CreateChatType = { title: string };
+export type CreateChatType = { title: string };
 type CreateChatResponseType = { id: number };
 
 type DeleteChatResponse = {
@@ -60,7 +60,7 @@ class ChatsApi extends BaseAPI {
     return this._http.delete(Path.USERS, { data: { chatId, users } });
   }
 
-  public getChatToken(chatId: number) {
+  public getChatToken(chatId: number): Promise<ChatToken[]> {
     return this._http.post(`${Path.TOKEN}/${chatId}`);
   }
 }

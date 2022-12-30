@@ -72,3 +72,7 @@ export type ChatMessage = {
   content: string;
   file: FileType;
 };
+
+export type ChatToken = {
+  token: string;
+};
