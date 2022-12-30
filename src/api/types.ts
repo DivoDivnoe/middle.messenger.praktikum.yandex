@@ -1,6 +1,6 @@
 export type SigninData = {
-  ['login']: string;
-  ['password']: string;
+  login: string;
+  password: string;
 };
 
 export type SignupData = {
@@ -29,4 +29,46 @@ export type User = UserMainData & {
 export type PasswordUpdateType = {
   oldPassword: string;
   newPassword: string;
+};
+
+export type LastMessageType = {
+  user: UserMainData;
+  time: string;
+  content: string;
+};
+
+export type ChatMainDataType = {
+  id: number;
+  title: string;
+  avatar: string;
+};
+
+export type ChatType = ChatMainDataType & {
+  unread_count: number;
+  last_message: LastMessageType | null;
+};
+
+export enum MessageType {
+  MESSAGE = 'message',
+  FILE = 'file',
+}
+
+export type FileType = {
+  id: number;
+  user_id: number;
+  path: string;
+  filename: string;
+  content_type: string;
+  content_size: number;
+  upload_date: string;
+};
+
+export type ChatMessage = {
+  id: number;
+  user_id: number;
+  chat_id: number;
+  time: string;
+  type: MessageType;
+  content: string;
+  file: FileType;
 };
