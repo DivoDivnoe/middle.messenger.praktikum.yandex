@@ -6,18 +6,32 @@ export enum StoreEvent {
   UPDATED = 'updated',
 }
 
-export type UserStateProps = {
-  data: User | null;
+export type StateCoreType = {
+  loading: boolean;
   error: string | null;
-  isLoading: boolean;
+};
+
+export type UserStateProps = StateCoreType & {
+  data: User | null;
+  current: User | null;
+};
+
+export type UsersStateProps = StateCoreType & {
+  data: User[];
 };
 
 export type StateProps = {
   user: UserStateProps;
+  users: UsersStateProps;
+};
+
+const initialState: StateProps = {
+  user: { data: null, error: null, loading: false, current: null },
+  users: { data: [], error: null, loading: false },
 };
 
 export class Store extends EventEmitter {
-  private _state: StateProps = { user: { data: null, error: null, isLoading: false } };
+  private _state: StateProps = initialState;
 
   public set(keyPath: string, data: unknown) {
     set(this._state, keyPath, data);

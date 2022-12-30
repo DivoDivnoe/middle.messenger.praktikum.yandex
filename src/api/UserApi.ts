@@ -31,11 +31,11 @@ class UserApi extends BaseAPI {
     return this._http.put(Path.PASSWORD, { data });
   }
 
-  public getById(id: string): Promise<User> {
+  public getUserById(id: string): Promise<User> {
     return this._http.get(`/${id}`);
   }
 
-  public getByLogin(login: string): Promise<User[]> {
+  public getUsersByLogin(login: string): Promise<User[]> {
     return this._http.post(Path.USER_BY_LOGIN, { data: { login } });
   }
 }
