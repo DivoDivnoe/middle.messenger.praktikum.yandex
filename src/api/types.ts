@@ -12,13 +12,21 @@ export type SignupData = {
   phone: string;
 };
 
-export type User = {
-  id: number;
+export type UserMainData = {
   first_name: string;
   second_name: string;
   display_name: string | null;
   login: string;
   email: string;
   phone: string;
+};
+
+export type User = UserMainData & {
+  id: number;
   avatar: string;
+};
+
+export type PasswordUpdateType = {
+  oldPassword: string;
+  newPassword: string;
 };

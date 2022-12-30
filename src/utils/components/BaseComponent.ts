@@ -50,7 +50,7 @@ class BaseComponent<
   protected _props: P;
   public id = nanoid(6);
 
-  constructor({ props = {} as P, listeners = {} as ListenersType }: O) {
+  constructor({ props, listeners = {} as ListenersType }: O) {
     this._template = this.getTemplate();
     this._listeners = listeners;
     this._children = {};
@@ -180,7 +180,7 @@ class BaseComponent<
   }
 
   protected getTemplate(): TemplateDelegate {
-    throw new Error('now template defined');
+    throw new Error('no template defined');
   }
 
   // eslint-disable-next-line

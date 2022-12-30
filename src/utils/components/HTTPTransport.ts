@@ -7,7 +7,7 @@ export enum Method {
 
 interface OptionsProps {
   method?: Method;
-  data?: Record<string, unknown>;
+  data?: Record<string, unknown> | FormData;
   timeout?: number;
   headers?: Record<string, string>;
 }
