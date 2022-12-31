@@ -32,8 +32,6 @@ class Avatar<
       isEditable,
     };
 
-    console.log('src', props.src);
-
     super({ props: avatarProps, listeners });
   }
 

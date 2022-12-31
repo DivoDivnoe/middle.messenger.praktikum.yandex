@@ -2,17 +2,17 @@ import { TemplateDelegate } from 'handlebars';
 import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Avatar from '@/modules/Avatar';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
 import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
+import Avatar from '@/components/Avatar';
 
 export type MessagesBlockPropsType = {
   isEmpty?: boolean;
-  src: string;
+  src: string | null;
   userName?: string;
   data?: ConversationBlockProps[];
   onSubmit: (message: string) => void;
@@ -57,7 +57,7 @@ class MessagesBlock<
 
   protected override init(): void {
     if (!this._props.isEmpty) {
-      const avatar = MessagesBlock._initAvatar();
+      const avatar = MessagesBlock._initAvatar(this._props.src);
       const arrowButton = MessagesBlock._initArrowButton();
       const messagesBlocks = MessagesBlock._initBlocks(
         this._props.data as ConversationBlockProps[],
@@ -68,8 +68,8 @@ class MessagesBlock<
     }
   }
 
-  private static _initAvatar() {
-    const avatar = new Avatar({ props: {} });
+  private static _initAvatar(src: string | null) {
+    const avatar = new Avatar({ props: { src } });
 
     return avatar;
   }
