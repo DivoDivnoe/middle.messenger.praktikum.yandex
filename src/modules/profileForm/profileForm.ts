@@ -1,39 +1,39 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ProfileForm.hbs';
 import styles from './ProfileForm.module.css';
-import BaseComponent, { ComponentProps, IBaseComponent } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentProps,
+  IBaseComponent,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import Avatar from '@/modules/Avatar';
 import UserData from '../UserData';
 import { ProfileProps, UserDataInputType } from '../UserData/UserData';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import { AvatarSize } from '@/components/Avatar/Avatar';
-import { User } from '@/api/types';
+import withUserStore, { UserProps } from '@/hocs/withUserStore';
+import userController from '@/controllers/UserController';
 
 type InputsProps = Record<UserDataInputType, string>;
 
-export type ProfileFormPropsType = {
-  user: User;
-  onSubmit: (data: InputsProps) => void;
-};
-
-export type ProfileFormProps = {
-  user: User;
+export type ProfileFormPropsType = UserProps;
+export type ProfileFormProps = UserProps & {
   styles: typeof styles;
 };
 
-class ProfileForm<
+export class ProfileForm<
   P extends ProfileFormPropsType = ProfileFormPropsType,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<ProfileFormProps> {
   private _inputsData: InputsProps;
 
-  constructor({ props: { user, onSubmit } }: O) {
+  constructor({ props: { user } }: O) {
     super({
       props: { user, styles },
       listeners: {
         submit: [
-          (evt) => {
+          async (evt) => {
             evt.preventDefault();
 
             if (
@@ -43,7 +43,7 @@ class ProfileForm<
                 }
               ).validate()
             ) {
-              onSubmit(this._inputsData);
+              await this._onSubmit();
             }
           },
         ],
@@ -117,6 +117,10 @@ class ProfileForm<
 
     return true;
   }
+
+  _onSubmit() {
+    return userController.updateProfile(this._inputsData);
+  }
 }
 
-export default ProfileForm;
+export default withUserStore<PropsTypes>(ProfileForm);

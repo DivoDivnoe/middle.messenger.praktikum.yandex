@@ -171,6 +171,7 @@ export class UserData<
     }
 
     if (oldUser.display_name !== newUser.display_name) {
+
       (this.getChild('displayNameInput') as BaseComponent).updateProps({
         value: newUser.display_name,
       });
@@ -194,5 +195,4 @@ export class UserData<
   }
 }
 
-const UserDataWithStore = withUserStore<ProfileProps>(UserData);
-export default UserDataWithStore;
+export default withUserStore<ProfileProps>(UserData);

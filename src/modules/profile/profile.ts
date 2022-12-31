@@ -43,9 +43,7 @@ class Profile extends BaseComponent<ProfileProps> {
   }
 
   private static _initLogoutButton(): LogoutButton {
-    const logoutButton = new LogoutButton();
-
-    return logoutButton;
+    return new LogoutButton();
   }
 
   protected override getTemplate(): TemplateDelegate {

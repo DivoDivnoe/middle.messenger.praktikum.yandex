@@ -9,7 +9,6 @@ import PasswordFormPage from './pages/passwordForm';
 import { PasswordFormPagePropsType } from './pages/passwordForm/passwordForm';
 import ProfilePage from './pages/profile';
 import ProfileFormPage from './pages/profileForm';
-import { ProfileFormPageType } from './pages/profileForm/profileForm';
 import SignupPage from './pages/signup';
 import router from './utils/components/Router';
 
@@ -36,7 +35,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     .use(Routes.LOGIN, LoginPage)
     .use<ChatBlockPropsType>(Routes.CHATS, ChatsPage)
     .use(Routes.PROFILE, ProfilePage)
-    .use<ProfileFormPageType>(Routes.EDIT_PROFILE, ProfileFormPage)
+    .use(Routes.EDIT_PROFILE, ProfileFormPage)
     .use<PasswordFormPagePropsType>(Routes.EDIT_PASSWORD, PasswordFormPage)
     .use(Routes.NOT_FOUND, NotFoundPage)
     .use(Routes.SERVER_ERROR, ServerErrorPage);

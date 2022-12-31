@@ -80,7 +80,6 @@ class HTTPTransport {
 
       xhr.onload = () => {
         if (xhr.status < 400) {
-          console.log('resolver', xhr.response);
           resolve(xhr.response);
         } else {
           reject(xhr.response);

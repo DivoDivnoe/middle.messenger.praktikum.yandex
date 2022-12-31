@@ -1,5 +1,7 @@
 import UserApi from '@/api/UserApi';
 import { PasswordUpdateType, UserMainData } from '@/api/types';
+import { Routes } from '@/configs/Routes';
+import router from '@/utils/components/Router';
 import store from '@/utils/components/Store';
 
 class UserController {
@@ -28,6 +30,8 @@ class UserController {
   private async _updateProfile(options: UserMainData): Promise<void> {
     const user = await this._api.updateProfile(options);
     store.set('user.data', user);
+
+    router.go(Routes.PROFILE);
   }
 
   private async _updateAvatar(data: FormData): Promise<void> {
@@ -65,4 +69,4 @@ class UserController {
   }
 }
 
-export default UserController;
+export default new UserController();
