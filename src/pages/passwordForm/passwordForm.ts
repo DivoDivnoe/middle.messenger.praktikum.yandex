@@ -33,7 +33,7 @@ class PasswordFormPage<
       props: { src: this._props.src, onSubmit: this._props.onSubmit },
     });
     // const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
-    const arrowButton = new BackArrow() as BaseComponent;
+    const arrowButton = new BackArrow();
 
     this.addChildren({ passwordForm, arrowButton });
   }

@@ -1,23 +1,24 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ProfileForm.hbs';
 import styles from './ProfileForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Avatar from '@/components/Avatar';
-import { AvatarSize } from '@/components/Avatar/Avatar';
+import BaseComponent, { ComponentProps, IBaseComponent } from '@/utils/components/BaseComponent';
+import Avatar from '@/modules/Avatar';
 import UserData from '../UserData';
-import { UserDataInputType, UserProps } from '../UserData/UserData';
+import { ProfileProps, UserDataInputType } from '../UserData/UserData';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
+import { AvatarSize } from '@/components/Avatar/Avatar';
+import { User } from '@/api/types';
 
 type InputsProps = Record<UserDataInputType, string>;
 
 export type ProfileFormPropsType = {
-  user: UserProps;
+  user: User;
   onSubmit: (data: InputsProps) => void;
 };
 
 export type ProfileFormProps = {
-  user: UserProps;
+  user: User;
   styles: typeof styles;
 };
 
@@ -29,13 +30,19 @@ class ProfileForm<
 
   constructor({ props: { user, onSubmit } }: O) {
     super({
-      props: { styles, user },
+      props: { user, styles },
       listeners: {
         submit: [
           (evt) => {
             evt.preventDefault();
 
-            if ((this.getChild('userData') as UserData).validate()) {
+            if (
+              (
+                this.getChild('userData') as IBaseComponent<ProfileProps> & {
+                  validate: () => boolean;
+                }
+              ).validate()
+            ) {
               onSubmit(this._inputsData);
             }
           },
@@ -43,31 +50,27 @@ class ProfileForm<
       },
     });
 
-    this._inputsData = {
-      email: user.email,
-      login: user.login,
-      first_name: user.first_name,
-      second_name: user.second_name,
-      display_name: user.display_name ?? '',
-      phone: user.phone,
-    };
+    this._initInputsData();
+  }
+
+  private _initInputsData(): void {
+    this._inputsData = { ...this._props.user, display_name: this._props.user.display_name ?? '' };
   }
 
   protected override init(): void {
-    const avatar = ProfileForm._initAvatar(this._props.user.avatar);
+    const avatar = ProfileForm._initAvatar();
     const userData = this._initUserData();
     const button = ProfileForm._initButton();
 
     this.addChildren({ avatar, userData, button });
   }
 
-  private static _initAvatar(src: string): Avatar {
+  private static _initAvatar() {
     const avatar = new Avatar({
       props: {
         className: String(styles.avatar),
         size: AvatarSize.LARGE,
         isEditable: false,
-        src,
       },
     });
 
@@ -85,10 +88,9 @@ class ProfileForm<
     return button;
   }
 
-  private _initUserData(): UserData {
+  private _initUserData() {
     const userData = new UserData({
       props: {
-        user: this._props.user as UserProps,
         isEditable: true,
         className: String(styles.userData),
         onChange: (name: UserDataInputType, value: string) => {
@@ -109,7 +111,8 @@ class ProfileForm<
     target: ProfileFormProps,
   ): boolean {
     if (oldTarget.user !== target.user) {
-      (this.getChild('userData') as BaseComponent).updateProps({ user: target.user });
+      this._initInputsData();
+      return false;
     }
 
     return true;

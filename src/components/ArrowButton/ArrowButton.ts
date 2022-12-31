@@ -13,7 +13,7 @@ export enum ArrowButtonType {
   SIDE = 'side',
 }
 
-type ArrowButtonPropsType = {
+export type ArrowButtonPropsType = {
   type?: ArrowButtonType;
   side?: ArrowButtonSide;
   isSubmit?: boolean;

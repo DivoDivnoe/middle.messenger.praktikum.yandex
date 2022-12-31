@@ -6,8 +6,10 @@ import {
 import store, { StateProps, StoreEvent } from '@/utils/components/Store';
 import isEqual from '@/utils/helpers/isEqual';
 
-const withStore = <T>(mapStateToProps: (state: StateProps) => T) => {
-  return <P extends PropsTypes = PropsTypes>(Component: BaseComponentConstructor<P>) => {
+const withStore = <T, P extends PropsTypes = PropsTypes>(
+  mapStateToProps: (state: StateProps) => T,
+) => {
+  return (Component: BaseComponentConstructor<P & T>): BaseComponentConstructor<P> => {
     let currentState: T;
 
     return class extends Component {

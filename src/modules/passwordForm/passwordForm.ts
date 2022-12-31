@@ -6,9 +6,9 @@ import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
-import Avatar from '@/components/Avatar';
-import { AvatarSize } from '@/components/Avatar/Avatar';
+import Avatar from '@/modules/Avatar';
 import RegularExp from '@/configs/RegularExp';
+import { AvatarSize } from '@/components/Avatar/Avatar';
 
 export type PasswordFormPropsType = {
   src: string;
@@ -46,7 +46,7 @@ class PasswordForm<
   }
 
   protected override init(): void {
-    const avatar = PasswordForm._initAvatar(this._props.src);
+    const avatar = PasswordForm._initAvatar();
     const button = PasswordForm._initButton();
     const oldPasswordInput = this._initOldPasswordInput();
     const newPasswordInput = this._initNewPasswordInput();
@@ -55,13 +55,8 @@ class PasswordForm<
     this.addChildren({ avatar, button, oldPasswordInput, newPasswordInput, newPasswordExtraInput });
   }
 
-  private static _initAvatar(src: string): Avatar {
-    const avatar = new Avatar({
-      props: {
-        src,
-        size: AvatarSize.LARGE,
-      },
-    });
+  private static _initAvatar() {
+    const avatar = new Avatar({ props: { size: AvatarSize.LARGE } });
 
     return avatar;
   }

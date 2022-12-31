@@ -23,7 +23,7 @@ export type UserMainData = {
 
 export type User = UserMainData & {
   id: number;
-  avatar: string;
+  avatar: string | null;
 };
 
 export type PasswordUpdateType = {

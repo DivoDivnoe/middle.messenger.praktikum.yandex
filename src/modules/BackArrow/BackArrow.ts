@@ -1,14 +1,12 @@
 import ArrowButton from '@/components/ArrowButton';
-import { ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
+import { ArrowButtonPropsType, ArrowButtonType } from '@/components/ArrowButton/ArrowButton';
 import router from '@/utils/components/Router';
 
-class BackArrow {
+class BackArrow extends ArrowButton<ArrowButtonPropsType> {
   constructor() {
-    const onClick = (): void => {
-      router.back();
-    };
+    const onClick = (): void => router.back();
 
-    return new ArrowButton({
+    super({
       props: { type: ArrowButtonType.SIDE },
       listeners: { click: [onClick] },
     });

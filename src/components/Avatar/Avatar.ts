@@ -2,19 +2,20 @@ import { TemplateDelegate } from 'handlebars';
 import template from './Avatar.hbs';
 import styles from './Avatar.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import { AvatarStoreProps } from '@/hocs/withAvatar';
 
 export enum AvatarSize {
   SMALL = 'small',
   LARGE = 'large',
 }
 
-export type AvatarPropsType = {
+export type AvatarMainProps = {
   className?: string;
   size?: AvatarSize;
-  src: string;
   isEditable?: boolean;
 };
 
+export type AvatarPropsType = AvatarStoreProps & AvatarMainProps;
 export type AvatarProps = AvatarPropsType & { styles: typeof styles };
 
 class Avatar<
@@ -30,6 +31,8 @@ class Avatar<
       size,
       isEditable,
     };
+
+    console.log('src', props.src);
 
     super({ props: avatarProps, listeners });
   }

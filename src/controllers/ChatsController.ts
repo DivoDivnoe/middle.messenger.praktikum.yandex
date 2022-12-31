@@ -74,17 +74,17 @@ class ChatsController {
   }
 
   private async _request(req: () => Promise<void>, errorMessage = '') {
-    store.set('user.loading', true);
-    store.set('user.error', null);
+    store.set('chats.loading', true);
+    store.set('chats.error', null);
 
     try {
       await req();
     } catch (err) {
       if (err instanceof Error) {
-        store.set('user.error', `${errorMessage} ${err.message}`);
+        store.set('chats.error', `${errorMessage} ${err.message}`);
       }
     } finally {
-      store.set('user.loading', false);
+      store.set('chats.loading', false);
     }
   }
 }

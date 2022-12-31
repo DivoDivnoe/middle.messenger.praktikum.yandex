@@ -2,7 +2,7 @@ import { TemplateDelegate } from 'handlebars';
 import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Avatar from '@/components/Avatar';
+import Avatar from '@/modules/Avatar';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
 import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';
@@ -57,7 +57,7 @@ class MessagesBlock<
 
   protected override init(): void {
     if (!this._props.isEmpty) {
-      const avatar = MessagesBlock._initAvatar(this._props.src as string);
+      const avatar = MessagesBlock._initAvatar();
       const arrowButton = MessagesBlock._initArrowButton();
       const messagesBlocks = MessagesBlock._initBlocks(
         this._props.data as ConversationBlockProps[],
@@ -68,10 +68,8 @@ class MessagesBlock<
     }
   }
 
-  private static _initAvatar(src: string): Avatar {
-    const avatar = new Avatar({
-      props: { src },
-    });
+  private static _initAvatar() {
+    const avatar = new Avatar({ props: {} });
 
     return avatar;
   }
@@ -140,9 +138,9 @@ class MessagesBlock<
       this.addChildren({ messagesBlocks });
     }
 
-    if (oldTarget.src !== target.src) {
-      (this.getChild('avatar') as Avatar).updateProps({ src: target.src });
-    }
+    // if (oldTarget.src !== target.src) {
+    //   (this.getChild('avatar') as IBaseComponent).updateProps({ src: target.src });
+    // }
 
     return true;
   }

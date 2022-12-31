@@ -2,9 +2,8 @@ import { TemplateDelegate } from 'handlebars';
 import template from './ChatItem.hbs';
 import styles from './ChatItem.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Avatar from '@/components/Avatar';
+import Avatar from '@/modules/Avatar';
 import '@/utils/helpers/condition';
-import { AvatarProps } from '@/components/Avatar/Avatar';
 
 export type ChatItemPropsType = {
   userName: string;
@@ -49,22 +48,23 @@ class ChatItem<
   }
 
   protected override init(): void {
-    const avatar = ChatItem._initAvatar(this._props.src as string | undefined);
+    const avatar = ChatItem._initAvatar();
 
     this.addChildren({ avatar });
   }
 
-  private static _initAvatar(src = ''): BaseComponent<AvatarProps> {
-    return new Avatar({ props: { className: String(styles.avatar), src } });
+  private static _initAvatar() {
+    return new Avatar({ props: { className: String(styles.avatar) } });
   }
 
-  protected override componentDidUpdate(oldTarget: ChatItemProps, target: ChatItemProps): boolean {
-    if (oldTarget.src !== target.src) {
-      (this.getChild('avatar') as BaseComponent).updateProps({ src: target.src });
-    }
+  // protected override componentDidUpdate(oldTarget: ChatItemProps,
+  // target: ChatItemProps): boolean {
+  //   if (oldTarget.src !== target.src) {
+  //     (this.getChild('avatar') as BaseComponent).updateProps({ src: target.src });
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }?
 
   protected override getTemplate(): TemplateDelegate {
     return template;

@@ -5,17 +5,10 @@ import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent'
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
-import { User } from '@/api/types';
+import { User, UserMainData } from '@/api/types';
+import withUserStore, { UserProps } from '@/hocs/withUserStore';
 
-export type UserProps = User;
-
-export type UserDataInputType =
-  | 'email'
-  | 'login'
-  | 'first_name'
-  | 'second_name'
-  | 'display_name'
-  | 'phone';
+export type UserDataInputType = keyof UserMainData;
 
 type InputProps = {
   id: string;
@@ -28,16 +21,16 @@ type InputProps = {
 
 type onChangeType = (name: UserDataInputType, value: string) => void;
 
-type UserDataPropsType = {
-  user: UserProps;
+export type ProfileProps = {
   className?: string;
   isEditable: boolean;
   onChange?: onChangeType;
 };
 
+type UserDataPropsType = ProfileProps & UserProps;
 type UserDataProps = UserDataPropsType & { styles: typeof styles };
 
-class UserData<
+export class UserData<
   P extends UserDataPropsType = UserDataPropsType,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<UserDataProps> {
@@ -102,42 +95,51 @@ class UserData<
 
   protected override init(): void {
     const [emailInput, loginInput, firstNameInput, secondNameInput, displayNameInput, phoneInput] =
-      this._initInputs(this._props.user as UserProps, !this._props.isEditable);
+      this._initInputs(this._props.user as User, !this._props.isEditable) as [
+        Input,
+        Input,
+        Input,
+        Input,
+        Input,
+        Input,
+      ];
 
     this.addChildren({
-      emailInput: emailInput!,
-      loginInput: loginInput!,
-      firstNameInput: firstNameInput!,
-      secondNameInput: secondNameInput!,
-      displayNameInput: displayNameInput!,
-      phoneInput: phoneInput!,
+      emailInput,
+      loginInput,
+      firstNameInput,
+      secondNameInput,
+      displayNameInput,
+      phoneInput,
     });
   }
 
-  private _initInputs(user: UserProps, disabled: boolean): Input[] {
+  private _initInputs(user: User, disabled: boolean): Input[] {
     return UserData._inputsProps.map((options) => {
       const validate = (): void => {
         input.validate();
       };
 
-      const input = new Input({
-        props: {
-          ...options,
-          value: user[options.name] || '',
-          disabled,
-        },
-        listeners: {
-          change: [
-            (evt) => {
-              if (this._props.isEditable) {
-                (this._props.onChange as onChangeType)(options.name, evt.target.value);
-              }
-            },
-          ],
-          focus: [validate],
-          blur: [validate],
-        },
-      });
+      const props = { ...options, value: user[options.name] || '', disabled };
+
+      const listeners = disabled
+        ? {}
+        : {
+            change: [
+              (evt: InputEvent) => {
+                if (this._props.isEditable) {
+                  (this._props.onChange as onChangeType)(
+                    options.name,
+                    (evt.target as HTMLInputElement).value,
+                  );
+                }
+              },
+            ],
+            focus: [validate],
+            blur: [validate],
+          };
+
+      const input = new Input({ props, listeners });
 
       return input;
     });
@@ -192,4 +194,5 @@ class UserData<
   }
 }
 
-export default UserData;
+const UserDataWithStore = withUserStore<ProfileProps>(UserData);
+export default UserDataWithStore;

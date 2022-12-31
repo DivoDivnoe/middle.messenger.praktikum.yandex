@@ -33,9 +33,7 @@ class ContactsBlock<
 
   private static _initContacts(users: ChatItemProps[]): ChatItem[] {
     const contacts = users.map((user) => {
-      const contact = new ChatItem({
-        props: user,
-      });
+      const contact = new ChatItem({ props: user });
 
       return contact;
     });

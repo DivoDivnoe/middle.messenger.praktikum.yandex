@@ -42,7 +42,7 @@ class ProfileFormPage<
 
   protected override init(): void {
     const profileForm = new ProfileForm({ props: this._props });
-    const arrowButton = new BackArrow() as BaseComponent;
+    const arrowButton = new BackArrow();
 
     this.addChildren({ profileForm, arrowButton });
   }
