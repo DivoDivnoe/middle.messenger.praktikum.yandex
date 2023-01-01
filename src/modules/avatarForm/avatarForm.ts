@@ -19,7 +19,7 @@ export type AvatarFormProps = {
 class AvatarForm extends BaseComponent<AvatarFormProps> {
   constructor() {
     super({
-      props: { styles, isError: false, isUploadError: false, fileName: 'url.png' },
+      props: { styles, isError: false, isUploadError: false, fileName: null },
       listeners: {
         submit: [
           async (evt) => {
@@ -89,7 +89,7 @@ class AvatarForm extends BaseComponent<AvatarFormProps> {
           const fileName = files[0]?.name;
 
           if (fileName) {
-            this.updateProps({ fileName });
+            this.updateProps({ fileName, isError: false });
           }
         }
       },
