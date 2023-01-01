@@ -39,8 +39,9 @@ class UserController {
     store.set('user.data', user);
   }
 
-  private _updatePassword(data: PasswordUpdateType): Promise<void> {
-    return this._api.updatePassword(data);
+  private async _updatePassword(data: PasswordUpdateType): Promise<void> {
+    await this._api.updatePassword(data);
+    router.go(Routes.PROFILE);
   }
 
   private async _getUserById(id: string): Promise<void> {

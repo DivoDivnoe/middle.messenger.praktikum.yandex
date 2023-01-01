@@ -1,38 +1,19 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './passwordForm.hbs';
 import styles from './passwordForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent from '@/utils/components/BaseComponent';
 import PasswordForm from '@/modules/PasswordForm';
 import BackArrow from '@/modules/BackArrow/BackArrow';
 
-type SubmitType = (...args: any[]) => void;
+type PasswordFormPageProps = { styles: typeof styles };
 
-export type PasswordFormPagePropsType = {
-  src: string;
-};
-
-type PasswordFormPageProps = PasswordFormPagePropsType & {
-  styles: typeof styles;
-  onSubmit: SubmitType;
-};
-
-const onSubmit: SubmitType = (...args) => {
-  console.log(...args);
-};
-
-class PasswordFormPage<
-  P extends PasswordFormPagePropsType = PasswordFormPagePropsType,
-  O extends ComponentProps<P> = ComponentProps<P>,
-> extends BaseComponent<PasswordFormPageProps> {
-  constructor({ props: { src } }: O) {
-    super({ props: { onSubmit, styles, src } });
+class PasswordFormPage extends BaseComponent<PasswordFormPageProps> {
+  constructor() {
+    super({ props: { styles } });
   }
 
   protected override init(): void {
-    const passwordForm = new PasswordForm({
-      props: { src: this._props.src, onSubmit: this._props.onSubmit },
-    });
-    // const arrowButton = new ArrowButton({ props: { type: ArrowButtonType.SIDE } });
+    const passwordForm = new PasswordForm();
     const arrowButton = new BackArrow();
 
     this.addChildren({ passwordForm, arrowButton });

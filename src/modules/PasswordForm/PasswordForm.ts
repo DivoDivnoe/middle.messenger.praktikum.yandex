@@ -1,7 +1,7 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './PasswordForm.hbs';
 import styles from './PasswordForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent from '@/utils/components/BaseComponent';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
@@ -9,35 +9,27 @@ import { InputType } from '@/components/Input/Input';
 import Avatar from '@/modules/Avatar';
 import RegularExp from '@/configs/RegularExp';
 import { AvatarSize } from '@/components/Avatar/Avatar';
-
-export type PasswordFormPropsType = {
-  src: string;
-  onSubmit: (oldPassword: string, newPassword: string, newPasswordExtra: string) => void;
-};
+import userController from '@/controllers/UserController';
 
 export type PasswordFormProps = {
-  src: string;
   styles: typeof styles;
 };
 
-class PasswordForm<
-  P extends PasswordFormPropsType = PasswordFormPropsType,
-  O extends ComponentProps<P> = ComponentProps<P>,
-> extends BaseComponent<PasswordFormProps> {
+class PasswordForm extends BaseComponent<PasswordFormProps> {
   private _old_password = '';
   private _new_password = '';
   private _new_password_extra = '';
 
-  constructor({ props: { onSubmit, src } }: O) {
+  constructor() {
     super({
-      props: { styles, src },
+      props: { styles },
       listeners: {
         submit: [
           (evt) => {
             evt.preventDefault();
 
             if (this._validate()) {
-              onSubmit(this._old_password, this._new_password, this._new_password_extra);
+              this._onSubmit(this._old_password, this._new_password);
             }
           },
         ],
@@ -170,6 +162,10 @@ class PasswordForm<
       (this.getChild('newPasswordInput') as Input).validate() &&
       (this.getChild('newPasswordExtraInput') as Input).validate()
     );
+  }
+
+  private _onSubmit(oldPassword: string, newPassword: string) {
+    return userController.updatePassword({ oldPassword, newPassword });
   }
 }
 

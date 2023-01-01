@@ -21,8 +21,6 @@ const withStore = <T, P extends PropsTypes = PropsTypes>(
         super({ props: { ...props, ...currentState }, listeners });
 
         store.on(StoreEvent.UPDATED, () => {
-          if (store.getState().user.loading) return;
-
           const state = deepClone(mapStateToProps(store.getState()));
 
           if (!isEqual(currentState, state)) {
