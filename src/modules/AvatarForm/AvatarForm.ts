@@ -1,40 +1,37 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './AvatarForm.hbs';
 import styles from './AvatarForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent from '@/utils/components/BaseComponent';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import '../../utils/helpers/condition';
+import isEqual from '@/utils/helpers/isEqual';
 
-export type AvatarFormPropsType = {
+export type AvatarFormProps = {
   isError?: boolean;
-  onSubmit: (value: FormDataEntryValue) => void;
+  isUploadError?: boolean;
+  fileName: string | null;
+  styles: typeof styles;
 };
 
-export type AvatarFormProps = AvatarFormPropsType & { styles: typeof styles };
-
-class AvatarForm<
-  P extends AvatarFormPropsType = AvatarFormPropsType,
-  O extends ComponentProps<P> = ComponentProps<P>,
-> extends BaseComponent<AvatarFormProps> {
-  constructor({ props }: O) {
-    const { isError = false, onSubmit } = props;
-
+class AvatarForm extends BaseComponent<AvatarFormProps> {
+  constructor() {
     super({
-      props: { ...props, styles, isError },
+      props: { styles, isError: false, isUploadError: false, fileName: 'url.png' },
       listeners: {
         submit: [
-          (evt) => {
+          async (evt) => {
             evt.preventDefault();
 
-            const formData = new FormData(this.getContent().querySelector('form')!);
-            onSubmit(formData.get('file') as FormDataEntryValue);
+            await this._onSubmit();
           },
         ],
       },
     });
+
+    this._subscribeForm();
   }
 
   protected override init(): void {
@@ -45,30 +42,58 @@ class AvatarForm<
   }
 
   private static _initButton(): Button {
-    const button = new Button({
-      props: {
-        content: 'Поменять',
-        type: ButtonType.SUBMIT,
-      },
-    });
-
-    return button;
+    return new Button({ props: { content: 'Поменять', type: ButtonType.SUBMIT } });
   }
 
   private static _initInput(): Input {
-    const input = new Input({
-      props: {
-        name: 'file',
-        type: InputType.FILE,
-        required: false,
-      },
-    });
-
-    return input;
+    return new Input({ props: { name: 'file', type: InputType.FILE, required: false } });
   }
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  private async _onSubmit() {
+    const formData = new FormData(this.getContent().querySelector('form') as HTMLFormElement);
+    const fileData = formData.get('file') as FormDataEntryValue;
+
+    console.log('file', fileData);
+
+    if (fileData instanceof File) {
+      const { name: fileName } = fileData;
+
+      this.updateProps({ isError: !!fileName.length });
+
+      if (!fileName.length) {
+        this.updateProps({ isError: true });
+      }
+    }
+
+    // await userController.updateAvatar(formData.get('file') as FormDataEntryValue);
+  }
+
+  protected override componentDidUpdate(
+    oldTarget: AvatarFormProps,
+    target: AvatarFormProps,
+  ): boolean {
+    return !isEqual(oldTarget, target);
+  }
+
+  _subscribeForm() {
+    (this.getContent().querySelector('input') as HTMLInputElement).addEventListener(
+      'input',
+      (evt) => {
+        const { files } = evt.target as HTMLInputElement;
+
+        if (files) {
+          const fileName = files[0]?.name;
+
+          if (fileName) {
+            this.updateProps({ fileName });
+          }
+        }
+      },
+    );
   }
 }
 

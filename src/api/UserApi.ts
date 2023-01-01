@@ -23,7 +23,7 @@ class UserApi extends BaseAPI {
     return this._http.put(Path.PROFILE, { data: options });
   }
 
-  public updateAvatar(data: FormData): Promise<User> {
+  public updateAvatar(data: FormDataEntryValue): Promise<User> {
     return this._http.put(Path.AVATAR, { data });
   }
 

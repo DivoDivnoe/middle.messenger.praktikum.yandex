@@ -8,14 +8,16 @@
   justify-content: center;
   align-items: center;
   background-color: var(--c-black-transparent-0);
+  z-index: 100;
 }
 
-.errorMessage {
+.errorMessage,
+.uploadErrorMessage {
   color: var(--c-red);
 }
 
 .title,
-.errorMessage {
+.uploadErrorMessage {
   margin: 0 0 43px;
   font-size: 15px;
   line-height: 20px;
@@ -34,6 +36,13 @@
     color: var(--c-primary);
     text-decoration: underline;
     cursor: pointer;
+
+    &.path {
+      font-size: 14px;
+      line-height: 16px;
+      color: #8d8d8d;
+      text-decoration: none;
+    }
   }
 
   button {
@@ -67,7 +76,13 @@
   }
 
   &:not(.error) {
-    & > .errorMessage {
+    .errorMessage {
+      display: none;
+    }
+  }
+
+  &:not(.uploadError) {
+    & > .uploadErrorMessage {
       display: none;
     }
   }
@@ -75,16 +90,4 @@
   input {
     display: none;
   }
-}
-
-.error {
-  h2 {
-    display: none;
-  }
-}
-
-.path {
-  font-size: 14px;
-  line-height: 16px;
-  color: #8d8d8d;
 }

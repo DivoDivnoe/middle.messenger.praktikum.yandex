@@ -11,7 +11,7 @@ class UserController {
     return this._request(() => this._updateProfile(options), 'update profile error');
   }
 
-  public updateAvatar(data: FormData): Promise<void> {
+  public updateAvatar(data: FormDataEntryValue): Promise<void> {
     return this._request(() => this._updateAvatar(data), 'update avatar error');
   }
 
@@ -34,7 +34,7 @@ class UserController {
     router.go(Routes.PROFILE);
   }
 
-  private async _updateAvatar(data: FormData): Promise<void> {
+  private async _updateAvatar(data: FormDataEntryValue): Promise<void> {
     const user = await this._api.updateAvatar(data);
     store.set('user.data', user);
   }

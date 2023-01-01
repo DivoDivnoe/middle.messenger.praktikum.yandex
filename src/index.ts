@@ -44,7 +44,11 @@ window.addEventListener('DOMContentLoaded', async () => {
   try {
     await AuthController.getUser();
 
+    console.log('got user');
+
     router.start();
+
+    console.log('router startedd');
 
     if (!isProtectedRoute) {
       router.go(Routes.PROFILE);
