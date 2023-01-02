@@ -10,7 +10,7 @@ export type ChatPropsType = {
   title: string;
   date?: string;
   messageText?: string;
-  newMessagesAmount?: number;
+  newMessagesAmount: number;
   src: string | null;
   isActive?: boolean;
 };
@@ -24,25 +24,9 @@ class Chat<
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<ChatProps> {
   constructor({ props }: O) {
-    const {
-      newMessagesAmount = 0,
-      src = '',
-      messageText = '',
-      date = '',
-      isActive = false,
-    } = props;
+    const { messageText = '', date = '', isActive = false } = props;
 
-    super({
-      props: {
-        ...props,
-        styles,
-        newMessagesAmount,
-        src,
-        messageText,
-        date,
-        isActive,
-      },
-    });
+    super({ props: { ...props, styles, messageText, date, isActive } });
   }
 
   protected override init(): void {
