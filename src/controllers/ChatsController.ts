@@ -4,7 +4,7 @@ import store from '@/utils/components/Store';
 class ChatsController {
   private _api = new ChatsApi();
 
-  public getFilteredList(data: GetChatsListType): Promise<void> {
+  public getFilteredList(data: GetChatsListType = {}): Promise<void> {
     return this._request(() => this._getFilteredList(data), 'get chats error');
   }
 
@@ -24,12 +24,20 @@ class ChatsController {
     return this._request(() => this._addUsers(chatId, users), 'add chat users error');
   }
 
+  public addUser(chatId: number, user: number): Promise<void> {
+    return this._request(() => this._addUser(chatId, user), 'add chat user error');
+  }
+
   public deleteUsers(chatId: number, users: number[]): Promise<void> {
     return this._request(() => this._deleteUsers(chatId, users), 'delete chat users error');
   }
 
   public getChatToken(chatId: number): Promise<void> {
     return this._request(() => this._getChatToken(chatId), 'cannot get chat token');
+  }
+
+  public selectChat(chatId: number | null): void {
+    store.set('currentChat.data', chatId);
   }
 
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
@@ -65,6 +73,10 @@ class ChatsController {
     await this._api.addUsers(chatId, users);
   }
 
+  private async _addUser(chatId: number, user: number): Promise<void> {
+    await this._api.addUser(chatId, user);
+  }
+
   private async _deleteUsers(chatId: number, users: number[]): Promise<void> {
     await this._api.deleteUsers(chatId, users);
   }
@@ -89,4 +101,4 @@ class ChatsController {
   }
 }
 
-export default ChatsController;
+export default new ChatsController();

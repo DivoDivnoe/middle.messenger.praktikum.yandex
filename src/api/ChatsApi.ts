@@ -1,6 +1,6 @@
 import BaseAPI from './BaseApi';
 import Endpoint from './Endpoint';
-import { ChatMainDataType, ChatToken, ChatType } from './types';
+import { ChatMainDataType, ChatToken, ChatType, User } from './types';
 
 enum Path {
   ROOT = '/',
@@ -14,6 +14,13 @@ export type GetChatsListType = {
   offset?: number;
   limit?: number;
   title?: string;
+};
+
+export type GetChatUsersType = {
+  offset?: number;
+  limit?: number;
+  name?: string;
+  email?: string;
 };
 
 export type CreateChatType = { title: string };
@@ -52,8 +59,16 @@ class ChatsApi extends BaseAPI {
     return this._http.get(Path.NEW, { data: { id } });
   }
 
+  public getUsers(chatId: number, data: GetChatUsersType): Promise<(User & { role: string })[]> {
+    return this._http.get(`${chatId}${Path.USERS}`, { data });
+  }
+
   public addUsers(chatId: number, users: number[]): Promise<void> {
     return this._http.put(Path.USERS, { data: { chatId, users } });
+  }
+
+  public addUser(chatId: number, user: number): Promise<void> {
+    return this.addUsers(chatId, [user]);
   }
 
   public deleteUsers(chatId: number, users: number[]): Promise<void> {

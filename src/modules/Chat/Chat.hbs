@@ -3,12 +3,14 @@
     {{{avatar}}}
     <div class='{{styles.content}}'>
       <div class='{{styles.top}}'>
-        <h2 class="{{styles.userName}}">{{userName}}</h2>
+        <h2 class="{{styles.userName}}">{{title}}</h2>
         <span class='{{styles.date}}'>{{date}}</s>
       </div>
       <div class='{{styles.dialog}}'>
         <p class="{{styles.userMessage}}">{{messageText}}</p>
-        <span class='{{styles.messages}} {{condition isMessagesCounterHidden styles.hidden}}'>{{newMessagesAmount}}</span>
+        {{#if newMessagesAmount }}
+          <span class='{{styles.messages}}'>{{newMessagesAmount}}</span>
+        {{/if}}
       </div>
     </div>
   </div>

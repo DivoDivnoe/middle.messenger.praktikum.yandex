@@ -15,20 +15,55 @@ type StateCoreType<T> = {
 export type UserStateProps = StateCoreType<User | null> & { current: User | null };
 export type UsersStateProps = StateCoreType<User[]>;
 export type ChatsStateProps = StateCoreType<ChatType[]>;
-export type ChatStateProps = StateCoreType<ChatType | null>;
+export type ChatStateProps = StateCoreType<number | null>;
 
 export type StateProps = {
   user: UserStateProps;
   users: UsersStateProps;
   chats: ChatsStateProps;
+  // currentChat: ChatStateProps;
   currentChat: ChatStateProps;
 };
 
+const withCoreStateData = <T>(data: T): StateCoreType<T> => {
+  return { error: null, loading: false, data };
+};
+
+const mockChats: (ChatType & { created_by: number })[] = [
+  {
+    id: 268,
+    title: 'Vadim',
+    avatar: null,
+    created_by: 2312,
+    unread_count: 10,
+    last_message: {
+      user: {
+        first_name: 'Petya',
+        second_name: 'Pupkin',
+        avatar: '/path/to/avatar.jpg',
+        email: 'my@email.com',
+        login: 'userLogin',
+        phone: '8(911)-222-33-22',
+      },
+      time: '2020-01-02T14:22:22.000Z',
+      content: 'Привет! Сегодня хороший день, чтобы сгонять на пляж! Ай да со мной!',
+    },
+  },
+  {
+    id: 261,
+    title: 'sometitle',
+    avatar: null,
+    created_by: 2312,
+    unread_count: 0,
+    last_message: null,
+  },
+];
+
 const initialState: StateProps = {
-  user: { data: null, error: null, loading: false, current: null },
-  users: { data: [], error: null, loading: false },
-  chats: { data: [], error: null, loading: false },
-  currentChat: { data: null, error: null, loading: false },
+  user: { current: null, ...withCoreStateData<User | null>(null) },
+  users: withCoreStateData<User[]>([]),
+  chats: withCoreStateData<ChatType[]>(mockChats),
+  currentChat: withCoreStateData<number | null>(null),
 };
 
 export class Store extends EventEmitter {

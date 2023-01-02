@@ -4,17 +4,20 @@ import styles from './MessagesBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
-import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';
+import ConversationBlock, {
+  ConversationBlockProps,
+  ConversationBlockPropsType,
+} from '../ConversationBlock/ConversationBlock';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
-import Avatar from '@/components/Avatar';
+import Avatar from '../Avatar';
 
 export type MessagesBlockPropsType = {
   isEmpty?: boolean;
   src: string | null;
   userName?: string;
-  data?: ConversationBlockProps[];
+  data?: ConversationBlockPropsType[];
   onSubmit: (message: string) => void;
   isActiveUserButton: boolean;
 };
@@ -39,6 +42,7 @@ class MessagesBlock<
       onSubmit,
     },
   }: O) {
+    console.log('messages block constructor');
     super({
       props: { styles, isEmpty, src, userName, data, isActiveUserButton },
       listeners: {
@@ -57,7 +61,8 @@ class MessagesBlock<
 
   protected override init(): void {
     if (!this._props.isEmpty) {
-      const avatar = MessagesBlock._initAvatar(this._props.src);
+      const avatar = MessagesBlock._initAvatar();
+
       const arrowButton = MessagesBlock._initArrowButton();
       const messagesBlocks = MessagesBlock._initBlocks(
         this._props.data as ConversationBlockProps[],
@@ -68,10 +73,8 @@ class MessagesBlock<
     }
   }
 
-  private static _initAvatar(src: string | null) {
-    const avatar = new Avatar({ props: { src } });
-
-    return avatar;
+  private static _initAvatar() {
+    return new Avatar({ props: {} });
   }
 
   private static _initArrowButton(): ArrowButton {
@@ -136,6 +139,10 @@ class MessagesBlock<
         (target.data ?? []) as ConversationBlockProps[],
       );
       this.addChildren({ messagesBlocks });
+    }
+
+    if (oldTarget.isEmpty && !target.isEmpty) {
+      this.init();
     }
 
     // if (oldTarget.src !== target.src) {

@@ -73,7 +73,7 @@ class AvatarForm extends BaseComponent<AvatarFormProps> {
 
       if (!isError) {
         await userController.updateAvatar(fileData);
-        this.updateProps({ uploaded: true });
+        this.updateProps({ uploaded: !this._props.isUploadError });
       }
     }
   }

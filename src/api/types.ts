@@ -31,8 +31,17 @@ export type PasswordUpdateType = {
   newPassword: string;
 };
 
+export type LastMessageUserType = {
+  first_name: string;
+  second_name: string;
+  avatar: string | null;
+  email: string;
+  login: string;
+  phone: string;
+};
+
 export type LastMessageType = {
-  user: UserMainData;
+  user: LastMessageUserType;
   time: string;
   content: string;
 };
@@ -40,7 +49,7 @@ export type LastMessageType = {
 export type ChatMainDataType = {
   id: number;
   title: string;
-  avatar: string;
+  avatar: string | null;
 };
 
 export type ChatType = ChatMainDataType & {

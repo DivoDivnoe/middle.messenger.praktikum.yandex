@@ -1,93 +1,73 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './chats.hbs';
 import styles from './chats.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import { ChatItemProps } from '@/modules/ChatItem/ChatItem';
+import BaseComponent from '@/utils/components/BaseComponent';
 import MessagesBlock, { MessagesBlockPropsType } from '@/modules/MessagesBlock/MessagesBlock';
-import ContactsBlock from '@/modules/ContactsBlock';
-// import { ConversationBlockProps } from '@/modules/ConversationBlock/ConversationBlock';
-// import { UserMessageType } from '@/components/Message/Message';
-// import image from '/static/avatar.svg';
+import { ConversationBlockPropsType } from '@/modules/ConversationBlock/ConversationBlock';
+import { UserMessageType } from '@/components/Message/Message';
+import image from '/static/avatar.svg';
+import Chats from '@/modules/Chats';
+import chatsController from '@/controllers/ChatsController';
 
-// const mockUsers: ChatItemProps[] = [
-//   {
-//     userName: 'Vadim',
-//     date: '17:53',
-//     messageText: 'Привет! Сегодня хороший день, чтобы сгонять на пляж! Ай да со мной!',
-//     newMessagesAmount: 1,
-//     src: image,
-//   },
-//   {
-//     userName: 'Sergey',
-//   },
-// ];
-
-// const mockMessagesData: ConversationBlockProps[] = [
-//   {
-//     date: '15 ноября',
-//     messagesData: [
-//       {
-//         text: 'Привет! Сегодня хороший день, чтобы сгонять на пляж! Ай да со мной!',
-//         userType: UserMessageType.INTERLOCUTOR,
-//         time: '17:54',
-//       },
-//       {
-//         text: 'Привет! Го',
-//         userType: UserMessageType.DEFAULT,
-//         time: '17:55',
-//       },
-//     ],
-//   },
-// ];
-
-// const mocks = {
-//   users: mockUsers,
-//   messages: {
-//     isEmpty: false,
-//     src: image,
-//     userName: 'Vadim',
-//     data: mockMessagesData,
-//     onSubmit: (message: string) => console.log(message),
-//   },
-// };
+const mockMessagesData: ConversationBlockPropsType[] = [
+  {
+    date: '15 ноября',
+    messagesData: [
+      {
+        text: 'Привет! Сегодня хороший день, чтобы сгонять на пляж! Ай да со мной!',
+        userType: UserMessageType.INTERLOCUTOR,
+        time: '17:54',
+      },
+      {
+        text: 'Привет! Го',
+        userType: UserMessageType.DEFAULT,
+        time: '17:55',
+      },
+    ],
+  },
+];
 
 export type ChatBlockPropsType = {
-  users?: ChatItemProps[];
   messages: MessagesBlockPropsType;
 };
 
 type ChatBlockProps = ChatBlockPropsType & { styles: typeof styles };
 
-class ChatsPage<
-  P extends ChatBlockPropsType = ChatBlockPropsType,
-  O extends ComponentProps<P> = ComponentProps<P>,
-> extends BaseComponent<ChatBlockProps> {
-  constructor({ props, listeners = {} }: O) {
-    const { users = [], messages } = props;
+const mocks: ChatBlockPropsType = {
+  messages: {
+    isEmpty: false,
+    src: image,
+    userName: 'Vadim',
+    data: mockMessagesData,
+    onSubmit: (message: string) => console.log(message),
+    isActiveUserButton: false,
+  },
+};
+
+class ChatsPage extends BaseComponent<ChatBlockProps> {
+  constructor() {
+    const { messages } = mocks;
 
     super({
-      props: { users: users, styles, messages },
-      listeners,
+      props: { styles, messages },
     });
   }
 
   protected override init(): void {
-    const contacts = ChatsPage._initContacts(this._props.users);
+    const chats = ChatsPage._initChats();
     const messages = ChatsPage._initMessages(this._props.messages);
 
-    this.addChildren({ contacts, messages });
+    this.addChildren({ chats, messages });
+
+    chatsController.getFilteredList();
   }
 
-  private static _initContacts(users: ChatItemProps[] = []): ContactsBlock {
-    const contacts = new ContactsBlock({ props: { users } });
-
-    return contacts;
+  private static _initChats() {
+    return new Chats({ props: {} });
   }
 
   private static _initMessages(messages: MessagesBlockPropsType): MessagesBlock {
-    const items = new MessagesBlock({ props: messages });
-
-    return items;
+    return new MessagesBlock({ props: messages });
   }
 
   protected override getTemplate(): TemplateDelegate {
@@ -98,11 +78,6 @@ class ChatsPage<
     oldTarget: ChatBlockProps,
     target: ChatBlockProps,
   ): boolean {
-    if (oldTarget.users !== target.users) {
-      const contacts = ChatsPage._initContacts(target.users as ChatItemProps[]);
-      this.addChildren({ contacts });
-    }
-
     if (oldTarget.messages !== target.messages) {
       const items = ChatsPage._initMessages(target.messages);
       this.addChildren({ messages: items });

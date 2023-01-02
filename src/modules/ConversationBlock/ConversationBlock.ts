@@ -2,11 +2,11 @@ import { TemplateDelegate } from 'handlebars';
 import template from './ConversationBlock.hbs';
 import styles from './ConversationBlock.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Message, { MessageProps } from '@/components/Message/Message';
+import Message, { MessageProps, MessagePropsType } from '@/components/Message/Message';
 
 export type ConversationBlockPropsType = {
   date: string;
-  messagesData: MessageProps[];
+  messagesData: MessagePropsType[];
 };
 
 export type ConversationBlockProps = ConversationBlockPropsType & { styles: typeof styles };
