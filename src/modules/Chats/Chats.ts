@@ -3,13 +3,15 @@ import template from './Chats.hbs';
 import styles from './Chats.module.css';
 import BaseComponent, { ComponentProps, PropsTypes } from '@/utils/components/BaseComponent';
 import '@/utils/helpers/condition';
-import Chat from '../Chat';
-import { ChatPropsType } from '../Chat/Chat';
 import withChatsStore, { ChatsProps } from '@/hocs/withChatsStore';
 import { ChatType } from '@/api/types';
-import getChatTime from '@/utils/helpers/getChatTime';
+import ChatsList from '../ChatsList';
 
-export type ChatsBlockProps = ChatsProps & { styles: typeof styles };
+export type ChatsBlockProps = ChatsProps & {
+  styles: typeof styles;
+  filteredChats: ChatType[];
+  inputValue: string;
+};
 
 export class Chats<
   P extends ChatsProps = ChatsProps,
@@ -18,30 +20,17 @@ export class Chats<
   constructor({ props }: O) {
     const { chats } = props;
 
-    super({ props: { chats, styles } });
+    super({ props: { chats, styles, filteredChats: chats, inputValue: '' } });
   }
 
   protected override init(): void {
-    const chats = Chats._initChatsItems(this._props.chats);
+    const filteredChatsBlock = Chats._initChatsItems(this._props.filteredChats);
 
-    this.addChildren({ chats });
+    this.addChildren({ filteredChatsBlock });
   }
 
-  private static _initChatsItems(chats: ChatType[]): Chat[] {
-    return chats.map((chat) => {
-      const { id, title, avatar: src, unread_count: newMessagesAmount, last_message } = chat;
-
-      let props: ChatPropsType = { id, title, src, newMessagesAmount };
-
-      if (last_message) {
-        const { time, content: messageText } = last_message;
-        const date = getChatTime(time);
-
-        props = { ...props, date, messageText };
-      }
-
-      return new Chat({ props });
-    });
+  private static _initChatsItems(chats: ChatType[]): ChatsList {
+    return new ChatsList({ props: { chats } });
   }
 
   protected override getTemplate(): TemplateDelegate {
@@ -52,12 +41,50 @@ export class Chats<
     oldTarget: ChatsBlockProps,
     target: ChatsBlockProps,
   ): boolean {
-    if (oldTarget.chats !== target.chats) {
-      const chats = Chats._initChatsItems(target.chats);
-      this.addChildren({ chats });
+    if (oldTarget.inputValue !== target.inputValue) {
+      console.log('update input value');
+      const chats = this._getFilteredChats(target.inputValue);
+      (this.getChild('filteredChatsBlock') as ChatsList).updateProps({ chats });
+      return false;
     }
 
+    if (oldTarget.chats !== target.chats) {
+      const chats = this._getFilteredChats(target.inputValue);
+      (this.getChild('filteredChatsBlock') as ChatsList).updateProps({ chats });
+      return false;
+    }
+
+    console.log('rerender');
+
+    this._unsubscribeInput();
+
     return true;
+  }
+
+  protected override _subscribe(addListeners?: boolean): void {
+    super._subscribe(addListeners);
+    this._subscribeInput();
+  }
+
+  private _subscribeInput() {
+    const input = this.getContent().querySelector(`.${styles.input}`) as HTMLInputElement;
+
+    input.oninput = (evt: Event) => {
+      const { value } = evt.target as HTMLInputElement;
+      this.updateProps({ inputValue: value });
+    };
+  }
+
+  private _unsubscribeInput() {
+    const input = this.getContent().querySelector(`.${styles.input}`) as HTMLInputElement;
+
+    input.oninput = null;
+  }
+
+  _getFilteredChats(inputValue: string) {
+    return this._props.chats.filter((chat) => {
+      return chat.title.indexOf(inputValue) >= 0;
+    });
   }
 }
 

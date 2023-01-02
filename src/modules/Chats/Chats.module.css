@@ -1,4 +1,5 @@
 .chatsBlock {
+  min-width: 311px;
   height: 100vh;
   background: var(--c-gray-3);
   border-right: 1px solid var(--c-gray-1);

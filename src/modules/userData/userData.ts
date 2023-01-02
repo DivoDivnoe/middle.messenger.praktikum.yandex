@@ -154,31 +154,36 @@ export class UserData<
 
     if (oldUser.email !== newUser.email) {
       (this.getChild('emailInput') as BaseComponent).updateProps({ value: newUser.email });
+      return false;
     }
 
     if (oldUser.login !== newUser.login) {
       (this.getChild('loginInput') as BaseComponent).updateProps({ value: newUser.login });
+      return false;
     }
 
     if (oldUser.first_name !== newUser.first_name) {
       (this.getChild('firstNameInput') as BaseComponent).updateProps({ value: newUser.first_name });
+      return false;
     }
 
     if (oldUser.second_name !== newUser.second_name) {
       (this.getChild('secondNameInput') as BaseComponent).updateProps({
         value: newUser.second_name,
       });
+      return false;
     }
 
     if (oldUser.display_name !== newUser.display_name) {
-
       (this.getChild('displayNameInput') as BaseComponent).updateProps({
         value: newUser.display_name,
       });
+      return false;
     }
 
     if (oldUser.phone !== newUser.phone) {
       (this.getChild('phoneInput') as BaseComponent).updateProps({ value: newUser.phone });
+      return false;
     }
 
     return true;

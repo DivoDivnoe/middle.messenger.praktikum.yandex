@@ -157,7 +157,7 @@ class BaseComponent<
     this._eventEmitter.on(EventType.UPDATE, this._componentDidUpdate);
   }
 
-  private _subscribe(addListeners = true): void {
+  protected _subscribe(addListeners = true): void {
     const events = Object.keys(this._listeners);
 
     for (const evt of events) {
