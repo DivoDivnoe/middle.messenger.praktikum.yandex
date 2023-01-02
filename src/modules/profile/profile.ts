@@ -34,7 +34,6 @@ class Profile extends BaseComponent<ProfileProps> {
       listeners: {
         click: [
           () => {
-            console.log('click avatar');
             this.updateProps({ isVisiblePopup: !this._props.isVisiblePopup });
           },
         ],

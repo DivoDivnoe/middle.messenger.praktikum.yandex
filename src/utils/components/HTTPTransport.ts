@@ -7,7 +7,7 @@ export enum Method {
 
 interface OptionsProps {
   method?: Method;
-  data?: Record<string, unknown> | FormDataEntryValue;
+  data?: Record<string, unknown> | FormData;
   timeout?: number;
   headers?: Record<string, string>;
 }
@@ -60,10 +60,11 @@ class HTTPTransport {
 
       const xhr = new XMLHttpRequest();
       const isGet = method === Method.GET;
+      const isFormData = data instanceof FormData;
 
       xhr.open(method, url);
 
-      if (!(data instanceof FormData)) {
+      if (!isFormData) {
         xhr.setRequestHeader('Content-Type', 'application/json');
       }
 
@@ -92,6 +93,8 @@ class HTTPTransport {
 
       if (isGet || !data) {
         xhr.send();
+      } else if (isFormData) {
+        xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
       }

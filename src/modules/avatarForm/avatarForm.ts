@@ -8,18 +8,26 @@ import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import '../../utils/helpers/condition';
 import isEqual from '@/utils/helpers/isEqual';
+import userController from '@/controllers/UserController';
 
 export type AvatarFormProps = {
   isError?: boolean;
   isUploadError?: boolean;
   fileName: string | null;
+  uploaded: boolean;
   styles: typeof styles;
 };
 
 class AvatarForm extends BaseComponent<AvatarFormProps> {
   constructor() {
     super({
-      props: { styles, isError: false, isUploadError: false, fileName: null },
+      props: {
+        styles,
+        isError: false,
+        isUploadError: false,
+        fileName: null,
+        uploaded: false,
+      },
       listeners: {
         submit: [
           async (evt) => {
@@ -57,19 +65,17 @@ class AvatarForm extends BaseComponent<AvatarFormProps> {
     const formData = new FormData(this.getContent().querySelector('form') as HTMLFormElement);
     const fileData = formData.get('file') as FormDataEntryValue;
 
-    console.log('file', fileData);
-
     if (fileData instanceof File) {
       const { name: fileName } = fileData;
+      const isError = !fileName.length;
 
-      this.updateProps({ isError: !!fileName.length });
+      this.updateProps({ isError });
 
-      if (!fileName.length) {
-        this.updateProps({ isError: true });
+      if (!isError) {
+        await userController.updateAvatar(fileData);
+        this.updateProps({ uploaded: true });
       }
     }
-
-    // await userController.updateAvatar(formData.get('file') as FormDataEntryValue);
   }
 
   protected override componentDidUpdate(

@@ -4,7 +4,13 @@
       {{condition isError styles.error}}
       {{condition uploadErrorMessage styles.uploadError}}'
   >
-    <h2 class='{{styles.title}} {{condition isShownTitle "visually-hidden"}}'>Загрузите файл</h2>
+    <p class='{{styles.title}}'>
+      {{#if uploaded}}
+        Файл загружен
+      {{else}}
+        Загрузите файл
+      {{/if}}
+    </p>
     <p class='{{styles.uploadErrorMessage}}'>Ошибка, попробуйте ещё раз</p>
 
     <form class='{{styles.form}}'>

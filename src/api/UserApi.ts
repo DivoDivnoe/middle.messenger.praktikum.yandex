@@ -23,7 +23,9 @@ class UserApi extends BaseAPI {
     return this._http.put(Path.PROFILE, { data: options });
   }
 
-  public updateAvatar(data: FormDataEntryValue): Promise<User> {
+  public updateAvatar(avatar: File): Promise<User> {
+    const data = new FormData();
+    data.append('avatar', avatar);
     return this._http.put(Path.AVATAR, { data });
   }
 
