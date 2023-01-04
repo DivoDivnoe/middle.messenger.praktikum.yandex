@@ -8,9 +8,15 @@ export enum ButtonType {
   SUBMIT = 'submit',
 }
 
+export enum ButtonTheme {
+  PRIMARY = 'primary',
+  SECONDARY = 'secondary',
+}
+
 export type ButtonPropsType = {
   content?: string;
   type?: ButtonType;
+  theme?: ButtonTheme;
 };
 
 export type ButtonProps = ButtonPropsType & { styles: typeof styles };
@@ -19,8 +25,11 @@ class Button<
   P extends ButtonPropsType = ButtonPropsType,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<ButtonProps> {
-  constructor({ props: { content = '', type = ButtonType.BUTTON }, listeners = {} }: O) {
-    super({ props: { content, styles, type }, listeners });
+  constructor({
+    props: { content = '', type = ButtonType.BUTTON, theme = ButtonTheme.PRIMARY },
+    listeners = {},
+  }: O) {
+    super({ props: { content, styles, type, theme }, listeners });
   }
 
   protected override getTemplate(): TemplateDelegate {

@@ -8,26 +8,45 @@ import { ChatType } from '@/api/types';
 import getChatTime from '@/utils/helpers/getChatTime';
 import chatsController from '@/controllers/ChatsController';
 import withCurrentChatStore, { CurrentChatProps } from '@/hocs/withCurrentChat';
+import DeleteChatPopup from '@/components/DeleteChatPopup';
 
 export type ChatsBlockPropsType = { chats: ChatType[] };
 export type ChatsBlockProps = ChatsBlockPropsType & CurrentChatProps;
+export type ChatsBlockType = ChatsBlockProps & { chatToDelete: number | null };
+
+enum EventType {
+  CONFIRM_DELETE_CHAT = 'confirm-delete-chat',
+  DELETE_CHAT = 'delete-chat',
+}
 
 export class ChatsList<
   P extends ChatsBlockProps = ChatsBlockProps,
   O extends ComponentProps<P> = ComponentProps<P>,
-> extends BaseComponent<ChatsBlockProps> {
+> extends BaseComponent<ChatsBlockType> {
   constructor({ props }: O) {
-    super({ props });
+    super({ props: { ...props, chatToDelete: null } });
+  }
+
+  protected override _subscribe(addListeners?: boolean): void {
+    super._subscribe(addListeners);
+
+    this._eventEmitter.on(EventType.CONFIRM_DELETE_CHAT, (chatId: number) => {
+      chatsController.selectDeletedChat(chatId);
+    });
+    this._eventEmitter.on(EventType.DELETE_CHAT, (chatId: number) => {
+      chatsController.delete(chatId);
+    });
   }
 
   protected override init(): void {
-    const chats = ChatsList._initChatsItems(this._props.chats, this._props.currentChat);
+    const chats = this._initChatsItems();
+    const deleteChatPopup = this._initDeleteChatPopup();
 
-    this.addChildren({ chats });
+    this.addChildren({ chats, deleteChatPopup });
   }
 
-  private static _initChatsItems(chats: ChatType[], currentChat: number | null): Chat[] {
-    return chats.map((chat) => {
+  private _initChatsItems(): Chat[] {
+    return this._props.chats.map((chat) => {
       const { id, title, avatar: src, unread_count: newMessagesAmount, last_message } = chat;
 
       let props: ChatPropsType = {
@@ -35,7 +54,7 @@ export class ChatsList<
         title,
         src,
         newMessagesAmount,
-        isActive: currentChat === id,
+        isActive: this._props.currentChat === id,
         onClick: () => {
           chatsController.selectChat(id);
         },
@@ -48,8 +67,48 @@ export class ChatsList<
         props = { ...props, date, messageText };
       }
 
-      return new Chat({ props });
+      return new Chat({
+        props,
+        listeners: {
+          contextmenu: [
+            (evt) => {
+              evt.preventDefault();
+
+              const { pageX: left, pageY: top } = evt;
+
+              this.deleteChatPopup.getContent().style.top = `${top}px`;
+              this.deleteChatPopup.getContent().style.left = `${left}px`;
+
+              this.updateProps({ chatToDelete: id });
+            },
+          ],
+        },
+      });
     });
+  }
+
+  protected _initDeleteChatPopup(): DeleteChatPopup {
+    const deleteChatPopup = new DeleteChatPopup({
+      listeners: {
+        click: [
+          (evt: Event) => {
+            evt.stopPropagation();
+            chatsController.selectDeletedChat(this._props.chatToDelete);
+            this.updateProps({ chatToDelete: null });
+          },
+        ],
+      },
+    });
+
+    deleteChatPopup.componentWasShown = () => {
+      this._subscribeClickDocument();
+    };
+
+    deleteChatPopup.componentWasHidden = () => {
+      this._unsubscribeClickDocument();
+    };
+
+    return deleteChatPopup;
   }
 
   protected override getTemplate(): TemplateDelegate {
@@ -57,8 +116,8 @@ export class ChatsList<
   }
 
   protected override componentDidUpdate(
-    oldTarget: ChatsBlockProps,
-    target: ChatsBlockProps,
+    oldTarget: ChatsBlockType,
+    target: ChatsBlockType,
   ): boolean {
     if (oldTarget.currentChat !== target.currentChat) {
       const [oldCurrentChat, newCurrentChat] = [oldTarget, target].map((item) => {
@@ -77,11 +136,37 @@ export class ChatsList<
       return false;
     }
 
+    if (oldTarget.chatToDelete !== target.chatToDelete) {
+      if (target.chatToDelete !== null) {
+        this.deleteChatPopup.show();
+      } else {
+        this.deleteChatPopup.hide();
+      }
+
+      return false;
+    }
+
     if (oldTarget.chats !== target.chats) {
       this.init();
     }
 
     return true;
+  }
+
+  _subscribeClickDocument() {
+    document.addEventListener('click', this._onClickDocument);
+  }
+
+  _unsubscribeClickDocument() {
+    document.removeEventListener('click', this._onClickDocument);
+  }
+
+  _onClickDocument = () => {
+    this.updateProps({ chatToDelete: null });
+  };
+
+  get deleteChatPopup() {
+    return this.getChild('deleteChatPopup') as DeleteChatPopup;
   }
 }
 

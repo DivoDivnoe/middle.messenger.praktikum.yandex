@@ -16,6 +16,8 @@
   --c-gray-4: #f8f8f8;
   --c-red: #ff2f2f;
   --c-blue: #e4edfd;
+  --popup-width: 340px;
+  --popup-height: 257px;
 }
 
 html,

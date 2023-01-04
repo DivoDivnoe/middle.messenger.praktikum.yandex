@@ -24,10 +24,13 @@ class Chat<
   P extends ChatPropsType = ChatPropsType,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<ChatProps> {
-  constructor({ props }: O) {
+  constructor({ props, listeners = {} }: O) {
     const { messageText = '', date = '', onClick } = props;
 
-    super({ props: { ...props, styles, messageText, date }, listeners: { click: [onClick] } });
+    super({
+      props: { ...props, styles, messageText, date },
+      listeners: { ...listeners, click: [onClick] },
+    });
   }
 
   protected override init(): void {

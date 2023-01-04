@@ -40,6 +40,10 @@ class ChatsController {
     store.set('currentChat.data', chatId);
   }
 
+  public selectDeletedChat(chatId: number | null): void {
+    store.set('deletedChat', chatId);
+  }
+
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
     const chats = await this._api.getFilteredList(data);
     store.set('chats.data', chats);
@@ -58,6 +62,10 @@ class ChatsController {
     const { data: chats } = store.getState().chats;
     const newChats = chats.filter((item) => item.id !== id);
     store.set('chats.data', newChats);
+
+    if (store.getState().currentChat.data === chatId) {
+      store.set('currentChat.data', null);
+    }
   }
 
   private async _getNewMessagesCount(id: number): Promise<void> {

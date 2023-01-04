@@ -1,0 +1,20 @@
+.popupWrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--c-black-transparent-0);
+  z-index: 100;
+}
+
+.popup {
+  min-width: 340px;
+  min-height: 257px;
+  background-color: var(--c-white);
+  box-shadow: 0 0 6px var(--c-black-transparent-2);
+  border-radius: 12px;
+}

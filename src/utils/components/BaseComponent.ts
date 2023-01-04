@@ -8,6 +8,8 @@ enum EventType {
   RENDER = 'render',
   MOUNT = 'mount',
   UPDATE = 'update',
+  SHOW = 'show',
+  HIDE = 'hide',
 }
 
 export type PropsTypes = Record<string, unknown>;
@@ -42,7 +44,7 @@ class BaseComponent<
   O extends ComponentProps<P> = ComponentProps<P>,
 > implements IBaseComponent<P>
 {
-  private _eventEmitter: EventEmitter;
+  protected _eventEmitter: EventEmitter;
   private _template: TemplateDelegate;
   private _element: HTMLElement;
   private _listeners: ListenersType;
@@ -155,6 +157,8 @@ class BaseComponent<
     this._eventEmitter.on(EventType.RENDER, this._render);
     this._eventEmitter.on(EventType.MOUNT, this._componentDidMount);
     this._eventEmitter.on(EventType.UPDATE, this._componentDidUpdate);
+    this._eventEmitter.on(EventType.SHOW, this._componentWasShown);
+    this._eventEmitter.on(EventType.HIDE, this._componentWasHidden);
   }
 
   protected _subscribe(addListeners = true): void {
@@ -223,13 +227,29 @@ class BaseComponent<
     };
   }
 
-  show() {
+  public show() {
     this.getContent().hidden = false;
+    this._eventEmitter.emit(EventType.SHOW);
   }
 
-  hide() {
+  public hide() {
     this.getContent().hidden = true;
+    this._eventEmitter.emit(EventType.HIDE);
   }
+
+  _componentWasShown = () => {
+    this.componentWasShown();
+  };
+
+  _componentWasHidden = () => {
+    this.componentWasHidden();
+  };
+
+  // eslint-disable-next-line
+  public componentWasShown(): void {}
+
+  // eslint-disable-next-line
+  public componentWasHidden(): void {}
 }
 
 export default BaseComponent;

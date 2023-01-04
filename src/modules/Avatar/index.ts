@@ -1,4 +1,3 @@
-import Avatar, { AvatarMainProps } from '@/components/Avatar/Avatar';
-import withAvatarStore from '@/hocs/withAvatar';
+import Avatar from './Avatar';
 
-export default withAvatarStore<AvatarMainProps>(Avatar);
+export default Avatar;

@@ -7,6 +7,7 @@ import { ConversationBlockPropsType } from '@/modules/ConversationBlock/Conversa
 import { UserMessageType } from '@/components/Message/Message';
 import Chats from '@/modules/Chats';
 import chatsController from '@/controllers/ChatsController';
+import ConfirmDeleteChat from '@/modules/ConfirmDeleteChat';
 
 const mockMessagesData: ConversationBlockPropsType[] = [
   {
@@ -48,8 +49,9 @@ class ChatsPage extends BaseComponent<ChatBlockProps> {
   protected override init(): void {
     const chats = ChatsPage._initChats();
     const messages = ChatsPage._initMessages(this._props.messages);
+    const confirmDeleteChat = new ConfirmDeleteChat({ props: {} });
 
-    this.addChildren({ chats, messages });
+    this.addChildren({ chats, messages, confirmDeleteChat });
 
     chatsController.getFilteredList();
   }

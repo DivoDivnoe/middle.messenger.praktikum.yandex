@@ -23,6 +23,7 @@ export type StateProps = {
   chats: ChatsStateProps;
   // currentChat: ChatStateProps;
   currentChat: ChatStateProps;
+  deletedChat: number | null;
 };
 
 const withCoreStateData = <T>(data: T): StateCoreType<T> => {
@@ -64,6 +65,7 @@ const initialState: StateProps = {
   users: withCoreStateData<User[]>([]),
   chats: withCoreStateData<ChatType[]>([]),
   currentChat: withCoreStateData<number | null>(null),
+  deletedChat: null,
 };
 
 export class Store extends EventEmitter {

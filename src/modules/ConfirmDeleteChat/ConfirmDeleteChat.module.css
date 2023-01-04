@@ -1,0 +1,24 @@
+.confirm {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: var(--popup-width);
+  height: var(--popup-height);
+  padding: 40px 30px;
+}
+
+.title {
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  margin-top: auto;
+
+  button:not(:last-child) {
+    margin-bottom: 14px;
+  }
+}

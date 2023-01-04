@@ -5,7 +5,7 @@
   margin-right: auto;
   border-right: 1px solid var(--c-gray-1);
 
-  & > div:last-child {
+  & > div:nth-child(2) {
     flex-grow: 1;
   }
 }
