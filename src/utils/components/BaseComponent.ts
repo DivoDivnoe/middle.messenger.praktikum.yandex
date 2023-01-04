@@ -227,6 +227,10 @@ class BaseComponent<
     };
   }
 
+  protected clearChildren(): void {
+    this._children = {};
+  }
+
   public show() {
     this.getContent().hidden = false;
     this._eventEmitter.emit(EventType.SHOW);

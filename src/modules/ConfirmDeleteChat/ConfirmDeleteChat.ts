@@ -22,7 +22,18 @@ class ConfirmDeleteChat<
   }
 
   protected override init(): void {
-    const confirmButton = new Button({ props: { content: 'Удалить' } });
+    const confirmButton = new Button({
+      props: { content: 'Удалить' },
+      listeners: {
+        click: [
+          () => {
+            if (this._props.deletedChat) {
+              chatsController.delete(this._props.deletedChat.id);
+            }
+          },
+        ],
+      },
+    });
     const cancelButton = new Button({
       props: { theme: ButtonTheme.SECONDARY, content: 'Отмена' },
       listeners: {
@@ -41,7 +52,6 @@ class ConfirmDeleteChat<
     oldTarget: ConfirmDeleteChatProps,
     target: ConfirmDeleteChatProps,
   ): boolean {
-    console.log('update confirm props', oldTarget, target);
     if (!!oldTarget.deletedChat && target.deletedChat === null) {
       this.hide();
     } else if (oldTarget.deletedChat === null && !!target.deletedChat) {

@@ -57,8 +57,6 @@ export class MessagesBlock<
   protected override init(): void {
     if (this._props.chat) {
       const avatar = MessagesBlock._initAvatar(this._props.chat?.avatar || null);
-      console.log('avatar', avatar);
-
       const arrowButton = MessagesBlock._initArrowButton();
       const messagesBlocks = MessagesBlock._initBlocks(
         this._props.data as ConversationBlockProps[],
@@ -66,6 +64,8 @@ export class MessagesBlock<
       const input = this._initInput();
 
       this.addChildren({ avatar, arrowButton, messagesBlocks, input });
+    } else {
+      this.clearChildren();
     }
   }
 
@@ -138,7 +138,7 @@ export class MessagesBlock<
       this.addChildren({ messagesBlocks });
     }
 
-    if (!oldTarget.chat && target.chat) {
+    if (oldTarget.chat !== target.chat) {
       this.init();
     }
 

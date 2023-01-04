@@ -55,12 +55,12 @@ class ChatsController {
   }
 
   private async _delete(chatId: number): Promise<void> {
-    const {
-      result: { id },
-    } = await this._api.delete(chatId);
+    await this._api.delete(chatId);
+
+    store.set('deletedChat', null);
 
     const { data: chats } = store.getState().chats;
-    const newChats = chats.filter((item) => item.id !== id);
+    const newChats = chats.filter((item) => item.id !== chatId);
     store.set('chats.data', newChats);
 
     if (store.getState().currentChat.data === chatId) {
