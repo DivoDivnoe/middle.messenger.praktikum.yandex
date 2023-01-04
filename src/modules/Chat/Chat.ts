@@ -12,10 +12,11 @@ export type ChatPropsType = {
   messageText?: string;
   newMessagesAmount: number;
   src: string | null;
-  isActive?: boolean;
+  isActive: boolean;
+  onClick: () => void;
 };
 
-export type ChatProps = ChatPropsType & {
+export type ChatProps = Omit<ChatPropsType, 'onClick'> & {
   styles: typeof styles;
 };
 
@@ -24,9 +25,9 @@ class Chat<
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<ChatProps> {
   constructor({ props }: O) {
-    const { messageText = '', date = '', isActive = false } = props;
+    const { messageText = '', date = '', onClick } = props;
 
-    super({ props: { ...props, styles, messageText, date, isActive } });
+    super({ props: { ...props, styles, messageText, date }, listeners: { click: [onClick] } });
   }
 
   protected override init(): void {

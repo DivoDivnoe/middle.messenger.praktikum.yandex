@@ -1,11 +1,16 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Chats.hbs';
 import styles from './Chats.module.css';
-import BaseComponent, { ComponentProps, PropsTypes } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentProps,
+  IBaseComponent,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import '@/utils/helpers/condition';
 import withChatsStore, { ChatsProps } from '@/hocs/withChatsStore';
 import { ChatType } from '@/api/types';
 import ChatsList from '../ChatsList';
+import { ChatsBlockPropsType } from '../ChatsList/ChatsList';
 
 export type ChatsBlockProps = ChatsProps & {
   styles: typeof styles;
@@ -29,7 +34,7 @@ export class Chats<
     this.addChildren({ filteredChatsBlock });
   }
 
-  private static _initChatsItems(chats: ChatType[]): ChatsList {
+  private static _initChatsItems(chats: ChatType[]) {
     return new ChatsList({ props: { chats } });
   }
 
@@ -42,19 +47,20 @@ export class Chats<
     target: ChatsBlockProps,
   ): boolean {
     if (oldTarget.inputValue !== target.inputValue) {
-      console.log('update input value');
       const chats = this._getFilteredChats(target.inputValue);
-      (this.getChild('filteredChatsBlock') as ChatsList).updateProps({ chats });
+      (this.getChild('filteredChatsBlock') as IBaseComponent<ChatsBlockPropsType>).updateProps({
+        chats,
+      });
       return false;
     }
 
     if (oldTarget.chats !== target.chats) {
       const chats = this._getFilteredChats(target.inputValue);
-      (this.getChild('filteredChatsBlock') as ChatsList).updateProps({ chats });
+      (this.getChild('filteredChatsBlock') as IBaseComponent<ChatsBlockPropsType>).updateProps({
+        chats,
+      });
       return false;
     }
-
-    console.log('rerender');
 
     this._unsubscribeInput();
 

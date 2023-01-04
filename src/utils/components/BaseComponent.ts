@@ -175,6 +175,10 @@ class BaseComponent<
     return this._element;
   }
 
+  public getProps(): P {
+    return this._props;
+  }
+
   public updateProps<T extends Partial<P>>(newProps: T): void {
     Object.assign(this._props, newProps);
   }

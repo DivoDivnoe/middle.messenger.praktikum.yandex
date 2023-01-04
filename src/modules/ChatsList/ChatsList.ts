@@ -6,10 +6,11 @@ import Chat from '../Chat';
 import { ChatPropsType } from '../Chat/Chat';
 import { ChatType } from '@/api/types';
 import getChatTime from '@/utils/helpers/getChatTime';
+import chatsController from '@/controllers/ChatsController';
+import withCurrentChatStore, { CurrentChatProps } from '@/hocs/withCurrentChat';
 
-export type ChatsBlockProps = {
-  chats: ChatType[];
-};
+export type ChatsBlockPropsType = { chats: ChatType[] };
+export type ChatsBlockProps = ChatsBlockPropsType & CurrentChatProps;
 
 export class ChatsList<
   P extends ChatsBlockProps = ChatsBlockProps,
@@ -20,16 +21,25 @@ export class ChatsList<
   }
 
   protected override init(): void {
-    const chats = ChatsList._initChatsItems(this._props.chats);
+    const chats = ChatsList._initChatsItems(this._props.chats, this._props.currentChat);
 
     this.addChildren({ chats });
   }
 
-  private static _initChatsItems(chats: ChatType[]): Chat[] {
+  private static _initChatsItems(chats: ChatType[], currentChat: number | null): Chat[] {
     return chats.map((chat) => {
       const { id, title, avatar: src, unread_count: newMessagesAmount, last_message } = chat;
 
-      let props: ChatPropsType = { id, title, src, newMessagesAmount };
+      let props: ChatPropsType = {
+        id,
+        title,
+        src,
+        newMessagesAmount,
+        isActive: currentChat === id,
+        onClick: () => {
+          chatsController.selectChat(id);
+        },
+      };
 
       if (last_message) {
         const { time, content: messageText } = last_message;
@@ -50,6 +60,23 @@ export class ChatsList<
     oldTarget: ChatsBlockProps,
     target: ChatsBlockProps,
   ): boolean {
+    if (oldTarget.currentChat !== target.currentChat) {
+      const [oldCurrentChat, newCurrentChat] = [oldTarget, target].map((item) => {
+        const chats = this.getChild('chats') as Chat[];
+        return chats.find((chat) => chat.getProps().id === item.currentChat);
+      });
+
+      if (oldCurrentChat) {
+        oldCurrentChat.updateProps({ isActive: false });
+      }
+
+      if (newCurrentChat) {
+        newCurrentChat.updateProps({ isActive: true });
+      }
+
+      return false;
+    }
+
     if (oldTarget.chats !== target.chats) {
       this.init();
     }
@@ -58,4 +85,4 @@ export class ChatsList<
   }
 }
 
-export default ChatsList;
+export default withCurrentChatStore<ChatsBlockPropsType>(ChatsList);
