@@ -1,12 +1,8 @@
-{{#if isEmpty}}
-  <div class='{{styles.messagesBlock}} {{condition isEmpty styles.empty}}'>
-    <p class='{{styles.emptyMessage}}'>Выберите чат, чтобы отправить сообщение</p>
-  </div>
-{{else}}
+{{#if chat}}
   <div class='{{styles.messagesBlock}}'>
     <div class='{{styles.header}}'>
       {{{avatar}}}
-      <span class='{{styles.userName}}'>{{userName}}</span>
+      <span class='{{styles.title}}'>{{chat.title}}</span>
       <button class='{{styles.userControlsButton}} {{condition isActiveUserButton styles.active}}'>
         <svg
           width='3'
@@ -82,5 +78,9 @@
       </div>
       {{{arrowButton}}}
     </form>
+  </div>
+{{else}}
+  <div class='{{styles.messagesBlock}}  {{#unless chats}} {{styles.empty}} {{/unless}}'>
+    <p class='{{styles.emptyMessage}}'>Выберите чат, чтобы отправить сообщение</p>
   </div>
 {{/if}}

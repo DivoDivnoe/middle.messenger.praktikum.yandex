@@ -11,40 +11,35 @@ import ConversationBlock, {
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
-import Avatar from '../Avatar';
+import withChatMainDataStore, { ChatMainDataProps } from '@/hocs/withChatMainData';
+import Avatar from '@/components/Avatar';
 
-export type MessagesBlockPropsType = {
-  isEmpty?: boolean;
-  src: string | null;
-  userName?: string;
+export type MessagesBlockCoreProps = {
   data?: ConversationBlockPropsType[];
   onSubmit: (message: string) => void;
   isActiveUserButton: boolean;
 };
 
+export type MessagesBlockPropsType = MessagesBlockCoreProps & ChatMainDataProps;
+
 export type MessagesBlockProps = Omit<MessagesBlockPropsType, 'onSubmit'> & {
   styles: typeof styles;
 };
 
-class MessagesBlock<
+export class MessagesBlock<
   P extends MessagesBlockPropsType = MessagesBlockPropsType,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<MessagesBlockProps> {
   private _message = '';
 
-  constructor({
-    props: {
-      isEmpty = false,
-      src = '',
-      userName = '',
-      data = [],
-      isActiveUserButton = false,
-      onSubmit,
-    },
-  }: O) {
-    console.log('messages block constructor');
+  constructor({ props: { data = [], isActiveUserButton = false, onSubmit, chat } }: O) {
     super({
-      props: { styles, isEmpty, src, userName, data, isActiveUserButton },
+      props: {
+        styles,
+        chat,
+        data,
+        isActiveUserButton,
+      },
       listeners: {
         submit: [
           (evt) => {
@@ -60,8 +55,9 @@ class MessagesBlock<
   }
 
   protected override init(): void {
-    if (!this._props.isEmpty) {
-      const avatar = MessagesBlock._initAvatar();
+    if (this._props.chat) {
+      const avatar = MessagesBlock._initAvatar(this._props.chat?.avatar || null);
+      console.log('avatar', avatar);
 
       const arrowButton = MessagesBlock._initArrowButton();
       const messagesBlocks = MessagesBlock._initBlocks(
@@ -73,8 +69,8 @@ class MessagesBlock<
     }
   }
 
-  private static _initAvatar() {
-    return new Avatar({ props: {} });
+  private static _initAvatar(src: string | null) {
+    return new Avatar({ props: { src } });
   }
 
   private static _initArrowButton(): ArrowButton {
@@ -134,6 +130,7 @@ class MessagesBlock<
     oldTarget: MessagesBlockProps,
     target: MessagesBlockProps,
   ): boolean {
+    console.log('update messages');
     if (oldTarget.data !== target.data) {
       const messagesBlocks = MessagesBlock._initBlocks(
         (target.data ?? []) as ConversationBlockProps[],
@@ -141,13 +138,9 @@ class MessagesBlock<
       this.addChildren({ messagesBlocks });
     }
 
-    if (oldTarget.isEmpty && !target.isEmpty) {
+    if (!oldTarget.chat && target.chat) {
       this.init();
     }
-
-    // if (oldTarget.src !== target.src) {
-    //   (this.getChild('avatar') as IBaseComponent).updateProps({ src: target.src });
-    // }
 
     return true;
   }
@@ -157,4 +150,4 @@ class MessagesBlock<
   }
 }
 
-export default MessagesBlock;
+export default withChatMainDataStore<MessagesBlockCoreProps>(MessagesBlock);

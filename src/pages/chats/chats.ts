@@ -2,10 +2,9 @@ import { TemplateDelegate } from 'handlebars';
 import template from './chats.hbs';
 import styles from './chats.module.css';
 import BaseComponent from '@/utils/components/BaseComponent';
-import MessagesBlock, { MessagesBlockPropsType } from '@/modules/MessagesBlock/MessagesBlock';
+import MessagesBlock, { MessagesBlockCoreProps } from '@/modules/MessagesBlock/MessagesBlock';
 import { ConversationBlockPropsType } from '@/modules/ConversationBlock/ConversationBlock';
 import { UserMessageType } from '@/components/Message/Message';
-import image from '/static/avatar.svg';
 import Chats from '@/modules/Chats';
 import chatsController from '@/controllers/ChatsController';
 
@@ -28,28 +27,21 @@ const mockMessagesData: ConversationBlockPropsType[] = [
 ];
 
 export type ChatBlockPropsType = {
-  messages: MessagesBlockPropsType;
+  messages: MessagesBlockCoreProps;
 };
 
 type ChatBlockProps = ChatBlockPropsType & { styles: typeof styles };
 
-const mocks: ChatBlockPropsType = {
-  messages: {
-    isEmpty: false,
-    src: image,
-    userName: 'Vadim',
-    data: mockMessagesData,
-    onSubmit: (message: string) => console.log(message),
-    isActiveUserButton: false,
-  },
+const mocks: MessagesBlockCoreProps = {
+  data: mockMessagesData,
+  onSubmit: (message: string) => console.log(message),
+  isActiveUserButton: false,
 };
 
 class ChatsPage extends BaseComponent<ChatBlockProps> {
   constructor() {
-    const { messages } = mocks;
-
     super({
-      props: { styles, messages },
+      props: { styles, messages: mocks },
     });
   }
 
@@ -66,7 +58,7 @@ class ChatsPage extends BaseComponent<ChatBlockProps> {
     return new Chats({ props: {} });
   }
 
-  private static _initMessages(messages: MessagesBlockPropsType): MessagesBlock {
+  private static _initMessages(messages: MessagesBlockCoreProps) {
     return new MessagesBlock({ props: messages });
   }
 
