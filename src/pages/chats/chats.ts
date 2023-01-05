@@ -8,6 +8,8 @@ import { UserMessageType } from '@/components/Message/Message';
 import Chats from '@/modules/Chats';
 import chatsController from '@/controllers/ChatsController';
 import ConfirmDeleteChat from '@/modules/ConfirmDeleteChat';
+import ChatAddUserForm from '@/modules/ChatAddUserForm';
+import ChatRemoveUserForm from '@/modules/ChatRemoveUserForm';
 
 const mockMessagesData: ConversationBlockPropsType[] = [
   {
@@ -36,22 +38,21 @@ type ChatBlockProps = ChatBlockPropsType & { styles: typeof styles };
 const mocks: MessagesBlockCoreProps = {
   data: mockMessagesData,
   onSubmit: (message: string) => console.log(message),
-  isActiveUserButton: false,
 };
 
 class ChatsPage extends BaseComponent<ChatBlockProps> {
   constructor() {
-    super({
-      props: { styles, messages: mocks },
-    });
+    super({ props: { styles, messages: mocks } });
   }
 
   protected override init(): void {
     const chats = ChatsPage._initChats();
     const messages = ChatsPage._initMessages(this._props.messages);
     const confirmDeleteChat = new ConfirmDeleteChat({ props: {} });
+    const chatAddUserForm = new ChatAddUserForm({ props: {} });
+    const chatRemoveUserForm = new ChatRemoveUserForm({ props: {} });
 
-    this.addChildren({ chats, messages, confirmDeleteChat });
+    this.addChildren({ chats, messages, confirmDeleteChat, chatAddUserForm, chatRemoveUserForm });
 
     chatsController.getFilteredList();
   }

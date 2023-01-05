@@ -1,5 +1,5 @@
 import UserApi from '@/api/UserApi';
-import { PasswordUpdateType, UserMainData } from '@/api/types';
+import { PasswordUpdateType, User, UserMainData } from '@/api/types';
 import { Routes } from '@/configs/Routes';
 import router from '@/utils/components/Router';
 import store from '@/utils/components/Store';
@@ -21,10 +21,6 @@ class UserController {
 
   public async getUserById(id: string): Promise<void> {
     return this._request(() => this._getUserById(id), 'get user error');
-  }
-
-  public async getUsersByLogin(login: string): Promise<void> {
-    return this._request(() => this._getUsersByLogin(login), 'get users error');
   }
 
   private async _updateProfile(options: UserMainData): Promise<void> {
@@ -49,9 +45,24 @@ class UserController {
     store.set('user.current', user);
   }
 
-  public async _getUsersByLogin(login: string): Promise<void> {
-    const users = this._api.getUsersByLogin(login);
-    store.set('users.data', users);
+  private _getUsersByLogin(login: string): Promise<User[]> {
+    return this._api.getUsersByLogin(login);
+  }
+
+  public async getUsersToAddByLogin(login: string): Promise<void> {
+    const users = await this._getUsersByLogin(login);
+    store.set(
+      'usersToAddToChat',
+      users.map(({ id }) => id),
+    );
+  }
+
+  public async getUsersToRemoveByLogin(login: string): Promise<void> {
+    const users = await this._getUsersByLogin(login);
+    store.set(
+      'usersToRemoveFromChat',
+      users.map(({ id }) => id),
+    );
   }
 
   private async _request(req: () => Promise<void>, errorMessage = '') {

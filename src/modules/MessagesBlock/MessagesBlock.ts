@@ -1,7 +1,7 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, { ComponentProps, IBaseComponent } from '@/utils/components/BaseComponent';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
 import ConversationBlock, {
@@ -13,17 +13,19 @@ import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
 import withChatMainDataStore, { ChatMainDataProps } from '@/hocs/withChatMainData';
 import Avatar from '@/components/Avatar';
+import ChatUserOptions from '../ChatUserOptions';
+import UserOptionsButton from '@/components/UserOptionsButton';
 
 export type MessagesBlockCoreProps = {
   data?: ConversationBlockPropsType[];
   onSubmit: (message: string) => void;
-  isActiveUserButton: boolean;
 };
 
 export type MessagesBlockPropsType = MessagesBlockCoreProps & ChatMainDataProps;
 
 export type MessagesBlockProps = Omit<MessagesBlockPropsType, 'onSubmit'> & {
   styles: typeof styles;
+  isShownUserOptions: boolean;
 };
 
 export class MessagesBlock<
@@ -32,14 +34,9 @@ export class MessagesBlock<
 > extends BaseComponent<MessagesBlockProps> {
   private _message = '';
 
-  constructor({ props: { data = [], isActiveUserButton = false, onSubmit, chat } }: O) {
+  constructor({ props: { data = [], onSubmit, chat } }: O) {
     super({
-      props: {
-        styles,
-        chat,
-        data,
-        isActiveUserButton,
-      },
+      props: { styles, chat, data, isShownUserOptions: false },
       listeners: {
         submit: [
           (evt) => {
@@ -62,11 +59,36 @@ export class MessagesBlock<
         this._props.data as ConversationBlockProps[],
       );
       const input = this._initInput();
+      const chatUserOptions = this._initChatUserOptions();
+      const userOptionsButton = this._initUserOptionsButton();
 
-      this.addChildren({ avatar, arrowButton, messagesBlocks, input });
+      this.addChildren({
+        avatar,
+        arrowButton,
+        messagesBlocks,
+        input,
+        chatUserOptions,
+        userOptionsButton,
+      });
     } else {
       this.clearChildren();
     }
+  }
+
+  private _initChatUserOptions() {
+    const chatUserOptions = new ChatUserOptions({
+      props: { className: String(styles.userOptions) },
+    });
+
+    chatUserOptions.componentWasShown = () => {
+      this._subscribeClickDocument();
+    };
+
+    chatUserOptions.componentWasHidden = () => {
+      this._unsubscribeClickDocument();
+    };
+
+    return chatUserOptions;
   }
 
   private static _initAvatar(src: string | null) {
@@ -122,6 +144,20 @@ export class MessagesBlock<
     return input;
   }
 
+  private _initUserOptionsButton() {
+    return new UserOptionsButton({
+      props: { isActive: this._props.isShownUserOptions },
+      listeners: {
+        click: [
+          (evt: Event) => {
+            evt.stopPropagation();
+            this._onClickUserOptionsButton();
+          },
+        ],
+      },
+    });
+  }
+
   protected override getTemplate(): TemplateDelegate {
     return template;
   }
@@ -130,7 +166,18 @@ export class MessagesBlock<
     oldTarget: MessagesBlockProps,
     target: MessagesBlockProps,
   ): boolean {
-    console.log('update messages');
+    if (oldTarget.isShownUserOptions !== target.isShownUserOptions) {
+      if (target.isShownUserOptions) {
+        this.chatUserOptions.show();
+      } else {
+        this.chatUserOptions.hide();
+      }
+
+      this.userOptionsButton.updateProps({ isActive: target.isShownUserOptions });
+
+      return false;
+    }
+
     if (oldTarget.data !== target.data) {
       const messagesBlocks = MessagesBlock._initBlocks(
         (target.data ?? []) as ConversationBlockProps[],
@@ -140,14 +187,42 @@ export class MessagesBlock<
 
     if (oldTarget.chat !== target.chat) {
       this.init();
+
+      if (!oldTarget.chat) {
+        this._subscribe;
+      }
     }
 
     return true;
   }
 
+  private _onClickUserOptionsButton = () => {
+    this.updateProps({ isShownUserOptions: !this._props.isShownUserOptions });
+  };
+
   private _validate(): boolean {
     return (this.getChild('input') as Input).validate();
   }
+
+  get chatUserOptions() {
+    return this.getChild('chatUserOptions') as IBaseComponent;
+  }
+
+  get userOptionsButton() {
+    return this.getChild('userOptionsButton') as UserOptionsButton;
+  }
+
+  _subscribeClickDocument() {
+    document.addEventListener('click', this._onClickDocument);
+  }
+
+  _unsubscribeClickDocument() {
+    document.removeEventListener('click', this._onClickDocument);
+  }
+
+  _onClickDocument = () => {
+    this.updateProps({ isShownUserOptions: false });
+  };
 }
 
 export default withChatMainDataStore<MessagesBlockCoreProps>(MessagesBlock);

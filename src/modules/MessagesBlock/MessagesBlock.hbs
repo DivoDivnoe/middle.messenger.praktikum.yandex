@@ -3,19 +3,8 @@
     <div class='{{styles.header}}'>
       {{{avatar}}}
       <span class='{{styles.title}}'>{{chat.title}}</span>
-      <button class='{{styles.userControlsButton}} {{condition isActiveUserButton styles.active}}'>
-        <svg
-          width='3'
-          height='16'
-          viewBox='0 0 3 16'
-          fill='#1e1e1e'
-          xmlns='http://www.w3.org/2000/svg'
-        >
-          <circle cx='1.5' cy='2' r='1.5'></circle>
-          <circle cx='1.5' cy='8' r='1.5'></circle>
-          <circle cx='1.5' cy='14' r='1.5'></circle>
-        </svg>
-      </button>
+      {{{userOptionsButton}}}
+      {{{chatUserOptions}}}
     </div>
     <div class='{{styles.content}}'>
       {{#each messagesBlocks}}
@@ -23,7 +12,7 @@
       {{/each}}
     </div>
     <form class='{{styles.controls}}'>
-      {{#if isActiveUserButton}}
+      {{#if isActiveFileButton}}
         <button class='{{styles.addFileButton}} {{styles.active}}' type="button">
       {{else}}
         <button class='{{styles.addFileButton}}' type="button">

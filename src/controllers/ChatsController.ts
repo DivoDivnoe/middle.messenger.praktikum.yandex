@@ -20,16 +20,60 @@ class ChatsController {
     return this._request(() => this._getNewMessagesCount(id), 'get new messages error');
   }
 
-  public addUsers(chatId: number, users: number[]): Promise<void> {
-    return this._request(() => this._addUsers(chatId, users), 'add chat users error');
+  public async addUsers(): Promise<void> {
+    const { data: chatId } = store.getState().currentChat;
+    const { usersToAddToChat: users } = store.getState();
+
+    if (chatId !== null && users.length) {
+      await this._request(() => this._addUsers(chatId, users), 'add chat users error');
+    }
+
+    this.cancelAddUsers();
+  }
+
+  public cancelAddUsers(): void {
+    store.set('addUserToChat', false);
+    store.set('usersToAddToChat', []);
+  }
+
+  public cancelRemoveUsers(): void {
+    store.set('removeUserFromChat', false);
+    store.set('usersToRemoveFromChat', []);
   }
 
   public addUser(chatId: number, user: number): Promise<void> {
     return this._request(() => this._addUser(chatId, user), 'add chat user error');
   }
 
-  public deleteUsers(chatId: number, users: number[]): Promise<void> {
-    return this._request(() => this._deleteUsers(chatId, users), 'delete chat users error');
+  public async addUserToCurrentChat(user: number): Promise<void> {
+    const chatId = store.getState().currentChat?.data;
+
+    if (chatId) {
+      await this.addUser(chatId, user);
+    }
+  }
+
+  public async deleteUsers(): Promise<void> {
+    const { data: chatId } = store.getState().currentChat;
+    const { usersToRemoveFromChat: users } = store.getState();
+
+    if (chatId !== null && users.length) {
+      await this._request(() => this._deleteUsers(chatId, users), 'delete chat users error');
+    }
+
+    this.cancelRemoveUsers();
+  }
+
+  public deleteUser(chatId: number, user: number): Promise<void> {
+    return this._request(() => this._deleteUser(chatId, user), 'delete chat user error');
+  }
+
+  public async removeUserFromCurrentChat(user: number): Promise<void> {
+    const chatId = store.getState().currentChat?.data;
+
+    if (chatId) {
+      await this.deleteUser(chatId, user);
+    }
   }
 
   public getChatToken(chatId: number): Promise<void> {
@@ -42,6 +86,15 @@ class ChatsController {
 
   public selectDeletedChat(chatId: number | null): void {
     store.set('deletedChat', chatId);
+  }
+
+  public wantAddUserToChat(flag: boolean): void {
+    console.log('controller add user', flag);
+    store.set('addUserToChat', flag);
+  }
+
+  public wantRemoveUserFromChat(flag: boolean): void {
+    store.set('removeUserFromChat', flag);
   }
 
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
@@ -79,6 +132,8 @@ class ChatsController {
 
   private async _addUsers(chatId: number, users: number[]): Promise<void> {
     await this._api.addUsers(chatId, users);
+    store.set('addUserToChat', false);
+    store.set('usersToAddToChat', []);
   }
 
   private async _addUser(chatId: number, user: number): Promise<void> {
@@ -87,6 +142,12 @@ class ChatsController {
 
   private async _deleteUsers(chatId: number, users: number[]): Promise<void> {
     await this._api.deleteUsers(chatId, users);
+    store.set('removeUserFromChat', false);
+    store.set('usersToRemoveFromChat', []);
+  }
+
+  private async _deleteUser(chatId: number, user: number): Promise<void> {
+    await this._api.deleteUser(chatId, user);
   }
 
   private async _getChatToken(chatId: number): Promise<void> {

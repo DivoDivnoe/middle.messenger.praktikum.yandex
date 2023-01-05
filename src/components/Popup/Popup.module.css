@@ -14,7 +14,4 @@
 .popup {
   min-width: 340px;
   min-height: 257px;
-  background-color: var(--c-white);
-  box-shadow: 0 0 6px var(--c-black-transparent-2);
-  border-radius: 12px;
 }

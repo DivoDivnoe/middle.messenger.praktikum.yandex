@@ -51,3 +51,9 @@ a {
 [hidden] {
   display: none !important;
 }
+
+.popup {
+  background-color: var(--c-white);
+  box-shadow: 0 0 6px var(--c-black-transparent-2);
+  border-radius: 12px;
+}

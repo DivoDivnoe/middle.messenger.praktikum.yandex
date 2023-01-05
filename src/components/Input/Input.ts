@@ -14,7 +14,7 @@ export enum InputType {
 
 export type InputPropsType = {
   id?: string;
-  type?: string;
+  type?: InputType;
   placeholder?: string;
   name?: string;
   value?: string;

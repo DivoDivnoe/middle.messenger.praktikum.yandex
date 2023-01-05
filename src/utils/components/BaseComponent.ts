@@ -31,6 +31,8 @@ export interface IBaseComponent<P extends PropsTypes = PropsTypes> {
   getChildren: () => ChildrenType;
   show: () => void;
   hide: () => void;
+  componentWasShown: () => void;
+  componentWasHidden: () => void;
 }
 export interface BaseComponentConstructor<
   P extends PropsTypes = PropsTypes,

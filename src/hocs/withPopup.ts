@@ -22,8 +22,14 @@ const withPopup = <
     protected override init(): void {
       const content = new Component({ props: this._props });
 
-      content.show = () => this.show();
-      content.hide = () => this.hide();
+      content.show = () => {
+        this.show();
+        content.componentWasShown();
+      };
+      content.hide = () => {
+        this.hide();
+        content.componentWasHidden();
+      };
 
       this.addChildren({ content });
     }
