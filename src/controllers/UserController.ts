@@ -74,6 +74,7 @@ class UserController {
     } catch (err) {
       if (err instanceof Error) {
         store.set('user.error', `${errorMessage} ${err.message}`);
+        alert(`${errorMessage} ${err.message}`);
       }
     } finally {
       store.set('user.loading', false);

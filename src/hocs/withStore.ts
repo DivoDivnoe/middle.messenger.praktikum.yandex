@@ -23,8 +23,6 @@ const withStore = <T, P extends PropsTypes = PropsTypes>(
         store.on(StoreEvent.UPDATED, () => {
           const state = deepClone(mapStateToProps(store.getState()));
 
-          console.log('update', currentState, state);
-
           if (!isEqual(currentState, state)) {
             this.updateProps(state as P & T);
             currentState = state;

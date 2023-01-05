@@ -1,19 +1,16 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ChatUserOptions.hbs';
 import styles from './ChatUserOptions.module.css';
-import BaseComponent, {
-  BaseComponentConstructor,
-  ComponentProps,
-} from '@/utils/components/BaseComponent';
+import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
 import ChatAddUserOption from '../ChatAddUserOption';
 import ChatRemoveUserOption from '../ChatRemoveUserOption';
-import withRemoveUserFromChat, {
-  RemoveUserFromChatStoreProps,
-} from '@/hocs/withRemoveUserFromChat';
-import withAddUserToChat, { AddUserToChatStoreProps } from '@/hocs/withAddUserToChat';
 
-export type ChatUserOptionsType = { className?: string } & AddUserToChatStoreProps &
-  RemoveUserFromChatStoreProps;
+export type ChatUserOptionsCoreType = {
+  className?: string;
+  onClick: () => void;
+};
+
+export type ChatUserOptionsType = ChatUserOptionsCoreType;
 export type ChatUserOptionsProps = ChatUserOptionsType & { styles: typeof styles };
 
 class ChatUserOptions<
@@ -22,15 +19,16 @@ class ChatUserOptions<
 > extends BaseComponent<ChatUserOptionsProps> {
   constructor({ props }: O) {
     const { className = '' } = props;
-
     super({ props: { ...props, className, styles } });
 
     this.hide();
   }
 
   protected override init(): void {
-    const addUserOption = new ChatAddUserOption();
-    const removeUserOption = new ChatRemoveUserOption();
+    const { onClick } = this._props;
+
+    const addUserOption = new ChatAddUserOption({ props: { onClick } });
+    const removeUserOption = new ChatRemoveUserOption({ props: { onClick } });
 
     this.addChildren({ addUserOption, removeUserOption });
   }
@@ -38,29 +36,6 @@ class ChatUserOptions<
   protected override getTemplate(): TemplateDelegate {
     return template;
   }
-
-  protected override componentDidUpdate(
-    oldTarget: ChatUserOptionsProps,
-    target: ChatUserOptionsProps,
-  ): boolean {
-    if (
-      (!oldTarget.addUserToChat && target.addUserToChat) ||
-      (!oldTarget.removeUserFromChat && target.removeUserFromChat)
-    ) {
-      this.hide();
-      return false;
-    }
-
-    return true;
-  }
 }
 
-const WithAddUserToChatForm = withAddUserToChat<
-  { className?: string } & RemoveUserFromChatStoreProps
->(ChatUserOptions as BaseComponentConstructor<{ className?: string }>);
-
-const WithRemoveUserFromChatForm = withRemoveUserFromChat<{ className?: string }>(
-  WithAddUserToChatForm,
-);
-
-export default WithRemoveUserFromChatForm;
+export default ChatUserOptions;

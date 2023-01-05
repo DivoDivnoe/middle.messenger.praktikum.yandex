@@ -15,6 +15,7 @@ import withChatMainDataStore, { ChatMainDataProps } from '@/hocs/withChatMainDat
 import Avatar from '@/components/Avatar';
 import ChatUserOptions from '../ChatUserOptions';
 import UserOptionsButton from '@/components/UserOptionsButton';
+import isEqual from '@/utils/helpers/isEqual';
 
 export type MessagesBlockCoreProps = {
   data?: ConversationBlockPropsType[];
@@ -77,7 +78,12 @@ export class MessagesBlock<
 
   private _initChatUserOptions() {
     const chatUserOptions = new ChatUserOptions({
-      props: { className: String(styles.userOptions) },
+      props: {
+        className: String(styles.userOptions),
+        onClick: () => {
+          this.updateProps({ isShownUserOptions: false });
+        },
+      },
     });
 
     chatUserOptions.componentWasShown = () => {
@@ -166,10 +172,13 @@ export class MessagesBlock<
     oldTarget: MessagesBlockProps,
     target: MessagesBlockProps,
   ): boolean {
+    console.log('update messages', oldTarget, target);
     if (oldTarget.isShownUserOptions !== target.isShownUserOptions) {
       if (target.isShownUserOptions) {
+        console.log('show options');
         this.chatUserOptions.show();
       } else {
+        console.log('hide options');
         this.chatUserOptions.hide();
       }
 
@@ -186,14 +195,19 @@ export class MessagesBlock<
     }
 
     if (oldTarget.chat !== target.chat) {
-      this.init();
+      if ([oldTarget, target].some((item) => item.chat === null)) {
+        this.init();
 
-      if (!oldTarget.chat) {
-        this._subscribe;
+        if (!oldTarget.chat) {
+          this._subscribe();
+        }
+      } else if (oldTarget.chat?.avatar !== target.chat?.avatar) {
+        (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
+        return false;
       }
     }
 
-    return true;
+    return !isEqual(oldTarget, target);
   }
 
   private _onClickUserOptionsButton = () => {

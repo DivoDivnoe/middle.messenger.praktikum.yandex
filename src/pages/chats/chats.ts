@@ -73,6 +73,7 @@ class ChatsPage extends BaseComponent<ChatBlockProps> {
     oldTarget: ChatBlockProps,
     target: ChatBlockProps,
   ): boolean {
+    console.log('update chats page');
     if (oldTarget.messages !== target.messages) {
       const items = ChatsPage._initMessages(target.messages);
       this.addChildren({ messages: items });

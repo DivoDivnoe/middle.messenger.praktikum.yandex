@@ -163,6 +163,7 @@ class ChatsController {
     } catch (err) {
       if (err instanceof Error) {
         store.set('chats.error', `${errorMessage} ${err.message}`);
+        alert(`${errorMessage} ${err.message}`);
       }
     } finally {
       store.set('chats.loading', false);

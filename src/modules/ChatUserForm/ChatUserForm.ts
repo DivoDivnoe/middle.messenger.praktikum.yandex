@@ -37,7 +37,7 @@ class ChatUserForm<
     super({
       props: { addUser, styles },
       listeners: {
-        click: [onSubmit],
+        submit: [onSubmit],
       },
     });
   }
