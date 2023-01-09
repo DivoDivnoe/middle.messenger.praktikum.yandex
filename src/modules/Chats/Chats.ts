@@ -89,7 +89,7 @@ export class Chats<
 
   _getFilteredChats(inputValue: string) {
     return this._props.chats.filter((chat) => {
-      return chat.title.indexOf(inputValue) >= 0;
+      return chat.title.toLowerCase().indexOf(inputValue.toLowerCase()) >= 0;
     });
   }
 }

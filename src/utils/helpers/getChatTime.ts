@@ -20,23 +20,43 @@ const isThisWeek = (date: Date): boolean => {
   return now - nowRest - (dateTime - dateTimeRest) < MILLISECONDS_PER_WEEK;
 };
 
+const isThisYear = (date: Date): boolean => {
+  const now = Date.now();
+
+  return date.getFullYear() === new Date(now).getFullYear();
+};
+
+export const getTime = (date: Date): string => {
+  const minutes = date.getMinutes();
+  const hours = date.getHours();
+
+  return `${hours}:${minutes}`;
+};
+
+export const getDate = (date: Date): string => {
+  const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric' };
+
+  if (isThisYear(date)) {
+    return date.toLocaleDateString('ru-RU', options);
+  }
+
+  options.year = 'numeric';
+
+  return date.toLocaleDateString('ru-RU', options).replace(/ г./, '');
+};
+
 const getChatTime = (dateStr: string): string => {
   const date = new Date(dateStr);
 
   if (isToday(date)) {
-    const minutes = date.getMinutes();
-    const hours = date.getHours();
-
-    return `${hours}:${minutes}`;
+    return getTime(date);
   }
 
   if (isThisWeek(date)) {
     return days[date.getDay()] as string;
   }
 
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-
-  return date.toLocaleDateString('ru-RU', options).replace(/ г./, '');
+  return getDate(date);
 };
 
 export default getChatTime;

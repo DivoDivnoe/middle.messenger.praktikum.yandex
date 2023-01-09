@@ -6,11 +6,10 @@
       {{{userOptionsButton}}}
       {{{chatUserOptions}}}
     </div>
-    <div class='{{styles.content}}'>
-      {{#each messagesBlocks}}
-        {{{this}}}
-      {{/each}}
+    <div class='{{styles.contentWrapper}}'>
+      {{{messagesList}}}
     </div>
+    
     <form class='{{styles.controls}}'>
       {{#if isActiveFileButton}}
         <button class='{{styles.addFileButton}} {{styles.active}}' type="button">

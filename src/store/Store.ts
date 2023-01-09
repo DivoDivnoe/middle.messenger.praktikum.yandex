@@ -1,6 +1,6 @@
-import { ChatType, User } from '@/api/types';
-import set from '../helpers/set';
-import EventEmitter from './EventEmitter';
+import { ChatMessage, ChatType, User } from '@/api/types';
+import set from '../utils/helpers/set';
+import EventEmitter from '../utils/components/EventEmitter';
 
 export enum StoreEvent {
   UPDATED = 'updated',
@@ -12,7 +12,7 @@ type StateCoreType<T> = {
   data: T;
 };
 
-export type UserStateProps = StateCoreType<User | null> & { current: User | null };
+export type UserStateProps = StateCoreType<User | null>;
 export type UsersStateProps = StateCoreType<User[]>;
 export type ChatsStateProps = StateCoreType<ChatType[]>;
 export type ChatStateProps = StateCoreType<number | null>;
@@ -21,6 +21,7 @@ export type StateProps = {
   user: UserStateProps;
   users: UsersStateProps;
   chats: ChatsStateProps;
+  messages: Record<number, ChatMessage[]>;
   currentChat: ChatStateProps;
   deletedChat: number | null;
   addUserToChat: boolean;
@@ -64,9 +65,10 @@ const withCoreStateData = <T>(data: T): StateCoreType<T> => {
 // ];
 
 const initialState: StateProps = {
-  user: { current: null, ...withCoreStateData<User | null>(null) },
+  user: withCoreStateData<User | null>(null),
   users: withCoreStateData<User[]>([]),
   chats: withCoreStateData<ChatType[]>([]),
+  messages: {},
   currentChat: withCoreStateData<number | null>(null),
   deletedChat: null,
   addUserToChat: false,

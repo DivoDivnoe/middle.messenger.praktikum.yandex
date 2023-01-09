@@ -3,7 +3,7 @@ import {
   ComponentProps,
   PropsTypes,
 } from '@/utils/components/BaseComponent';
-import store, { StateProps, StoreEvent } from '@/utils/components/Store';
+import store, { StateProps, StoreEvent } from '@/store/Store';
 import deepClone from '@/utils/helpers/deepClone';
 import isEqual from '@/utils/helpers/isEqual';
 

@@ -79,8 +79,8 @@ class ChatsApi extends BaseAPI {
     return this.deleteUsers(chatId, [user]);
   }
 
-  public getChatToken(chatId: number): Promise<ChatToken[]> {
-    return this._http.post(`${Path.TOKEN}/${chatId}`);
+  public async getChatToken(chatId: number): Promise<string> {
+    return (await this._http.post<ChatToken>(`${Path.TOKEN}/${chatId}`)).token;
   }
 }
 

@@ -1,3 +1,4 @@
+import { Routes } from '@/configs/Routes';
 import { BaseComponentConstructor, PropsTypes } from './BaseComponent';
 import Route from './Route';
 
@@ -40,14 +41,14 @@ class Router {
   }
 
   _onRoute(pathname: string) {
-    const route = this._routes[pathname];
-
-    if (!route) {
-      return;
-    }
+    let route = this._routes[pathname];
 
     if (this._currentRoute && this._currentRoute !== route) {
       this._currentRoute.leave();
+    }
+
+    if (!route) {
+      route = this._routes[Routes.NOT_FOUND] as Route;
     }
 
     this._currentRoute = route;

@@ -1,8 +1,8 @@
 import UserApi from '@/api/UserApi';
 import { PasswordUpdateType, User, UserMainData } from '@/api/types';
 import { Routes } from '@/configs/Routes';
+import store from '@/store/Store';
 import router from '@/utils/components/Router';
-import store from '@/utils/components/Store';
 
 class UserController {
   private _api = new UserApi();
@@ -49,19 +49,40 @@ class UserController {
     return this._api.getUsersByLogin(login);
   }
 
-  public async getUsersToAddByLogin(login: string): Promise<void> {
+  private async _getUsersToAddByLogin(login: string): Promise<void> {
     const users = await this._getUsersByLogin(login);
+
+    if (!users.length) {
+      throw new Error('no users found');
+    }
+
     store.set(
       'usersToAddToChat',
       users.map(({ id }) => id),
     );
   }
 
-  public async getUsersToRemoveByLogin(login: string): Promise<void> {
+  public getUsersToAddByLogin(login: string): Promise<void> {
+    return this._request(() => this._getUsersToAddByLogin(login), 'add users to chat error');
+  }
+
+  private async _getUsersToRemoveByLogin(login: string): Promise<void> {
     const users = await this._getUsersByLogin(login);
+
+    if (!users.length) {
+      throw new Error('no users found');
+    }
+
     store.set(
       'usersToRemoveFromChat',
       users.map(({ id }) => id),
+    );
+  }
+
+  public getUsersToRemoveByLogin(login: string): Promise<void> {
+    return this._request(
+      () => this._getUsersToRemoveByLogin(login),
+      'remove users from chat error',
     );
   }
 

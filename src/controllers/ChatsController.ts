@@ -1,5 +1,6 @@
 import ChatsApi, { CreateChatType, GetChatsListType } from '@/api/ChatsApi';
-import store from '@/utils/components/Store';
+import store from '@/store/Store';
+import MessagesController from './MessagesController';
 
 class ChatsController {
   private _api = new ChatsApi();
@@ -76,10 +77,6 @@ class ChatsController {
     }
   }
 
-  public getChatToken(chatId: number): Promise<void> {
-    return this._request(() => this._getChatToken(chatId), 'cannot get chat token');
-  }
-
   public selectChat(chatId: number | null): void {
     store.set('currentChat.data', chatId);
   }
@@ -99,6 +96,10 @@ class ChatsController {
 
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
     const chats = await this._api.getFilteredList(data);
+
+    const promises = chats.map((chat) => MessagesController.connect(chat.id));
+    await Promise.all(promises);
+
     store.set('chats.data', chats);
   }
 
@@ -150,8 +151,8 @@ class ChatsController {
     await this._api.deleteUser(chatId, user);
   }
 
-  private async _getChatToken(chatId: number): Promise<void> {
-    await this._api.getChatToken(chatId);
+  public async getChatToken(chatId: number): Promise<string> {
+    return this._api.getChatToken(chatId);
   }
 
   private async _request(req: () => Promise<void>, errorMessage = '') {

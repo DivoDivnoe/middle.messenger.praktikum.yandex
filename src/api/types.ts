@@ -60,6 +60,7 @@ export type ChatType = ChatMainDataType & {
 export enum MessageType {
   MESSAGE = 'message',
   FILE = 'file',
+  STICKER = 'sticker',
 }
 
 export type FileType = {
@@ -75,11 +76,11 @@ export type FileType = {
 export type ChatMessage = {
   id: number;
   user_id: number;
-  chat_id: number;
+  chat_id?: number;
   time: string;
   type: MessageType;
   content: string;
-  file: FileType;
+  file?: FileType;
 };
 
 export type ChatToken = {

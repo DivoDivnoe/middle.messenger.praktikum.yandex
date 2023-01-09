@@ -3,7 +3,6 @@ import AuthController from './controllers/AuthController';
 import NotFoundPage from './pages/404';
 import ServerErrorPage from './pages/500';
 import ChatsPage from './pages/chats';
-import { ChatBlockPropsType } from './pages/chats/chats';
 import LoginPage from './pages/login';
 import PasswordFormPage from './pages/passwordForm';
 import ProfilePage from './pages/profile';
@@ -32,7 +31,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   router
     .use(Routes.SIGNUP, SignupPage)
     .use(Routes.LOGIN, LoginPage)
-    .use<ChatBlockPropsType>(Routes.CHATS, ChatsPage)
+    .use(Routes.CHATS, ChatsPage)
     .use(Routes.PROFILE, ProfilePage)
     .use(Routes.EDIT_PROFILE, ProfileFormPage)
     .use(Routes.EDIT_PASSWORD, PasswordFormPage)

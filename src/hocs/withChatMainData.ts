@@ -1,6 +1,6 @@
 import { BaseComponentConstructor, PropsTypes } from '@/utils/components/BaseComponent';
 import withStore from './withStore';
-import { StateProps } from '@/utils/components/Store';
+import { StateProps } from '@/store/Store';
 import { ChatMainDataType } from '@/api/types';
 
 export type ChatMainDataProps = { chat: ChatMainDataType | null };

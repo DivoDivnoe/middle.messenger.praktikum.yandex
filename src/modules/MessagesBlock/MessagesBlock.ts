@@ -1,13 +1,13 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
-import BaseComponent, { ComponentProps, IBaseComponent } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentProps,
+  IBaseComponent,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
-import ConversationBlock, {
-  ConversationBlockProps,
-  ConversationBlockPropsType,
-} from '../ConversationBlock/ConversationBlock';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
@@ -16,28 +16,24 @@ import Avatar from '@/components/Avatar';
 import ChatUserOptions from '../ChatUserOptions';
 import UserOptionsButton from '@/components/UserOptionsButton';
 import isEqual from '@/utils/helpers/isEqual';
+import MessagesList from '../MessagesList/MessagesList';
 
-export type MessagesBlockCoreProps = {
-  data?: ConversationBlockPropsType[];
-  onSubmit: (message: string) => void;
-};
+const onSubmit = (message: string) => console.log(message);
 
-export type MessagesBlockPropsType = MessagesBlockCoreProps & ChatMainDataProps;
-
-export type MessagesBlockProps = Omit<MessagesBlockPropsType, 'onSubmit'> & {
+export type MessagesBlockProps = ChatMainDataProps & {
   styles: typeof styles;
   isShownUserOptions: boolean;
 };
 
 export class MessagesBlock<
-  P extends MessagesBlockPropsType = MessagesBlockPropsType,
+  P extends ChatMainDataProps = ChatMainDataProps,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<MessagesBlockProps> {
   private _message = '';
 
-  constructor({ props: { data = [], onSubmit, chat } }: O) {
+  constructor({ props: { chat } }: O) {
     super({
-      props: { styles, chat, data, isShownUserOptions: false },
+      props: { styles, chat, isShownUserOptions: false },
       listeners: {
         submit: [
           (evt) => {
@@ -56,9 +52,7 @@ export class MessagesBlock<
     if (this._props.chat) {
       const avatar = MessagesBlock._initAvatar(this._props.chat?.avatar || null);
       const arrowButton = MessagesBlock._initArrowButton();
-      const messagesBlocks = MessagesBlock._initBlocks(
-        this._props.data as ConversationBlockProps[],
-      );
+      const messagesList = MessagesBlock._initMessagesList();
       const input = this._initInput();
       const chatUserOptions = this._initChatUserOptions();
       const userOptionsButton = this._initUserOptionsButton();
@@ -66,7 +60,7 @@ export class MessagesBlock<
       this.addChildren({
         avatar,
         arrowButton,
-        messagesBlocks,
+        messagesList,
         input,
         chatUserOptions,
         userOptionsButton,
@@ -109,16 +103,8 @@ export class MessagesBlock<
     return arrowButton;
   }
 
-  private static _initBlocks(data: ConversationBlockProps[]): ConversationBlock[] {
-    const messages = data.map((item) => {
-      const contact = new ConversationBlock({
-        props: item,
-      });
-
-      return contact;
-    });
-
-    return messages;
+  private static _initMessagesList() {
+    return new MessagesList({ props: { className: String(styles.content) } });
   }
 
   private _initInput(value = ''): Input {
@@ -172,26 +158,16 @@ export class MessagesBlock<
     oldTarget: MessagesBlockProps,
     target: MessagesBlockProps,
   ): boolean {
-    console.log('update messages', oldTarget, target);
     if (oldTarget.isShownUserOptions !== target.isShownUserOptions) {
       if (target.isShownUserOptions) {
-        console.log('show options');
         this.chatUserOptions.show();
       } else {
-        console.log('hide options');
         this.chatUserOptions.hide();
       }
 
       this.userOptionsButton.updateProps({ isActive: target.isShownUserOptions });
 
       return false;
-    }
-
-    if (oldTarget.data !== target.data) {
-      const messagesBlocks = MessagesBlock._initBlocks(
-        (target.data ?? []) as ConversationBlockProps[],
-      );
-      this.addChildren({ messagesBlocks });
     }
 
     if (oldTarget.chat !== target.chat) {
@@ -239,4 +215,4 @@ export class MessagesBlock<
   };
 }
 
-export default withChatMainDataStore<MessagesBlockCoreProps>(MessagesBlock);
+export default withChatMainDataStore<PropsTypes>(MessagesBlock);

@@ -9,7 +9,7 @@ export enum UserMessageType {
 }
 
 export type MessagePropsType = {
-  text: string;
+  content: string;
   userType: UserMessageType;
   time: string;
 };
