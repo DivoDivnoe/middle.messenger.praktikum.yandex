@@ -33,7 +33,7 @@ class UserApi extends BaseAPI {
     return this._http.put(Path.PASSWORD, { data });
   }
 
-  public getUserById(id: string): Promise<User> {
+  public getUserById(id: number): Promise<User> {
     return this._http.get(`/${id}`);
   }
 

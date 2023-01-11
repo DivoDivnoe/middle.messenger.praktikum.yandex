@@ -17,8 +17,7 @@ import ChatUserOptions from '../ChatUserOptions';
 import UserOptionsButton from '@/components/UserOptionsButton';
 import isEqual from '@/utils/helpers/isEqual';
 import MessagesList from '../MessagesList/MessagesList';
-
-const onSubmit = (message: string) => console.log(message);
+import messagesController from '@/controllers/MessagesController';
 
 export type MessagesBlockProps = ChatMainDataProps & {
   styles: typeof styles;
@@ -40,7 +39,7 @@ export class MessagesBlock<
             evt.preventDefault();
 
             if (this._validate()) {
-              onSubmit(this._message);
+              this._onSubmit(this._message);
             }
           },
         ],
@@ -202,6 +201,10 @@ export class MessagesBlock<
     return this.getChild('userOptionsButton') as UserOptionsButton;
   }
 
+  get input() {
+    return this.getChild('input') as Input;
+  }
+
   _subscribeClickDocument() {
     document.addEventListener('click', this._onClickDocument);
   }
@@ -212,6 +215,14 @@ export class MessagesBlock<
 
   _onClickDocument = () => {
     this.updateProps({ isShownUserOptions: false });
+  };
+
+  _onSubmit = (message: string) => {
+    if (!this._props.chat) return;
+
+    messagesController.sendMessage(this._props.chat.id, message);
+    this.input.updateProps({ value: '' });
+    this._message = '';
   };
 }
 

@@ -70,6 +70,7 @@ class Input<
   protected override componentDidUpdate(oldTarget: InputProps, target: InputProps): boolean {
     if (
       oldTarget.disabled !== target.disabled ||
+      (oldTarget.value !== target.value && !target.value?.length) ||
       (this._props.disabled && oldTarget.value !== target.value)
     )
       return true;

@@ -1,6 +1,6 @@
 import ChatsApi, { CreateChatType, GetChatsListType } from '@/api/ChatsApi';
 import store from '@/store/Store';
-import MessagesController from './MessagesController';
+import messagesController from './MessagesController';
 
 class ChatsController {
   private _api = new ChatsApi();
@@ -78,7 +78,18 @@ class ChatsController {
   }
 
   public selectChat(chatId: number | null): void {
+    console.log('select chat', chatId);
     store.set('currentChat.data', chatId);
+
+    if (chatId !== null) {
+      console.log('current messages', store.getState().messages[chatId]);
+      if (!store.getState().messages[chatId]) {
+        store.set(`messages.${chatId}`, []);
+        console.log('set messages');
+      }
+
+      messagesController.getOldMessages(chatId);
+    }
   }
 
   public selectDeletedChat(chatId: number | null): void {
@@ -97,7 +108,7 @@ class ChatsController {
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
     const chats = await this._api.getFilteredList(data);
 
-    const promises = chats.map((chat) => MessagesController.connect(chat.id));
+    const promises = chats.map((chat) => messagesController.connect(chat.id));
     await Promise.all(promises);
 
     store.set('chats.data', chats);

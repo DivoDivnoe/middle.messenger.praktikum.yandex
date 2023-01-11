@@ -19,9 +19,9 @@ class UserController {
     return this._request(() => this._updatePassword(data), 'update password error');
   }
 
-  public async getUserById(id: string): Promise<void> {
-    return this._request(() => this._getUserById(id), 'get user error');
-  }
+  // public async getUserById(id: string): Promise<void> {
+  //   return this._request(() => this._getUserById(id), 'get user error');
+  // }
 
   private async _updateProfile(options: UserMainData): Promise<void> {
     const user = await this._api.updateProfile(options);
@@ -40,9 +40,9 @@ class UserController {
     router.go(Routes.PROFILE);
   }
 
-  private async _getUserById(id: string): Promise<void> {
-    const user = await this._api.getUserById(id);
-    store.set('user.current', user);
+  public async getUserById(id: number): Promise<User> {
+    return this._api.getUserById(id);
+    // store.set('user.current', user);
   }
 
   private _getUsersByLogin(login: string): Promise<User[]> {

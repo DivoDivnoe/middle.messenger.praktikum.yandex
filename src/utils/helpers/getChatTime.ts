@@ -3,6 +3,10 @@ const MILLISECONDS_PER_WEEK = 7 * MILLISECONDS_PER_DAY;
 
 const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
 
+const formatNumber = (number: number): string => {
+  return `${number < 10 ? 0 : ''}${number}`;
+};
+
 const isToday = (date: Date): boolean => {
   const now = Date.now();
   const dateTime = date.getTime();
@@ -27,8 +31,8 @@ const isThisYear = (date: Date): boolean => {
 };
 
 export const getTime = (date: Date): string => {
-  const minutes = date.getMinutes();
-  const hours = date.getHours();
+  const minutes = formatNumber(date.getMinutes());
+  const hours = formatNumber(date.getHours());
 
   return `${hours}:${minutes}`;
 };
