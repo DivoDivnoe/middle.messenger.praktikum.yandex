@@ -1,6 +1,7 @@
 // eslint-disable-next-line
-import express from 'express';
-import { resolve } from 'path';
+const express = require('express');
+// eslint-disable-next-line
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -8,7 +9,7 @@ const PORT = 3000;
 app.use(express.static('./dist'));
 
 app.get('*', (req, res) => {
-  res.sendFile(resolve() + '/dist/index.html');
+  res.sendFile(path.resolve() + '/dist/index.html');
 });
 
 app.listen(PORT);
