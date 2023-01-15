@@ -4,7 +4,7 @@
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
     "dev": "parcel ./src/index.html",
-    "build": "parcel build ./src/pages/{*,**/*}.html",
+    "build": "parcel build ./src/index.html",
     "start": "npm run build && node ./server.js",
     "stylelint": "stylelint  \"**/*.css\" --fix",
     "check": "tsc && lint-staged && npm run stylelint",

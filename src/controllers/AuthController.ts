@@ -25,10 +25,6 @@ class AuthController {
 
     try {
       await this._getUser();
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new Error(err.message);
-      }
     } finally {
       store.set('isLoading', false);
     }
