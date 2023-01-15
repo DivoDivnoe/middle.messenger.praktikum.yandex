@@ -40,7 +40,7 @@ class UserController {
     router.go(Routes.PROFILE);
   }
 
-  public async getUserById(id: number): Promise<User> {
+  public getUserById(id: number): Promise<User> {
     return this._api.getUserById(id);
     // store.set('user.current', user);
   }

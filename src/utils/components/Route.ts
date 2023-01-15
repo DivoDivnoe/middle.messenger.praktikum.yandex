@@ -38,6 +38,7 @@ class Route<P extends PropsTypes = PropsTypes> {
     if (!this._block) {
       this._block = new this._blockClass({ props: {} as P });
       renderDOM(this._props.rootQuery, this._block as BaseComponent);
+      this._block.dispatchComponentDidMount();
       return;
     }
 

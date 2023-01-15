@@ -224,6 +224,17 @@ export class MessagesBlock<
     this.input.updateProps({ value: '' });
     this._message = '';
   };
+
+  protected override componentDidRender(): void {
+    const contentWrapper = this.getContent().querySelector(
+      `.${styles.contentWrapper}`,
+    ) as HTMLDivElement | null;
+    console.log('contentWrapper', contentWrapper);
+
+    if (contentWrapper) {
+      contentWrapper.style.height = `${contentWrapper.offsetHeight}px`;
+    }
+  }
 }
 
 export default withChatMainDataStore<PropsTypes>(MessagesBlock);

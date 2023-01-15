@@ -21,7 +21,6 @@ class Message<
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<MessageProps> {
   constructor({ props, listeners = {} }: O) {
-    console.log('message props', props);
     const { userType = UserMessageType.DEFAULT } = props;
 
     super({ props: { ...props, styles, userType }, listeners });
@@ -29,6 +28,11 @@ class Message<
 
   protected override getTemplate(): TemplateDelegate {
     return template;
+  }
+
+  protected override componentDidUpdate(oldTarget: MessageProps, target: MessageProps): boolean {
+    console.log('old message props', oldTarget, 'new', target);
+    return true;
   }
 }
 

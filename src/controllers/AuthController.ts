@@ -3,6 +3,7 @@ import { SigninData, SignupData } from '@/api/types';
 import { Routes } from '@/configs/Routes';
 import router from '@/utils/components/Router';
 import store from '@/store/Store';
+import MessagesController from './MessagesController';
 
 class AuthController {
   private _api = new AuthApi();
@@ -35,6 +36,7 @@ class AuthController {
 
   private async _logout() {
     await this._api.logout();
+    MessagesController.disconnectAll();
 
     router.go(Routes.LOGIN);
   }
@@ -48,6 +50,8 @@ class AuthController {
     try {
       const user = await this._api.getUser();
       store.set('user.data', user);
+
+      console.log('user', user);
     } catch (err) {
       if (err instanceof Error) {
         store.set('user.error', `get user data error ${err.message}`);

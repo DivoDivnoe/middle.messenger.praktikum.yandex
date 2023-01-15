@@ -81,13 +81,8 @@ class ChatsController {
     console.log('select chat', chatId);
     store.set('currentChat.data', chatId);
 
-    if (chatId !== null) {
-      console.log('current messages', store.getState().messages[chatId]);
-      if (!store.getState().messages[chatId]) {
-        store.set(`messages.${chatId}`, []);
-        console.log('set messages');
-      }
-
+    if (chatId !== null && !store.getState().messages[chatId]) {
+      store.set(`messages.${chatId}`, []);
       messagesController.getOldMessages(chatId);
     }
   }
@@ -122,6 +117,7 @@ class ChatsController {
   private async _delete(chatId: number): Promise<void> {
     await this._api.delete(chatId);
 
+    messagesController.disconnect(chatId);
     store.set('deletedChat', null);
 
     const { data: chats } = store.getState().chats;

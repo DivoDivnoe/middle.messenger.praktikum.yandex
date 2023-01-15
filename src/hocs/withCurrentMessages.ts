@@ -13,13 +13,15 @@ class Adapter {
     return messages.reduce((acc, message) => {
       const { time } = message;
       const messageDate = getDate(new Date(time));
-      const lastItem = acc[acc.length - 1];
 
-      if (lastItem && lastItem.date === messageDate) {
-        lastItem.messagesData.push(Adapter.convertMessageData(message, myId));
-      } else {
-        acc.push({ date: messageDate, messagesData: [] });
+      let sameDateItem = acc.find((item) => item.date === messageDate);
+
+      if (!sameDateItem) {
+        sameDateItem = { date: messageDate, messagesData: [] };
+        acc.push(sameDateItem);
       }
+
+      sameDateItem.messagesData.push(Adapter.convertMessageData(message, myId));
 
       return acc;
     }, [] as ConversationBlockPropsType[]);
@@ -46,8 +48,6 @@ const withCurrentMessagesMapStateToProps = (state: StateProps): ChatMessagesProp
     stateMessages[currentChat.data] as ChatMessage[],
     Number(user.data?.id),
   );
-
-  console.log('new messages', messages);
 
   return { messages };
 };

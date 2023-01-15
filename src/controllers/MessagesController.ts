@@ -14,23 +14,44 @@ class MessagesController {
   private _transports: Record<number, WSTransport> = {};
 
   public async connect(chatId: number) {
+    if (this._transports[chatId]) return;
+
     const token = await ChatsController.getChatToken(chatId);
     const { id: userId } = store.getState().user.data as User;
 
     const transport = new WSTransport(`${ApiUrl.WSS}/${userId}/${chatId}/${token}`);
     await transport.connect();
-    transport.on(SocketEvent.MESSAGE, this._receiveMessage.bind(this, chatId));
+    transport.on(SocketEvent.MESSAGE, this._onReceiveMessage.bind(this, chatId));
+    transport.on(SocketEvent.CLOSE, this._onConnectionClose.bind(this, chatId));
 
     this._transports[chatId] = transport;
 
     this.getOldMessages(chatId);
   }
 
-  private async _receiveMessage(
+  public disconnect(chatId: number) {
+    const transport = this._transports[chatId];
+
+    if (!transport) return;
+
+    transport.disconnect();
+  }
+
+  public disconnectAll() {
+    Object.values(this._transports).forEach((transport) => transport.disconnect());
+  }
+
+  private _onConnectionClose(chatId: number) {
+    delete this._transports[chatId];
+  }
+
+  private async _onReceiveMessage(
     chatId: number,
     message: ChatMessage | ChatMessage[],
   ): Promise<void> {
     const { messages } = store.getState();
+    console.log('current messages', messages[chatId]);
+    console.log('messages income', message);
 
     if (Array.isArray(message)) {
       message.sort((prev, next) => {
@@ -78,11 +99,12 @@ class MessagesController {
     transport.send({ type: TransportType.GET_OLD_MESSAGES, content: '0' });
   }
 
-  public sendMessage(chatId: number, content: string): void {
-    const transport = this._transports[chatId];
+  public async sendMessage(chatId: number, content: string): Promise<void> {
+    let transport = this._transports[chatId];
 
     if (!transport) {
-      throw new Error(`no ws transport for chat ${chatId}`);
+      await this.connect(chatId);
+      transport = this._transports[chatId] as WSTransport;
     }
 
     transport.send({ type: TransportType.MESSAGE, content });

@@ -6,6 +6,7 @@ import { nanoid } from 'nanoid';
 enum EventType {
   INIT = 'init',
   RENDER = 'render',
+  DID_RENDER = 'did-render',
   MOUNT = 'mount',
   UPDATE = 'update',
   SHOW = 'show',
@@ -119,6 +120,8 @@ class BaseComponent<
     this._element = newElement;
 
     this._subscribe();
+
+    this._eventEmitter.emit(EventType.DID_RENDER);
   };
 
   private _makePropsProxy(props: P) {
@@ -157,6 +160,7 @@ class BaseComponent<
 
     this._eventEmitter.on(EventType.INIT, this._init);
     this._eventEmitter.on(EventType.RENDER, this._render);
+    this._eventEmitter.on(EventType.DID_RENDER, this._componentDidRender);
     this._eventEmitter.on(EventType.MOUNT, this._componentDidMount);
     this._eventEmitter.on(EventType.UPDATE, this._componentDidUpdate);
     this._eventEmitter.on(EventType.SHOW, this._componentWasShown);
@@ -192,6 +196,13 @@ class BaseComponent<
   protected getTemplate(): TemplateDelegate {
     throw new Error('no template defined');
   }
+
+  private _componentDidRender = (): void => {
+    this.componentDidRender();
+  };
+
+  // eslint-disable-next-line
+  protected componentDidRender(): void {}
 
   // eslint-disable-next-line
   protected componentDidMount(): void {}
