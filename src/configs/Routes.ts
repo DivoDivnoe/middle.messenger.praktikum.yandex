@@ -1,11 +1,10 @@
 export enum Routes {
-  INDEX = '/',
-  LOGIN = '/login',
-  SIGNUP = '/signup',
-  PROFILE = '/profile',
-  EDIT_PROFILE = '/edit/profile',
+  LOGIN = '/',
+  SIGNUP = '/sign-up',
+  PROFILE = '/settings',
+  EDIT_PROFILE = '/edit/settings',
   EDIT_PASSWORD = '/edit/password',
-  CHATS = '/chats',
+  CHATS = '/messenger',
   NOT_FOUND = '/notfound',
   SERVER_ERROR = '/servererror',
 }
