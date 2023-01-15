@@ -1,5 +1,6 @@
 import { Routes, publicRoutes } from './configs/Routes';
 import AuthController from './controllers/AuthController';
+import Loader from './modules/Loader';
 import NotFoundPage from './pages/404';
 import ServerErrorPage from './pages/500';
 import ChatsPage from './pages/chats';
@@ -9,6 +10,7 @@ import ProfilePage from './pages/profile';
 import ProfileFormPage from './pages/profileForm';
 import SignupPage from './pages/signup';
 import router from './utils/components/Router';
+import renderDOM from './utils/helpers/renderDOM';
 
 window.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('click', (evt) => {
@@ -28,6 +30,8 @@ window.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
+  renderDOM('#app', new Loader({ props: {} }));
+
   router
     .use(Routes.SIGNUP, SignupPage)
     .use(Routes.LOGIN, LoginPage)
@@ -43,14 +47,10 @@ window.addEventListener('DOMContentLoaded', async () => {
   try {
     await AuthController.getUser();
 
-    console.log('got user');
-
     router.start();
 
-    console.log('router startedd');
-
     if (!isProtectedRoute) {
-      router.go(Routes.PROFILE);
+      router.go(Routes.CHATS);
     }
   } catch {
     if (isProtectedRoute) {

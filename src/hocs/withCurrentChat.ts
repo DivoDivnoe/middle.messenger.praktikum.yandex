@@ -5,7 +5,7 @@ import { StateProps } from '@/store/Store';
 export type CurrentChatProps = { currentChat: number | null };
 
 const mapCurrentChatStateToProps = (state: StateProps): CurrentChatProps => ({
-  currentChat: state.currentChat.data,
+  currentChat: state.currentChat,
 });
 
 const withCurrentChatStore = <P extends PropsTypes = PropsTypes>(

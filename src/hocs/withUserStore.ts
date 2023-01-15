@@ -6,7 +6,7 @@ import { User } from '@/api/types';
 export type UserProps = { user: User };
 
 const mapUserStateToProps = (state: StateProps): UserProps => ({
-  user: state.user.data as User,
+  user: state.user as User,
 });
 
 const withUserStore = <P extends PropsTypes = PropsTypes>(

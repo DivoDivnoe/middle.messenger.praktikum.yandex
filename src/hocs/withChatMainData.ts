@@ -6,7 +6,7 @@ import { ChatMainDataType } from '@/api/types';
 export type ChatMainDataProps = { chat: ChatMainDataType | null };
 
 const mapChatMainDataStateToProps = (state: StateProps): ChatMainDataProps => ({
-  chat: state.chats.data.find((chat) => chat.id === state.currentChat.data) || null,
+  chat: state.chats.find((chat) => chat.id === state.currentChat) || null,
 });
 
 const withChatMainDataStore = <P extends PropsTypes = PropsTypes>(

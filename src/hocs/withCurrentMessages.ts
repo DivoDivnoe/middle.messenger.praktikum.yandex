@@ -42,12 +42,9 @@ class Adapter {
 const withCurrentMessagesMapStateToProps = (state: StateProps): ChatMessagesProps => {
   const { currentChat, messages: stateMessages, user } = state;
 
-  if (!currentChat.data || !stateMessages[currentChat.data]) return { messages: [] };
+  if (!currentChat || !stateMessages[currentChat]) return { messages: [] };
 
-  const messages = Adapter.format(
-    stateMessages[currentChat.data] as ChatMessage[],
-    Number(user.data?.id),
-  );
+  const messages = Adapter.format(stateMessages[currentChat] as ChatMessage[], Number(user?.id));
 
   return { messages };
 };

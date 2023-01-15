@@ -20,6 +20,20 @@ class AuthController {
     await this._request(this._logout.bind(this), 'logout error');
   }
 
+  public async getUser() {
+    store.set('isLoading', true);
+
+    try {
+      await this._getUser();
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(err.message);
+      }
+    } finally {
+      store.set('isLoading', false);
+    }
+  }
+
   private async _signin(signinData: SigninData) {
     await this._api.signin(signinData);
     await this._getUser();
@@ -41,37 +55,22 @@ class AuthController {
     router.go(Routes.LOGIN);
   }
 
-  public async getUser() {
-    const user = await this._api.getUser();
-    store.set('user.data', user);
-  }
-
   private async _getUser() {
-    try {
-      const user = await this._api.getUser();
-      store.set('user.data', user);
-
-      console.log('user', user);
-    } catch (err) {
-      if (err instanceof Error) {
-        store.set('user.error', `get user data error ${err.message}`);
-      }
-    }
+    const user = await this._api.getUser();
+    store.set('user', user);
   }
 
   private async _request(req: () => Promise<void>, errorMessage = '') {
-    store.set('user.loading', true);
-    store.set('user.error', null);
+    store.set('isLoading', true);
 
     try {
       await req();
     } catch (err) {
       if (err instanceof Error) {
-        store.set('user.error', `${errorMessage} ${err.message}`);
         alert(`${errorMessage} ${err.message}`);
       }
     } finally {
-      store.set('user.loading', false);
+      store.set('isLoading', false);
     }
   }
 }

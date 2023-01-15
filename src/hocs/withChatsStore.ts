@@ -6,7 +6,7 @@ import { ChatType } from '@/api/types';
 export type ChatsProps = { chats: ChatType[] };
 
 const mapUserStateToProps = (state: StateProps): ChatsProps => ({
-  chats: state.chats.data || [],
+  chats: state.chats || [],
 });
 
 const withChatsStore = <P extends PropsTypes = PropsTypes>(

@@ -86,3 +86,7 @@ export type ChatMessage = {
 export type ChatToken = {
   token: string;
 };
+
+export type ApiErrorType = {
+  reason: string;
+};

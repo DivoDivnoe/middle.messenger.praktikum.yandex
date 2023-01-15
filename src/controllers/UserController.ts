@@ -1,5 +1,5 @@
 import UserApi from '@/api/UserApi';
-import { PasswordUpdateType, User, UserMainData } from '@/api/types';
+import { ApiErrorType, PasswordUpdateType, User, UserMainData } from '@/api/types';
 import { Routes } from '@/configs/Routes';
 import store from '@/store/Store';
 import router from '@/utils/components/Router';
@@ -25,14 +25,14 @@ class UserController {
 
   private async _updateProfile(options: UserMainData): Promise<void> {
     const user = await this._api.updateProfile(options);
-    store.set('user.data', user);
+    store.set('user', user);
 
     router.go(Routes.PROFILE);
   }
 
   private async _updateAvatar(data: File): Promise<void> {
     const user = await this._api.updateAvatar(data);
-    store.set('user.data', user);
+    store.set('user', user);
   }
 
   private async _updatePassword(data: PasswordUpdateType): Promise<void> {
@@ -87,18 +87,18 @@ class UserController {
   }
 
   private async _request(req: () => Promise<void>, errorMessage = '') {
-    store.set('user.loading', true);
-    store.set('user.error', null);
+    store.set('isLoading', true);
 
     try {
       await req();
     } catch (err) {
       if (err instanceof Error) {
-        store.set('user.error', `${errorMessage} ${err.message}`);
         alert(`${errorMessage} ${err.message}`);
+      } else if (Object.prototype.hasOwnProperty.call(err, 'reason')) {
+        alert(`${errorMessage} ${(err as ApiErrorType).reason}`);
       }
     } finally {
-      store.set('user.loading', false);
+      store.set('isLoading', false);
     }
   }
 }

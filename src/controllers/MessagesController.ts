@@ -17,7 +17,7 @@ class MessagesController {
     if (this._transports[chatId]) return;
 
     const token = await ChatsController.getChatToken(chatId);
-    const { id: userId } = store.getState().user.data as User;
+    const { id: userId } = store.getState().user as User;
 
     const transport = new WSTransport(`${ApiUrl.WSS}/${userId}/${chatId}/${token}`);
     await transport.connect();
@@ -50,8 +50,6 @@ class MessagesController {
     message: ChatMessage | ChatMessage[],
   ): Promise<void> {
     const { messages } = store.getState();
-    console.log('current messages', messages[chatId]);
-    console.log('messages income', message);
 
     if (Array.isArray(message)) {
       message.sort((prev, next) => {
@@ -71,7 +69,7 @@ class MessagesController {
     const { messages, chats } = store.getState();
 
     const lastMessage = messages[chatId]?.slice().pop();
-    const index = chats.data.findIndex((item) => item.id === chatId);
+    const index = chats.findIndex((item) => item.id === chatId);
 
     if (!lastMessage || index < 0) return;
 
@@ -86,7 +84,7 @@ class MessagesController {
       content,
     };
 
-    store.set(`chats.data.${index}.last_message`, newLastMessage);
+    store.set(`chats.${index}.last_message`, newLastMessage);
   }
 
   public async getOldMessages(chatId: number) {

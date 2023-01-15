@@ -8,7 +8,7 @@ import ConversationBlock, {
 import isEqual from '@/utils/helpers/isEqual';
 import withCurrentMessages from '@/hocs/withCurrentMessages';
 
-export type MessagesListCoreProps = { className?: string };
+export type MessagesListCoreProps = { className?: string; onRender?: () => void };
 
 export type MessagesListPropsType = MessagesListCoreProps & {
   messages: ConversationBlockPropsType[];
@@ -19,8 +19,10 @@ export class MessagesList<
   P extends MessagesListPropsType = MessagesListPropsType,
   O extends ComponentProps<P> = ComponentProps<P>,
 > extends BaseComponent<MessagesListProps> {
-  constructor({ props: { messages, className = '' } }: O) {
-    super({ props: { styles, messages, className } });
+  constructor({ props }: O) {
+    const { className = '' } = props;
+
+    super({ props: { ...props, styles, className } });
   }
 
   protected override init(): void {
@@ -51,6 +53,8 @@ export class MessagesList<
           }
         });
 
+        this._onRender();
+
         return false;
       }
 
@@ -61,8 +65,18 @@ export class MessagesList<
     return true;
   }
 
+  protected override componentDidRender(): void {
+    this._onRender();
+  }
+
   get messagesBlocks(): ConversationBlock[] {
     return this.getChild('messagesBlocks') as ConversationBlock[];
+  }
+
+  _onRender() {
+    if (this._props.onRender) {
+      this._props.onRender();
+    }
   }
 }
 

@@ -45,9 +45,7 @@ class WSTransport extends EventEmitter {
 
   private _setupPingPong(delay = 10000): void {
     this._pingPongIntervalId = setInterval(() => {
-      if (this._pingPongIntervalId !== null) {
-        this.send({ type: 'ping' });
-      }
+      this.send({ type: 'ping' });
     }, delay);
   }
 

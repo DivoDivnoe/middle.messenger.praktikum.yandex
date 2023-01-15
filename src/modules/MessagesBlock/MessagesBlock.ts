@@ -51,7 +51,7 @@ export class MessagesBlock<
     if (this._props.chat) {
       const avatar = MessagesBlock._initAvatar(this._props.chat?.avatar || null);
       const arrowButton = MessagesBlock._initArrowButton();
-      const messagesList = MessagesBlock._initMessagesList();
+      const messagesList = this._initMessagesList();
       const input = this._initInput();
       const chatUserOptions = this._initChatUserOptions();
       const userOptionsButton = this._initUserOptionsButton();
@@ -102,8 +102,15 @@ export class MessagesBlock<
     return arrowButton;
   }
 
-  private static _initMessagesList() {
-    return new MessagesList({ props: { className: String(styles.content) } });
+  private _initMessagesList() {
+    const messagesList = new MessagesList({
+      props: {
+        className: String(styles.content),
+        onRender: this._onRenderMessagesList,
+      },
+    });
+
+    return messagesList;
   }
 
   private _initInput(value = ''): Input {
@@ -176,8 +183,11 @@ export class MessagesBlock<
         if (!oldTarget.chat) {
           this._subscribe();
         }
-      } else if (oldTarget.chat?.avatar !== target.chat?.avatar) {
-        (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
+      } else {
+        if (oldTarget.chat?.avatar !== target.chat?.avatar) {
+          (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
+        }
+
         return false;
       }
     }
@@ -225,14 +235,24 @@ export class MessagesBlock<
     this._message = '';
   };
 
+  _onRenderMessagesList = () => {
+    const contentWrapper = this.getContent().querySelector(
+      `.${styles.contentWrapper}`,
+    ) as HTMLDivElement | null;
+
+    if (contentWrapper) {
+      contentWrapper.scrollTop = contentWrapper.scrollHeight;
+    }
+  };
+
   protected override componentDidRender(): void {
     const contentWrapper = this.getContent().querySelector(
       `.${styles.contentWrapper}`,
     ) as HTMLDivElement | null;
-    console.log('contentWrapper', contentWrapper);
 
     if (contentWrapper) {
       contentWrapper.style.height = `${contentWrapper.offsetHeight}px`;
+      contentWrapper.scrollTop = contentWrapper.scrollHeight;
     }
   }
 }

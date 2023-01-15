@@ -1,6 +1,7 @@
 import ChatsApi, { CreateChatType, GetChatsListType } from '@/api/ChatsApi';
 import store from '@/store/Store';
 import messagesController from './MessagesController';
+import { ApiErrorType } from '@/api/types';
 
 class ChatsController {
   private _api = new ChatsApi();
@@ -22,7 +23,7 @@ class ChatsController {
   }
 
   public async addUsers(): Promise<void> {
-    const { data: chatId } = store.getState().currentChat;
+    const { currentChat: chatId } = store.getState();
     const { usersToAddToChat: users } = store.getState();
 
     if (chatId !== null && users.length) {
@@ -47,7 +48,7 @@ class ChatsController {
   }
 
   public async addUserToCurrentChat(user: number): Promise<void> {
-    const chatId = store.getState().currentChat?.data;
+    const chatId = store.getState().currentChat;
 
     if (chatId) {
       await this.addUser(chatId, user);
@@ -55,7 +56,7 @@ class ChatsController {
   }
 
   public async deleteUsers(): Promise<void> {
-    const { data: chatId } = store.getState().currentChat;
+    const { currentChat: chatId } = store.getState();
     const { usersToRemoveFromChat: users } = store.getState();
 
     if (chatId !== null && users.length) {
@@ -70,7 +71,7 @@ class ChatsController {
   }
 
   public async removeUserFromCurrentChat(user: number): Promise<void> {
-    const chatId = store.getState().currentChat?.data;
+    const chatId = store.getState().currentChat;
 
     if (chatId) {
       await this.deleteUser(chatId, user);
@@ -78,8 +79,7 @@ class ChatsController {
   }
 
   public selectChat(chatId: number | null): void {
-    console.log('select chat', chatId);
-    store.set('currentChat.data', chatId);
+    store.set('currentChat', chatId);
 
     if (chatId !== null && !store.getState().messages[chatId]) {
       store.set(`messages.${chatId}`, []);
@@ -92,7 +92,6 @@ class ChatsController {
   }
 
   public wantAddUserToChat(flag: boolean): void {
-    console.log('controller add user', flag);
     store.set('addUserToChat', flag);
   }
 
@@ -106,7 +105,7 @@ class ChatsController {
     const promises = chats.map((chat) => messagesController.connect(chat.id));
     await Promise.all(promises);
 
-    store.set('chats.data', chats);
+    store.set('chats', chats);
   }
 
   private async _create(data: CreateChatType): Promise<void> {
@@ -120,18 +119,18 @@ class ChatsController {
     messagesController.disconnect(chatId);
     store.set('deletedChat', null);
 
-    const { data: chats } = store.getState().chats;
+    const { chats } = store.getState();
     const newChats = chats.filter((item) => item.id !== chatId);
-    store.set('chats.data', newChats);
+    store.set('chats', newChats);
 
-    if (store.getState().currentChat.data === chatId) {
-      store.set('currentChat.data', null);
+    if (store.getState().currentChat === chatId) {
+      store.set('currentChat', null);
     }
   }
 
   private async _getNewMessagesCount(id: number): Promise<void> {
     const { unread_count } = await this._api.getNewMessagesCount(id);
-    const index = store.getState().chats.data.findIndex((item) => item.id === id);
+    const index = store.getState().chats.findIndex((item) => item.id === id);
 
     if (index >= 0) {
       store.set(`chats.${index}.unread_count`, unread_count);
@@ -163,18 +162,18 @@ class ChatsController {
   }
 
   private async _request(req: () => Promise<void>, errorMessage = '') {
-    store.set('chats.loading', true);
-    store.set('chats.error', null);
+    store.set('isLoading', true);
 
     try {
       await req();
     } catch (err) {
       if (err instanceof Error) {
-        store.set('chats.error', `${errorMessage} ${err.message}`);
         alert(`${errorMessage} ${err.message}`);
+      } else if (Object.prototype.hasOwnProperty.call(err, 'reason')) {
+        alert(`${errorMessage} ${(err as ApiErrorType).reason}`);
       }
     } finally {
-      store.set('chats.loading', false);
+      store.set('isLoading', false);
     }
   }
 }

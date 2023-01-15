@@ -6,7 +6,7 @@ import { ChatMainDataType } from '@/api/types';
 export type DeletedChatMainDataProps = { deletedChat: ChatMainDataType | null };
 
 const mapDeletedChatMainDataStateToProps = (state: StateProps): DeletedChatMainDataProps => ({
-  deletedChat: state.chats.data.find((chat) => chat.id === state.deletedChat) || null,
+  deletedChat: state.chats.find((chat) => chat.id === state.deletedChat) || null,
 });
 
 const withDeletedChatMainDataStore = <P extends PropsTypes = PropsTypes>(
