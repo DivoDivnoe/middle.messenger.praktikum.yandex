@@ -38,14 +38,14 @@ class AuthController {
     await this._api.signin(signinData);
     await this._getUser();
 
-    router.go(Routes.PROFILE);
+    router.go(Routes.CHATS);
   }
 
   private async _signup(signupData: SignupData) {
     await this._api.signup(signupData);
     await this._getUser();
 
-    router.go(Routes.PROFILE);
+    router.go(Routes.CHATS);
   }
 
   private async _logout() {
