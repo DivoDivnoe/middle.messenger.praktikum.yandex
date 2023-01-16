@@ -22,14 +22,8 @@ const withPopup = <
     protected override init(): void {
       const content = new Component({ props: this._props });
 
-      content.show = () => {
-        this.show();
-        content.componentWasShown();
-      };
-      content.hide = () => {
-        this.hide();
-        content.componentWasHidden();
-      };
+      content.show = () => this.show();
+      content.hide = () => this.hide();
 
       this.addChildren({ content });
     }
@@ -37,6 +31,14 @@ const withPopup = <
     public get content() {
       return this.getChild('content') as IBaseComponent<P>;
     }
+
+    public override componentWasHidden = () => {
+      this.content.componentWasHidden();
+    };
+
+    public override componentWasShown = () => {
+      this.content.componentWasShown();
+    };
   };
 };
 

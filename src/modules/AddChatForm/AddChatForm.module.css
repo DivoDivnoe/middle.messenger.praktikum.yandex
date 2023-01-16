@@ -1,0 +1,24 @@
+.addChatForm {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 30px;
+  width: var(--popup-width);
+  height: var(--popup-height);
+
+  form {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+
+    input {
+      margin-bottom: 33px;
+    }
+  }
+}
+
+.title {
+  font-size: 15px;
+  line-height: 20px;
+  text-align: center;
+}

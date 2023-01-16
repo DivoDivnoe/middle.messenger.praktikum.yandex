@@ -102,6 +102,8 @@ class ChatsController {
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
     const chats = await this._api.getFilteredList(data);
 
+    console.log('load chats', chats);
+
     const promises = chats.map((chat) => messagesController.connect(chat.id));
     await Promise.all(promises);
 
@@ -110,7 +112,7 @@ class ChatsController {
 
   private async _create(data: CreateChatType): Promise<void> {
     await this._api.create(data);
-    await this._getFilteredList(data);
+    await this._getFilteredList({});
   }
 
   private async _delete(chatId: number): Promise<void> {

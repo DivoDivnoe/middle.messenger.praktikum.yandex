@@ -11,13 +11,34 @@
   padding: 21px 10px 14px;
 }
 
-.link {
-  align-self: flex-end;
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 23px;
+}
+
+.addButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    svg > * {
+      stroke: var(--c-primary);
+    }
+  }
+}
+
+.link {
   font-size: 12px;
   line-height: 12px;
   color: var(--c-gray-0);
   text-align: right;
+
+  &:hover {
+    color: var(--c-primary);
+  }
 }
 
 .input {
