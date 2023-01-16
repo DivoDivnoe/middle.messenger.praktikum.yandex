@@ -2,6 +2,7 @@ import { TemplateDelegate } from 'handlebars';
 import template from './ProfileForm.hbs';
 import styles from './ProfileForm.module.css';
 import BaseComponent, {
+  ComponentDidUpdateType,
   ComponentProps,
   IBaseComponent,
   PropsTypes,
@@ -106,17 +107,17 @@ export class ProfileForm<
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ProfileFormProps,
-    target: ProfileFormProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ProfileFormProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.user !== target.user) {
       this._initInputsData();
       return false;
     }
 
     return true;
-  }
+  };
 
   _onSubmit() {
     return userController.updateProfile(this._inputsData);

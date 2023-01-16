@@ -1,7 +1,7 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Profile.hbs';
 import styles from './Profile.module.css';
-import BaseComponent from '@/utils/components/BaseComponent';
+import BaseComponent, { ComponentDidUpdateType } from '@/utils/components/BaseComponent';
 import Avatar from '@/modules/Avatar';
 import UserData from '../UserData';
 import LogoutButton from '../LogoutButton';
@@ -73,7 +73,10 @@ class Profile extends BaseComponent<ProfileProps> {
     document.removeEventListener('keydown', this._onClickEscape);
   }
 
-  protected override componentDidUpdate(oldTarget: ProfileProps, target: ProfileProps): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ProfileProps> = (
+    oldTarget,
+    target,
+  ) => {
     const hasChangedPopupState = oldTarget.isVisiblePopup !== target.isVisiblePopup;
 
     if (hasChangedPopupState) {
@@ -85,7 +88,7 @@ class Profile extends BaseComponent<ProfileProps> {
     }
 
     return hasChangedPopupState;
-  }
+  };
 }
 
 export default Profile;

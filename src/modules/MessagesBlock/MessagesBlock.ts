@@ -2,6 +2,7 @@ import { TemplateDelegate } from 'handlebars';
 import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
 import BaseComponent, {
+  ComponentDidUpdateType,
   ComponentProps,
   IBaseComponent,
   PropsTypes,
@@ -160,10 +161,10 @@ export class MessagesBlock<
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: MessagesBlockProps,
-    target: MessagesBlockProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<MessagesBlockProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.isShownUserOptions !== target.isShownUserOptions) {
       if (target.isShownUserOptions) {
         this.chatUserOptions.show();
@@ -177,23 +178,21 @@ export class MessagesBlock<
     }
 
     if (oldTarget.chat !== target.chat) {
+      console.log('changed chat');
       if ([oldTarget, target].some((item) => item.chat === null)) {
         this.init();
 
         if (!oldTarget.chat) {
           this._subscribe();
         }
-      } else {
-        if (oldTarget.chat?.avatar !== target.chat?.avatar) {
-          (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
-        }
-
+      } else if (oldTarget.chat?.avatar !== target.chat?.avatar) {
+        (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
         return false;
       }
     }
 
     return !isEqual(oldTarget, target);
-  }
+  };
 
   private _onClickUserOptionsButton = () => {
     this.updateProps({ isShownUserOptions: !this._props.isShownUserOptions });

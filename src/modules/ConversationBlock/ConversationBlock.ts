@@ -1,7 +1,10 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ConversationBlock.hbs';
 import styles from './ConversationBlock.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 import Message, { MessageProps, MessagePropsType } from '@/components/Message/Message';
 
 export type ConversationBlockPropsType = {
@@ -42,17 +45,17 @@ class ConversationBlock<
     return messages;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ConversationBlockProps,
-    target: ConversationBlockProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ConversationBlockProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.messagesData !== target.messagesData) {
       const messages = ConversationBlock._initMessages(target.messagesData as MessageProps[]);
       this.addChildren({ messages });
     }
 
     return true;
-  }
+  };
 
   protected override getTemplate(): TemplateDelegate {
     return template;

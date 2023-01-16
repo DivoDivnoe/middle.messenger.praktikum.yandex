@@ -54,7 +54,7 @@ class AddChatForm<
     });
   }
 
-  private static _initButton() {
+  private static _initButton(): Button {
     return new Button({ props: { type: ButtonType.SUBMIT, content: 'Добавить' } });
   }
 

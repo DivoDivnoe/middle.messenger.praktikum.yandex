@@ -2,6 +2,7 @@ import { TemplateDelegate } from 'handlebars';
 import template from './Chats.hbs';
 import styles from './Chats.module.css';
 import BaseComponent, {
+  ComponentDidUpdateType,
   ComponentProps,
   IBaseComponent,
   PropsTypes,
@@ -43,7 +44,6 @@ export class Chats<
     const addChatsForm = new AddChatForm({
       props: {
         onEscape: () => {
-          console.log('escape');
           this.updateProps({ wantAddChat: false });
         },
       },
@@ -60,10 +60,10 @@ export class Chats<
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ChatsBlockProps,
-    target: ChatsBlockProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ChatsBlockProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.inputValue !== target.inputValue) {
       const chats = this._getFilteredChats(target.inputValue);
       this.filteredChatsBlock.updateProps({ chats });
@@ -90,7 +90,7 @@ export class Chats<
     this._unsubscribeAddChat();
 
     return true;
-  }
+  };
 
   protected override _subscribe(addListeners?: boolean): void {
     super._subscribe(addListeners);
@@ -117,7 +117,6 @@ export class Chats<
 
   private _subscribeAddChat(): void {
     this.addChatButton.onclick = () => {
-      console.log('click');
       this.updateProps({ wantAddChat: true });
     };
   }

@@ -43,6 +43,7 @@ class MessagesController {
 
   private _onConnectionClose(chatId: number) {
     delete this._transports[chatId];
+    store.set(`messages.${chatId}`, []);
   }
 
   private async _onReceiveMessage(

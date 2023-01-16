@@ -3,6 +3,7 @@ import ChatUserForm from '../ChatUserForm';
 import { ChatUserFormProps, ChatUserFormType } from '../ChatUserForm/ChatUserForm';
 import {
   BaseComponentConstructor,
+  ComponentDidUpdateType,
   ComponentProps,
   PropsTypes,
 } from '@/utils/components/BaseComponent';
@@ -21,10 +22,10 @@ class ChatRemoveUserForm<
     super({ props: { addUser: false, removeUserFromChat } });
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ChatUserFormProps,
-    target: ChatUserFormProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ChatUserFormProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.removeUserFromChat !== target.removeUserFromChat) {
       if (target.removeUserFromChat) {
         this.show();
@@ -36,7 +37,7 @@ class ChatRemoveUserForm<
     }
 
     return true;
-  }
+  };
 
   public override componentWasShown(): void {
     this._subscribeEscape();

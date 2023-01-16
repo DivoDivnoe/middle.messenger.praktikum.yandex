@@ -1,7 +1,10 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Chat.hbs';
 import styles from './Chat.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 import '@/utils/helpers/condition';
 import Avatar from '@/components/Avatar';
 
@@ -43,13 +46,16 @@ class Chat<
     return new Avatar({ props: { className: String(styles.avatar), src } });
   }
 
-  protected override componentDidUpdate(oldTarget: ChatProps, target: ChatProps): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ChatProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.src !== target.src) {
       (this.getChild('avatar') as BaseComponent).updateProps({ src: target.src });
     }
 
     return true;
-  }
+  };
 
   protected override getTemplate(): TemplateDelegate {
     return template;

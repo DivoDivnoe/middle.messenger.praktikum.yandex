@@ -1,7 +1,11 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Loader.hbs';
 import styles from './Loader.module.css';
-import BaseComponent, { ComponentProps, PropsTypes } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import withLoadingStore, { LoadingStoreProps } from '@/hocs/withLoading';
 
 type LoaderProps = LoadingStoreProps & { styles: typeof styles };
@@ -20,7 +24,10 @@ class Loader<
     return template;
   }
 
-  protected override componentDidUpdate(_oldTarget: LoaderProps, target: LoaderProps): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<LoaderProps> = (
+    _oldTarget,
+    target,
+  ) => {
     if (target.isLoading) {
       this.show();
     } else {
@@ -28,7 +35,7 @@ class Loader<
     }
 
     return false;
-  }
+  };
 }
 
 export default withLoadingStore<PropsTypes>(Loader);

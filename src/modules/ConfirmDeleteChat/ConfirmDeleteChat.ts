@@ -1,7 +1,11 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ConfirmDeleteChat.hbs';
 import styles from './ConfirmDeleteChat.module.css';
-import BaseComponent, { ComponentProps, PropsTypes } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import '@/utils/helpers/condition';
 import Button from '@/components/Button';
 import { ButtonTheme } from '@/components/Button/Button';
@@ -48,10 +52,10 @@ class ConfirmDeleteChat<
     this.addChildren({ confirmButton, cancelButton });
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ConfirmDeleteChatProps,
-    target: ConfirmDeleteChatProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ConfirmDeleteChatProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (!!oldTarget.deletedChat && target.deletedChat === null) {
       this.hide();
     } else if (oldTarget.deletedChat === null && !!target.deletedChat) {
@@ -59,7 +63,7 @@ class ConfirmDeleteChat<
     }
 
     return true;
-  }
+  };
 
   protected override getTemplate(): TemplateDelegate {
     return template;

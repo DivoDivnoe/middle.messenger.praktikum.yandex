@@ -4,6 +4,7 @@ import { ChatUserFormProps, ChatUserFormType } from '../ChatUserForm/ChatUserFor
 import withAddUserToChat, { AddUserToChatStoreProps } from '@/hocs/withAddUserToChat';
 import {
   BaseComponentConstructor,
+  ComponentDidUpdateType,
   ComponentProps,
   PropsTypes,
 } from '@/utils/components/BaseComponent';
@@ -19,10 +20,10 @@ class ChatAddUserForm<
     super({ props: { addUser: true, addUserToChat } });
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ChatUserFormProps,
-    target: ChatUserFormProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ChatUserFormProps> = (
+    oldTarget,
+    target,
+  ) => {
     console.log('update add user form props', oldTarget, target);
     if (oldTarget.addUserToChat !== target.addUserToChat) {
       if (target.addUserToChat) {
@@ -35,7 +36,7 @@ class ChatAddUserForm<
     }
 
     return true;
-  }
+  };
 
   public override componentWasShown(): void {
     this._subscribeEscape();

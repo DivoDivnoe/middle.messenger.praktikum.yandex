@@ -1,7 +1,10 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './UserData.hbs';
 import styles from './UserData.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
@@ -149,7 +152,10 @@ export class UserData<
     return template;
   }
 
-  protected override componentDidUpdate(oldTarget: UserDataProps, target: UserDataProps): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<UserDataProps> = (
+    oldTarget,
+    target,
+  ) => {
     const [oldUser, newUser] = [oldTarget.user, target.user];
 
     if (oldUser.email !== newUser.email) {
@@ -187,7 +193,7 @@ export class UserData<
     }
 
     return true;
-  }
+  };
 
   public validate(): boolean {
     const inputs = Object.values(this.getChildren()).filter(

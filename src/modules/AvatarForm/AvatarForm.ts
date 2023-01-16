@@ -1,7 +1,7 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './AvatarForm.hbs';
 import styles from './AvatarForm.module.css';
-import BaseComponent from '@/utils/components/BaseComponent';
+import BaseComponent, { ComponentDidUpdateType } from '@/utils/components/BaseComponent';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
@@ -61,7 +61,7 @@ class AvatarForm extends BaseComponent<AvatarFormProps> {
     return template;
   }
 
-  private async _onSubmit() {
+  private async _onSubmit(): Promise<void> {
     const formData = new FormData(this.getContent().querySelector('form') as HTMLFormElement);
     const fileData = formData.get('file') as FormDataEntryValue;
 
@@ -78,14 +78,14 @@ class AvatarForm extends BaseComponent<AvatarFormProps> {
     }
   }
 
-  protected override componentDidUpdate(
-    oldTarget: AvatarFormProps,
-    target: AvatarFormProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<AvatarFormProps> = (
+    oldTarget,
+    target,
+  ) => {
     return !isEqual(oldTarget, target);
-  }
+  };
 
-  _subscribeForm() {
+  _subscribeForm(): void {
     (this.getContent().querySelector('input') as HTMLInputElement).addEventListener(
       'input',
       (evt) => {

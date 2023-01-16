@@ -35,6 +35,11 @@ export interface IBaseComponent<P extends PropsTypes = PropsTypes> {
   componentWasShown: () => void;
   componentWasHidden: () => void;
 }
+
+export type ComponentDidUpdateType<P extends PropsTypes = PropsTypes> = (
+  _oldTarget: P,
+  target: P,
+) => boolean;
 export interface BaseComponentConstructor<
   P extends PropsTypes = PropsTypes,
   O extends ComponentProps<P> = ComponentProps<P>,
@@ -207,9 +212,10 @@ class BaseComponent<
   // eslint-disable-next-line
   protected componentDidMount(): void {}
 
-  protected componentDidUpdate(_oldTarget: P, _target: P): boolean {
+  // eslint-disable-next-line
+  protected componentDidUpdate: ComponentDidUpdateType<P> = (_oldTarget, _target) => {
     return true;
-  }
+  };
 
   public dispatchComponentDidMount(): void {
     this._eventEmitter.emit(EventType.MOUNT);

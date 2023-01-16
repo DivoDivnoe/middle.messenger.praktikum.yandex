@@ -1,7 +1,10 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Input.hbs';
 import styles from './Input.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 
 export enum InputType {
   TEXT = 'text',
@@ -67,7 +70,10 @@ class Input<
     return true;
   }
 
-  protected override componentDidUpdate(oldTarget: InputProps, target: InputProps): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<InputProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (
       oldTarget.disabled !== target.disabled ||
       (oldTarget.value !== target.value && !target.value?.length) ||
@@ -76,7 +82,7 @@ class Input<
       return true;
 
     return false;
-  }
+  };
 }
 
 export default Input;

@@ -1,6 +1,9 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ChatsList.hbs';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 import '@/utils/helpers/condition';
 import Chat from '../Chat';
 import { ChatPropsType } from '../Chat/Chat';
@@ -115,10 +118,10 @@ export class ChatsList<
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ChatsBlockType,
-    target: ChatsBlockType,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ChatsBlockType> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.currentChat !== target.currentChat) {
       const [oldCurrentChat, newCurrentChat] = [oldTarget, target].map((item) => {
         const chats = this.getChild('chats') as Chat[];
@@ -151,7 +154,7 @@ export class ChatsList<
     }
 
     return true;
-  }
+  };
 
   _subscribeClickDocument() {
     document.addEventListener('click', this._onClickDocument);

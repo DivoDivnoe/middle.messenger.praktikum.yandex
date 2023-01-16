@@ -1,7 +1,10 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './MessagesList.hbs';
 import styles from './MessagesList.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 import ConversationBlock, {
   ConversationBlockPropsType,
 } from '../ConversationBlock/ConversationBlock';
@@ -39,10 +42,10 @@ export class MessagesList<
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: MessagesListProps,
-    target: MessagesListProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<MessagesListProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.messages !== target.messages) {
       if (oldTarget.messages.length === target.messages.length) {
         oldTarget.messages.forEach((oldMessage, index) => {
@@ -63,7 +66,7 @@ export class MessagesList<
     }
 
     return true;
-  }
+  };
 
   protected override componentDidRender(): void {
     this._onRender();

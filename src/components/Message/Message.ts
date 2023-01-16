@@ -29,11 +29,6 @@ class Message<
   protected override getTemplate(): TemplateDelegate {
     return template;
   }
-
-  protected override componentDidUpdate(oldTarget: MessageProps, target: MessageProps): boolean {
-    console.log('old message props', oldTarget, 'new', target);
-    return true;
-  }
 }
 
 export default Message;
