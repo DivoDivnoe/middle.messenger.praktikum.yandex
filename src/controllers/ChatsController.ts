@@ -102,8 +102,6 @@ class ChatsController {
   private async _getFilteredList(data: GetChatsListType): Promise<void> {
     const chats = await this._api.getFilteredList(data);
 
-    console.log('load chats', chats);
-
     const promises = chats.map((chat) => messagesController.connect(chat.id));
     await Promise.all(promises);
 
