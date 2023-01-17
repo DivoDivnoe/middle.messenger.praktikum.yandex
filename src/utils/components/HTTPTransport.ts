@@ -12,6 +12,12 @@ interface OptionsProps {
   headers?: Record<string, string>;
 }
 
+type RequestType = <Response>(path: string, options?: OptionsProps) => Promise<Response>;
+type RequestTypeRequiredOptions = <Response>(
+  path: string,
+  options: OptionsProps,
+) => Promise<Response>;
+
 function queryStringify(data: Record<string, string>) {
   const strData = Object.entries(data).map(([key, value]) => `${key}=${String(value)}`);
 
@@ -26,28 +32,28 @@ class HTTPTransport {
     this._endpoint = `${HTTPTransport.API_URL}${endpoint}`;
   }
 
-  get = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+  get: RequestType = (path, options = {}) => {
     const data = options.data ? queryStringify(options.data as Record<string, string>) : '';
 
     return this._request(`${path}${data}`, { ...options, method: Method.GET });
   };
-  post = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+  post: RequestType = (path, options = {}) => {
     return this._request(path, { ...options, method: Method.POST });
   };
-  put = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+  put: RequestType = (path, options = {}) => {
     return this._request(path, { ...options, method: Method.PUT });
   };
-  delete = <Response>(path: string, options = {} as OptionsProps): Promise<Response> => {
+  delete: RequestType = (path, options = {}) => {
     return this._request(path, { ...options, method: Method.DELETE });
   };
 
-  _request = <Response>(pathName: string, options: OptionsProps): Promise<Response> => {
-    const url = `${this._endpoint}${pathName}`;
+  _request: RequestTypeRequiredOptions = (path, options) => {
+    const url = `${this._endpoint}${path}`;
 
-    return HTTPTransport.request<Response>(url, options);
+    return HTTPTransport.request(url, options);
   };
 
-  static request = <Response>(url: string, options: OptionsProps): Promise<Response> => {
+  static request: RequestTypeRequiredOptions = (url, options) => {
     const DEFAULT_TIMEOUT = 5000;
 
     const { headers = {}, method = Method.GET, data, timeout = DEFAULT_TIMEOUT } = options;
