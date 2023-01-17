@@ -56,13 +56,16 @@ class ConfirmDeleteChat<
     oldTarget,
     target,
   ) => {
-    if (!!oldTarget.deletedChat && target.deletedChat === null) {
-      this.hide();
-    } else if (oldTarget.deletedChat === null && !!target.deletedChat) {
+    if (oldTarget.deletedChat === null && !!target.deletedChat) {
       this.show();
+      return true;
     }
 
-    return true;
+    if (!!oldTarget.deletedChat && target.deletedChat === null) {
+      this.hide();
+    }
+
+    return false;
   };
 
   protected override getTemplate(): TemplateDelegate {

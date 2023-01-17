@@ -117,15 +117,15 @@ class ChatsController {
     await this._api.delete(chatId);
 
     messagesController.disconnect(chatId);
-    store.set('deletedChat', null);
+    this.selectDeletedChat(null);
+
+    if (store.getState().currentChat === chatId) {
+      this.selectChat(null);
+    }
 
     const { chats } = store.getState();
     const newChats = chats.filter((item) => item.id !== chatId);
     store.set('chats', newChats);
-
-    if (store.getState().currentChat === chatId) {
-      store.set('currentChat', null);
-    }
   }
 
   private async _getNewMessagesCount(id: number): Promise<void> {

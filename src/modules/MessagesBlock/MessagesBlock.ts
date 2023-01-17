@@ -178,14 +178,13 @@ export class MessagesBlock<
     }
 
     if (oldTarget.chat !== target.chat) {
-      console.log('changed chat');
       if ([oldTarget, target].some((item) => item.chat === null)) {
         this.init();
 
-        if (!oldTarget.chat) {
-          this._subscribe();
-        }
-      } else if (oldTarget.chat?.avatar !== target.chat?.avatar) {
+        return true;
+      }
+
+      if (oldTarget.chat?.avatar !== target.chat?.avatar) {
         (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
         return false;
       }

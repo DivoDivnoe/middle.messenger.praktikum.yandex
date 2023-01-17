@@ -42,8 +42,6 @@ class Adapter {
 const withCurrentMessagesMapStateToProps = (state: StateProps): ChatMessagesProps => {
   const { currentChat, messages: stateMessages, user } = state;
 
-  console.log('current chat', currentChat);
-
   if (!currentChat || !stateMessages[currentChat]) return { messages: [] };
 
   const messages = Adapter.format(stateMessages[currentChat] as ChatMessage[], Number(user?.id));

@@ -11,21 +11,23 @@ const withStore = <T, P extends PropsTypes = PropsTypes>(
   mapStateToProps: (state: StateProps) => T,
 ) => {
   return (Component: BaseComponentConstructor<P & T>): BaseComponentConstructor<P> => {
-    let currentState: T;
-
     return class extends Component {
+      private _currentState: T;
+
       constructor(options: ComponentProps<P>) {
         const { props, listeners = {} } = options;
-        currentState = deepClone(mapStateToProps(store.getState()));
+        const currentState = deepClone(mapStateToProps(store.getState()));
 
         super({ props: { ...props, ...currentState }, listeners });
+
+        this._currentState = currentState;
 
         store.on(StoreEvent.UPDATED, () => {
           const state = deepClone(mapStateToProps(store.getState()));
 
-          if (!isEqual(currentState, state)) {
+          if (!isEqual(this._currentState, state)) {
             this.updateProps(state as P & T);
-            currentState = state;
+            this._currentState = state;
           }
         });
       }

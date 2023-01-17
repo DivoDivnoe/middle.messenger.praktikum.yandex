@@ -8,7 +8,6 @@ import BaseComponent, {
 import ConversationBlock, {
   ConversationBlockPropsType,
 } from '../ConversationBlock/ConversationBlock';
-import isEqual from '@/utils/helpers/isEqual';
 import withCurrentMessages from '@/hocs/withCurrentMessages';
 
 export type MessagesListCoreProps = { className?: string; onRender?: () => void };
@@ -47,20 +46,6 @@ export class MessagesList<
     target,
   ) => {
     if (oldTarget.messages !== target.messages) {
-      if (oldTarget.messages.length === target.messages.length) {
-        oldTarget.messages.forEach((oldMessage, index) => {
-          const newMessage = target.messages[index];
-
-          if (newMessage && !isEqual(oldMessage, newMessage)) {
-            this.messagesBlocks[index]?.updateProps(newMessage);
-          }
-        });
-
-        this._onRender();
-
-        return false;
-      }
-
       const messagesBlocks = MessagesList._initBlocks(target.messages);
       this.addChildren({ messagesBlocks });
     }

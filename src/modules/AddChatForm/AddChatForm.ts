@@ -25,6 +25,7 @@ class AddChatForm<
 
       await chatsController.create({ title: this._getTitle() });
 
+      (this.getChild('input') as Input).updateProps({ value: '' });
       props.onEscape();
     };
 
