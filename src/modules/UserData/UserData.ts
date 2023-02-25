@@ -1,47 +1,42 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './UserData.hbs';
 import styles from './UserData.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
+import { User, UserMainData } from '@/api/types';
+import withUserStore, { UserProps } from '@/hocs/withUserStore';
 
-export type UserProps = {
-  email: string;
-  login: string;
-  first_name: string;
-  second_name: string;
-  display_name?: string;
-  phone: string;
-};
+export type UserDataInputType = keyof UserMainData;
 
 type InputProps = {
   id: string;
-  name: keyof UserProps;
+  name: UserDataInputType;
   type: InputType;
   placeholder: string;
   required: boolean;
   validationRule?: RegExp;
 };
 
-export type UserDataInputType =
-  | 'email'
-  | 'login'
-  | 'first_name'
-  | 'second_name'
-  | 'display_name'
-  | 'phone';
-
 type onChangeType = (name: UserDataInputType, value: string) => void;
 
-type UserDataProps = {
-  isEditable?: boolean;
-  user: UserProps;
+export type ProfileProps = {
   className?: string;
+  isEditable: boolean;
   onChange?: onChangeType;
 };
 
-class UserData extends BaseComponent {
+type UserDataPropsType = ProfileProps & UserProps;
+type UserDataProps = UserDataPropsType & { styles: typeof styles };
+
+export class UserData<
+  P extends UserDataPropsType = UserDataPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<UserDataProps> {
   private static _inputsProps: InputProps[] = [
     {
       id: 'email',
@@ -92,53 +87,62 @@ class UserData extends BaseComponent {
     },
   ];
 
-  constructor({ props, listeners = {} }: ComponentProps<UserDataProps>) {
-    const { user, isEditable = true, className = '', onChange } = props;
+  constructor({ props, listeners = {} }: O) {
+    const { isEditable = true, className = '' } = props;
 
     super({
-      props: { styles, isEditable, user, className, onChange },
+      props: { ...props, styles, isEditable, className },
       listeners,
     });
   }
 
   protected override init(): void {
     const [emailInput, loginInput, firstNameInput, secondNameInput, displayNameInput, phoneInput] =
-      this._initInputs(this._props.user as UserProps, !this._props.isEditable);
+      this._initInputs(this._props.user as User, !this._props.isEditable) as [
+        Input,
+        Input,
+        Input,
+        Input,
+        Input,
+        Input,
+      ];
 
     this.addChildren({
-      emailInput: emailInput!,
-      loginInput: loginInput!,
-      firstNameInput: firstNameInput!,
-      secondNameInput: secondNameInput!,
-      displayNameInput: displayNameInput!,
-      phoneInput: phoneInput!,
+      emailInput,
+      loginInput,
+      firstNameInput,
+      secondNameInput,
+      displayNameInput,
+      phoneInput,
     });
   }
 
-  private _initInputs(user: UserProps, disabled: boolean): Input[] {
+  private _initInputs(user: User, disabled: boolean): Input[] {
     return UserData._inputsProps.map((options) => {
       const validate = (): void => {
         input.validate();
       };
 
-      const input = new Input({
-        props: {
-          ...options,
-          value: user[options.name]!,
-          disabled,
-        },
-        listeners: {
-          change: [
-            (evt) => {
-              if (this._props.isEditable) {
-                (this._props.onChange as onChangeType)(options.name, evt.target.value);
-              }
-            },
-          ],
-          focus: [validate],
-          blur: [validate],
-        },
-      });
+      const props = { ...options, value: user[options.name] || '', disabled };
+
+      const listeners = disabled
+        ? {}
+        : {
+            change: [
+              (evt: InputEvent) => {
+                if (this._props.isEditable) {
+                  (this._props.onChange as onChangeType)(
+                    options.name,
+                    (evt.target as HTMLInputElement).value,
+                  );
+                }
+              },
+            ],
+            focus: [validate],
+            blur: [validate],
+          };
+
+      const input = new Input({ props, listeners });
 
       return input;
     });
@@ -148,39 +152,48 @@ class UserData extends BaseComponent {
     return template;
   }
 
-  protected override componentDidUpdate(oldTarget: UserDataProps, target: UserDataProps): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<UserDataProps> = (
+    oldTarget,
+    target,
+  ) => {
     const [oldUser, newUser] = [oldTarget.user, target.user];
 
     if (oldUser.email !== newUser.email) {
       (this.getChild('emailInput') as BaseComponent).updateProps({ value: newUser.email });
+      return false;
     }
 
     if (oldUser.login !== newUser.login) {
       (this.getChild('loginInput') as BaseComponent).updateProps({ value: newUser.login });
+      return false;
     }
 
     if (oldUser.first_name !== newUser.first_name) {
       (this.getChild('firstNameInput') as BaseComponent).updateProps({ value: newUser.first_name });
+      return false;
     }
 
     if (oldUser.second_name !== newUser.second_name) {
       (this.getChild('secondNameInput') as BaseComponent).updateProps({
         value: newUser.second_name,
       });
+      return false;
     }
 
     if (oldUser.display_name !== newUser.display_name) {
       (this.getChild('displayNameInput') as BaseComponent).updateProps({
         value: newUser.display_name,
       });
+      return false;
     }
 
     if (oldUser.phone !== newUser.phone) {
       (this.getChild('phoneInput') as BaseComponent).updateProps({ value: newUser.phone });
+      return false;
     }
 
     return true;
-  }
+  };
 
   public validate(): boolean {
     const inputs = Object.values(this.getChildren()).filter(
@@ -193,4 +206,4 @@ class UserData extends BaseComponent {
   }
 }
 
-export default UserData;
+export default withUserStore<ProfileProps>(UserData);

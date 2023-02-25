@@ -1,4 +1,4 @@
-enum Method {
+export enum Method {
   GET = 'GET',
   POST = 'POST',
   PUT = 'PUT',
@@ -6,11 +6,17 @@ enum Method {
 }
 
 interface OptionsProps {
-  method: Method;
-  data: Record<string, unknown>;
-  timeout: number;
-  headers: Record<string, string>;
+  method?: Method;
+  data?: Record<string, unknown> | FormData;
+  timeout?: number;
+  headers?: Record<string, string>;
 }
+
+type RequestType = <Response>(path: string, options?: OptionsProps) => Promise<Response>;
+type RequestTypeRequiredOptions = <Response>(
+  path: string,
+  options: OptionsProps,
+) => Promise<Response>;
 
 function queryStringify(data: Record<string, string>) {
   const strData = Object.entries(data).map(([key, value]) => `${key}=${String(value)}`);
@@ -19,24 +25,38 @@ function queryStringify(data: Record<string, string>) {
 }
 
 class HTTPTransport {
-  get = (url: string, options = {} as OptionsProps) => {
-    const data = queryStringify(options.data as Record<string, string>);
-    const getUrl = `${url}${data}`;
+  static API_URL = 'https://ya-praktikum.tech/api/v2';
+  protected _endpoint: string;
 
-    return this.request(getUrl, { ...options, method: Method.GET }, options.timeout);
+  constructor(endpoint: string) {
+    this._endpoint = `${HTTPTransport.API_URL}${endpoint}`;
+  }
+
+  get: RequestType = (path, options = {}) => {
+    const data = options.data ? queryStringify(options.data as Record<string, string>) : '';
+
+    return this._request(`${path}${data}`, { ...options, method: Method.GET });
   };
-  post = (url: string, options = {} as OptionsProps) => {
-    return this.request(url, { ...options, method: Method.POST }, options.timeout);
+  post: RequestType = (path, options = {}) => {
+    return this._request(path, { ...options, method: Method.POST });
   };
-  put = (url: string, options = {} as OptionsProps) => {
-    return this.request(url, { ...options, method: Method.PUT }, options.timeout);
+  put: RequestType = (path, options = {}) => {
+    return this._request(path, { ...options, method: Method.PUT });
   };
-  delete = (url: string, options = {} as OptionsProps) => {
-    return this.request(url, { ...options, method: Method.DELETE }, options.timeout);
+  delete: RequestType = (path, options = {}) => {
+    return this._request(path, { ...options, method: Method.DELETE });
   };
 
-  request = (url: string, options: OptionsProps, timeout = 5000) => {
-    const { headers = {}, method, data } = options;
+  _request: RequestTypeRequiredOptions = (path, options) => {
+    const url = `${this._endpoint}${path}`;
+
+    return HTTPTransport.request(url, options);
+  };
+
+  static request: RequestTypeRequiredOptions = (url, options) => {
+    const DEFAULT_TIMEOUT = 5000;
+
+    const { headers = {}, method = Method.GET, data, timeout = DEFAULT_TIMEOUT } = options;
 
     return new Promise((resolve, reject) => {
       if (!method) {
@@ -46,9 +66,19 @@ class HTTPTransport {
 
       const xhr = new XMLHttpRequest();
       const isGet = method === Method.GET;
+      const isFormData = data instanceof FormData;
+
+      xhr.open(method, url);
+
+      if (!isFormData) {
+        xhr.setRequestHeader('Content-Type', 'application/json');
+      }
+
+      xhr.withCredentials = true;
+      xhr.responseType = 'json';
 
       if (headers) {
-        for (const [key, value] of Object.entries(options.headers)) {
+        for (const [key, value] of Object.entries(headers)) {
           xhr.setRequestHeader(key, value);
         }
       }
@@ -56,17 +86,21 @@ class HTTPTransport {
       xhr.timeout = timeout;
 
       xhr.onload = () => {
-        resolve(xhr);
+        if (xhr.status < 400) {
+          resolve(xhr.response);
+        } else {
+          reject(xhr.response);
+        }
       };
 
-      xhr.onabort = reject;
-      xhr.onerror = reject;
-      xhr.ontimeout = reject;
-
-      xhr.open(method, url);
+      xhr.onabort = () => reject({ reason: 'abort' });
+      xhr.onerror = () => reject({ reason: 'network error' });
+      xhr.ontimeout = () => reject({ reason: 'timeout' });
 
       if (isGet || !data) {
         xhr.send();
+      } else if (isFormData) {
+        xhr.send(data);
       } else {
         xhr.send(JSON.stringify(data));
       }
@@ -74,11 +108,12 @@ class HTTPTransport {
   };
 }
 
-export const myFetch = (url: string, options: OptionsProps) =>
-  new HTTPTransport().request(url, options);
+export const myFetch = (path: string, options: OptionsProps) =>
+  HTTPTransport.request(path, options);
 
 export const fetchWithRetry = (
-  url: string,
+  endpoint: string,
+  path: string,
   options = {} as OptionsProps & { tries?: number },
 ): Promise<unknown> => {
   const { tries = 1 } = options;
@@ -90,10 +125,10 @@ export const fetchWithRetry = (
       throw err;
     }
 
-    return fetchWithRetry(url, { ...options, tries: triesLeft });
+    return fetchWithRetry(endpoint, path, { ...options, tries: triesLeft });
   };
 
-  return myFetch(url, options as OptionsProps).catch(onError);
+  return myFetch(path, options as OptionsProps).catch(onError);
 };
 
 export default HTTPTransport;

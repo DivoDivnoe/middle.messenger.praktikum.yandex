@@ -1,25 +1,26 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './PasswordForm.hbs';
 import styles from './PasswordForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent from '@/utils/components/BaseComponent';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
-import Avatar from '@/components/Avatar';
-import { AvatarSize } from '@/components/Avatar/Avatar';
+import Avatar from '@/modules/Avatar';
 import RegularExp from '@/configs/RegularExp';
+import { AvatarSize } from '@/components/Avatar/Avatar';
+import userController from '@/controllers/UserController';
 
 export type PasswordFormProps = {
-  onSubmit: (oldPassword: string, newPassword: string, newPasswordExtra: string) => void;
+  styles: typeof styles;
 };
 
-class PasswordForm extends BaseComponent {
+class PasswordForm extends BaseComponent<PasswordFormProps> {
   private _old_password = '';
   private _new_password = '';
   private _new_password_extra = '';
 
-  constructor({ props: { onSubmit } }: ComponentProps<PasswordFormProps>) {
+  constructor() {
     super({
       props: { styles },
       listeners: {
@@ -28,7 +29,7 @@ class PasswordForm extends BaseComponent {
             evt.preventDefault();
 
             if (this._validate()) {
-              onSubmit(this._old_password, this._new_password, this._new_password_extra);
+              this._onSubmit(this._old_password, this._new_password);
             }
           },
         ],
@@ -46,12 +47,8 @@ class PasswordForm extends BaseComponent {
     this.addChildren({ avatar, button, oldPasswordInput, newPasswordInput, newPasswordExtraInput });
   }
 
-  private static _initAvatar(): Avatar {
-    const avatar = new Avatar({
-      props: {
-        size: AvatarSize.LARGE,
-      },
-    });
+  private static _initAvatar() {
+    const avatar = new Avatar({ props: { size: AvatarSize.LARGE } });
 
     return avatar;
   }
@@ -165,6 +162,10 @@ class PasswordForm extends BaseComponent {
       (this.getChild('newPasswordInput') as Input).validate() &&
       (this.getChild('newPasswordExtraInput') as Input).validate()
     );
+  }
+
+  private _onSubmit(oldPassword: string, newPassword: string) {
+    return userController.updatePassword({ oldPassword, newPassword });
   }
 }
 

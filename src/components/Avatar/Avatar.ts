@@ -2,21 +2,27 @@ import { TemplateDelegate } from 'handlebars';
 import template from './Avatar.hbs';
 import styles from './Avatar.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import { AvatarStoreProps } from '@/hocs/withAvatar';
 
 export enum AvatarSize {
   SMALL = 'small',
   LARGE = 'large',
 }
 
-export type AvatarProps = {
+export type AvatarMainProps = {
   className?: string;
   size?: AvatarSize;
-  src?: string;
   isEditable?: boolean;
 };
 
-class Avatar extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<AvatarProps>) {
+export type AvatarPropsType = AvatarStoreProps & AvatarMainProps;
+export type AvatarProps = AvatarPropsType & { styles: typeof styles };
+
+class Avatar<
+  P extends AvatarPropsType = AvatarPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<AvatarProps> {
+  constructor({ props, listeners = {} }: O) {
     const { className = '', size = AvatarSize.SMALL, isEditable = false } = props;
     const avatarProps = {
       ...props,

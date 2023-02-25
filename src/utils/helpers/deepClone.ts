@@ -1,10 +1,7 @@
-// check is item object or array
-export const isObject = (item: unknown): boolean => {
-  return typeof item === 'object' && item !== null;
-};
+import { isObjectOrArray } from './isObject';
 
 const deepClone = <T>(obj: T): T => {
-  if (!isObject(obj)) return obj;
+  if (!isObjectOrArray(obj)) return obj;
 
   if (Array.isArray(obj)) {
     return obj.map(deepClone) as typeof obj;

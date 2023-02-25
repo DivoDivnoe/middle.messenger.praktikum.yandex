@@ -1,16 +1,28 @@
 <div class='{{styles.popupWrapper}}'>
-  <div class='{{styles.popup}} {{condition isError styles.error}}'>
-    <h2 class='{{styles.title}} {{condition isError "visually-hidden"}}'>Загрузите файл</h2>
-    <p class='{{styles.errorMessage}}'>Ошибка, попробуйте ещё раз</p>
+  <div
+    class='{{styles.popup}}
+      {{condition isError styles.error}}
+      {{condition uploadErrorMessage styles.uploadError}}
+      popup'
+  >
+    <p class='{{styles.title}}'>
+      {{#if uploaded}}
+        Файл загружен
+      {{else}}
+        Загрузите файл
+      {{/if}}
+    </p>
+    <p class='{{styles.uploadErrorMessage}}'>Ошибка, попробуйте ещё раз</p>
 
     <form class='{{styles.form}}'>
-      <label>
-        Выбрать файл на компьютере
+      <label class='{{condition fileName styles.path}}'>
+        {{#if fileName}}
+          {{fileName}}
+        {{else}}
+          Выбрать файл на компьютере
+        {{/if}}
         {{{input}}}
       </label>
-
-      {{! here will be shown file path }}
-      <span class='{{styles.path}}'></span>
 
       {{{button}}}
       <span class='{{styles.errorMessage}}'>Нужно выбрать файл</span>

@@ -1,16 +1,24 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ConversationBlock.hbs';
 import styles from './ConversationBlock.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Message, { MessageProps } from '@/components/Message/Message';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
+import Message, { MessageProps, MessagePropsType } from '@/components/Message/Message';
 
-export type ConversationBlockProps = {
+export type ConversationBlockPropsType = {
   date: string;
-  messagesData: MessageProps[];
+  messagesData: MessagePropsType[];
 };
 
-class ConversationBlock extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<ConversationBlockProps>) {
+export type ConversationBlockProps = ConversationBlockPropsType & { styles: typeof styles };
+
+class ConversationBlock<
+  P extends ConversationBlockPropsType = ConversationBlockPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ConversationBlockProps> {
+  constructor({ props, listeners = {} }: O) {
     const { date, messagesData } = props;
 
     super({
@@ -37,17 +45,17 @@ class ConversationBlock extends BaseComponent {
     return messages;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ConversationBlockProps,
-    target: ConversationBlockProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ConversationBlockProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.messagesData !== target.messagesData) {
       const messages = ConversationBlock._initMessages(target.messagesData as MessageProps[]);
       this.addChildren({ messages });
     }
 
     return true;
-  }
+  };
 
   protected override getTemplate(): TemplateDelegate {
     return template;

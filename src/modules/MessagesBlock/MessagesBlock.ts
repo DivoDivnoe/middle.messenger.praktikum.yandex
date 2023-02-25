@@ -1,38 +1,46 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './MessagesBlock.hbs';
 import styles from './MessagesBlock.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Avatar from '@/components/Avatar';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+  IBaseComponent,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import ArrowButton from '@/components/ArrowButton';
 import { ArrowButtonSide } from '@/components/ArrowButton/ArrowButton';
-import ConversationBlock, { ConversationBlockProps } from '../ConversationBlock/ConversationBlock';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
 import RegularExp from '@/configs/RegularExp';
+import withChatMainDataStore, { ChatMainDataProps } from '@/hocs/withChatMainData';
+import Avatar from '@/components/Avatar';
+import ChatUserOptions from '../ChatUserOptions';
+import UserOptionsButton from '@/components/UserOptionsButton';
+import isEqual from '@/utils/helpers/isEqual';
+import MessagesList from '../MessagesList/MessagesList';
+import messagesController from '@/controllers/MessagesController';
 
-export type MessagesBlockProps = {
-  isEmpty?: boolean;
-  src?: string;
-  userName?: string;
-  data?: ConversationBlockProps[];
-  onSubmit: (message: string) => void;
+export type MessagesBlockProps = ChatMainDataProps & {
+  styles: typeof styles;
+  isShownUserOptions: boolean;
 };
 
-class MessagesBlock extends BaseComponent {
+export class MessagesBlock<
+  P extends ChatMainDataProps = ChatMainDataProps,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<MessagesBlockProps> {
   private _message = '';
 
-  constructor({
-    props: { isEmpty = false, src = '', userName = '', data = [], onSubmit },
-  }: ComponentProps<MessagesBlockProps>) {
+  constructor({ props: { chat } }: O) {
     super({
-      props: { styles, isEmpty, src, userName, data, onSubmit, isActiveUserButton: false },
+      props: { styles, chat, isShownUserOptions: false },
       listeners: {
         submit: [
           (evt) => {
             evt.preventDefault();
 
             if (this._validate()) {
-              onSubmit(this._message);
+              this._onSubmit(this._message);
             }
           },
         ],
@@ -41,24 +49,50 @@ class MessagesBlock extends BaseComponent {
   }
 
   protected override init(): void {
-    if (!this._props.isEmpty) {
-      const avatar = MessagesBlock._initAvatar(this._props.src as string);
+    if (this._props.chat) {
+      const avatar = MessagesBlock._initAvatar(this._props.chat?.avatar || null);
       const arrowButton = MessagesBlock._initArrowButton();
-      const messagesBlocks = MessagesBlock._initBlocks(
-        this._props.data as ConversationBlockProps[],
-      );
+      const messagesList = this._initMessagesList();
       const input = this._initInput();
+      const chatUserOptions = this._initChatUserOptions();
+      const userOptionsButton = this._initUserOptionsButton();
 
-      this.addChildren({ avatar, arrowButton, messagesBlocks, input });
+      this.addChildren({
+        avatar,
+        arrowButton,
+        messagesList,
+        input,
+        chatUserOptions,
+        userOptionsButton,
+      });
+    } else {
+      this.clearChildren();
     }
   }
 
-  private static _initAvatar(src: string): Avatar {
-    const avatar = new Avatar({
-      props: { src },
+  private _initChatUserOptions() {
+    const chatUserOptions = new ChatUserOptions({
+      props: {
+        className: String(styles.userOptions),
+        onClick: () => {
+          this.updateProps({ isShownUserOptions: false });
+        },
+      },
     });
 
-    return avatar;
+    chatUserOptions.componentWasShown = () => {
+      this._subscribeClickDocument();
+    };
+
+    chatUserOptions.componentWasHidden = () => {
+      this._unsubscribeClickDocument();
+    };
+
+    return chatUserOptions;
+  }
+
+  private static _initAvatar(src: string | null) {
+    return new Avatar({ props: { src } });
   }
 
   private static _initArrowButton(): ArrowButton {
@@ -69,16 +103,15 @@ class MessagesBlock extends BaseComponent {
     return arrowButton;
   }
 
-  private static _initBlocks(data: ConversationBlockProps[]): ConversationBlock[] {
-    const messages = data.map((item) => {
-      const contact = new ConversationBlock({
-        props: item,
-      });
-
-      return contact;
+  private _initMessagesList() {
+    const messagesList = new MessagesList({
+      props: {
+        className: String(styles.content),
+        onRender: this._onRenderMessagesList,
+      },
     });
 
-    return messages;
+    return messagesList;
   }
 
   private _initInput(value = ''): Input {
@@ -110,31 +143,116 @@ class MessagesBlock extends BaseComponent {
     return input;
   }
 
+  private _initUserOptionsButton() {
+    return new UserOptionsButton({
+      props: { isActive: this._props.isShownUserOptions },
+      listeners: {
+        click: [
+          (evt: Event) => {
+            evt.stopPropagation();
+            this._onClickUserOptionsButton();
+          },
+        ],
+      },
+    });
+  }
+
   protected override getTemplate(): TemplateDelegate {
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: MessagesBlockProps,
-    target: MessagesBlockProps,
-  ): boolean {
-    if (oldTarget.data !== target.data) {
-      const messagesBlocks = MessagesBlock._initBlocks(
-        (target.data ?? []) as ConversationBlockProps[],
-      );
-      this.addChildren({ messagesBlocks });
+  protected override componentDidUpdate: ComponentDidUpdateType<MessagesBlockProps> = (
+    oldTarget,
+    target,
+  ) => {
+    if (oldTarget.isShownUserOptions !== target.isShownUserOptions) {
+      if (target.isShownUserOptions) {
+        this.chatUserOptions.show();
+      } else {
+        this.chatUserOptions.hide();
+      }
+
+      this.userOptionsButton.updateProps({ isActive: target.isShownUserOptions });
+
+      return false;
     }
 
-    if (oldTarget.src !== target.src) {
-      (this.getChild('avatar') as Avatar).updateProps({ src: target.src });
+    if (oldTarget.chat !== target.chat) {
+      if ([oldTarget, target].some((item) => item.chat === null)) {
+        this.init();
+
+        return true;
+      }
+
+      if (oldTarget.chat?.avatar !== target.chat?.avatar) {
+        (this.getChild('avatar') as Avatar).updateProps({ src: target.chat?.avatar || null });
+        return false;
+      }
     }
 
-    return true;
-  }
+    return !isEqual(oldTarget, target);
+  };
+
+  private _onClickUserOptionsButton = () => {
+    this.updateProps({ isShownUserOptions: !this._props.isShownUserOptions });
+  };
 
   private _validate(): boolean {
     return (this.getChild('input') as Input).validate();
   }
+
+  get chatUserOptions() {
+    return this.getChild('chatUserOptions') as IBaseComponent;
+  }
+
+  get userOptionsButton() {
+    return this.getChild('userOptionsButton') as UserOptionsButton;
+  }
+
+  get input() {
+    return this.getChild('input') as Input;
+  }
+
+  _subscribeClickDocument() {
+    document.addEventListener('click', this._onClickDocument);
+  }
+
+  _unsubscribeClickDocument() {
+    document.removeEventListener('click', this._onClickDocument);
+  }
+
+  _onClickDocument = () => {
+    this.updateProps({ isShownUserOptions: false });
+  };
+
+  _onSubmit = (message: string) => {
+    if (!this._props.chat) return;
+
+    messagesController.sendMessage(this._props.chat.id, message);
+    this.input.updateProps({ value: '' });
+    this._message = '';
+  };
+
+  _onRenderMessagesList = () => {
+    const contentWrapper = this.getContent().querySelector(
+      `.${styles.contentWrapper}`,
+    ) as HTMLDivElement | null;
+
+    if (contentWrapper) {
+      contentWrapper.scrollTop = contentWrapper.scrollHeight;
+    }
+  };
+
+  protected override componentDidRender(): void {
+    const contentWrapper = this.getContent().querySelector(
+      `.${styles.contentWrapper}`,
+    ) as HTMLDivElement | null;
+
+    if (contentWrapper) {
+      contentWrapper.style.height = `${contentWrapper.offsetHeight}px`;
+      contentWrapper.scrollTop = contentWrapper.scrollHeight;
+    }
+  }
 }
 
-export default MessagesBlock;
+export default withChatMainDataStore<PropsTypes>(MessagesBlock);

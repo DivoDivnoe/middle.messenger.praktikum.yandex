@@ -16,6 +16,8 @@
   --c-gray-4: #f8f8f8;
   --c-red: #ff2f2f;
   --c-blue: #e4edfd;
+  --popup-width: 340px;
+  --popup-height: 257px;
 }
 
 html,
@@ -44,4 +46,14 @@ a {
   overflow: hidden;
   border: 0;
   clip: rect(0 0 0 0);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.popup {
+  background-color: var(--c-white);
+  box-shadow: 0 0 6px var(--c-black-transparent-2);
+  border-radius: 12px;
 }

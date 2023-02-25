@@ -8,14 +8,16 @@
   justify-content: center;
   align-items: center;
   background-color: var(--c-black-transparent-0);
+  z-index: 100;
 }
 
-.errorMessage {
+.errorMessage,
+.uploadErrorMessage {
   color: var(--c-red);
 }
 
 .title,
-.errorMessage {
+.uploadErrorMessage {
   margin: 0 0 43px;
   font-size: 15px;
   line-height: 20px;
@@ -34,6 +36,13 @@
     color: var(--c-primary);
     text-decoration: underline;
     cursor: pointer;
+
+    &.path {
+      font-size: 14px;
+      line-height: 16px;
+      color: #8d8d8d;
+      text-decoration: none;
+    }
   }
 
   button {
@@ -57,17 +66,26 @@
   height: 257px;
   padding-top: 40px;
   padding-bottom: 40px;
-  background-color: var(--c-white);
-  box-shadow: 0 0 6px var(--c-black-transparent-2);
-  border-radius: 12px;
   text-align: center;
+
+  &.uploadError {
+    .title {
+      display: none;
+    }
+  }
 
   & > .errorMessage {
     margin-bottom: 43px;
   }
 
   &:not(.error) {
-    & > .errorMessage {
+    .errorMessage {
+      display: none;
+    }
+  }
+
+  &:not(.uploadError) {
+    & > .uploadErrorMessage {
       display: none;
     }
   }
@@ -75,16 +93,4 @@
   input {
     display: none;
   }
-}
-
-.error {
-  h2 {
-    display: none;
-  }
-}
-
-.path {
-  font-size: 14px;
-  line-height: 16px;
-  color: #8d8d8d;
 }

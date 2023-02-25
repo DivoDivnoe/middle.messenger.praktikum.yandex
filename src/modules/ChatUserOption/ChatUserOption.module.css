@@ -1,0 +1,15 @@
+.option {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.text {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.icon {
+  margin-right: 15px;
+}

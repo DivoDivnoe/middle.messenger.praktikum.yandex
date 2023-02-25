@@ -3,36 +3,64 @@ import deepClone from '../helpers/deepClone';
 import EventEmitter, { CallbackType } from './EventEmitter';
 import { nanoid } from 'nanoid';
 
-export type PropsTypes = Record<string, unknown>;
+enum EventType {
+  INIT = 'init',
+  RENDER = 'render',
+  DID_RENDER = 'did-render',
+  MOUNT = 'mount',
+  UPDATE = 'update',
+  SHOW = 'show',
+  HIDE = 'hide',
+}
 
+export type PropsTypes = Record<string, unknown>;
 export type ListenersType = Record<string, CallbackType[]>;
-type ChildrenType = Record<string, BaseComponent | BaseComponent[]>;
 
 export interface ComponentProps<T = Record<string, never>> {
   props: T;
   listeners?: ListenersType;
 }
 
-enum EventType {
-  INIT = 'init',
-  RENDER = 'render',
-  MOUNT = 'mount',
-  UPDATE = 'update',
+type ChildrenType = Record<string, IBaseComponent | IBaseComponent[]>;
+
+export interface IBaseComponent<P extends PropsTypes = PropsTypes> {
+  id: string;
+
+  getContent: () => HTMLElement;
+  updateProps: <T extends Partial<P>>(newProps: T) => void;
+  dispatchComponentDidMount: () => void;
+  getChildren: () => ChildrenType;
+  show: () => void;
+  hide: () => void;
+  componentWasShown: () => void;
+  componentWasHidden: () => void;
 }
 
-class BaseComponent {
-  private _eventEmitter: EventEmitter;
+export type ComponentDidUpdateType<P extends PropsTypes = PropsTypes> = (
+  _oldTarget: P,
+  target: P,
+) => boolean;
+export interface BaseComponentConstructor<
+  P extends PropsTypes = PropsTypes,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> {
+  new (data: O): IBaseComponent<P>;
+}
+
+class BaseComponent<
+  P extends PropsTypes = PropsTypes,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> implements IBaseComponent<P>
+{
+  protected _eventEmitter: EventEmitter;
   private _template: TemplateDelegate;
   private _element: HTMLElement;
   private _listeners: ListenersType;
   private _children: ChildrenType;
-  protected _props: PropsTypes;
+  protected _props: P;
   public id = nanoid(6);
 
-  constructor({
-    props = {} as PropsTypes,
-    listeners = {} as ListenersType,
-  }: ComponentProps<PropsTypes>) {
+  constructor({ props, listeners = {} as ListenersType }: O) {
     this._template = this.getTemplate();
     this._listeners = listeners;
     this._children = {};
@@ -41,7 +69,7 @@ class BaseComponent {
     this._eventEmitter.emit(EventType.INIT, props);
   }
 
-  private _init = (props: PropsTypes): void => {
+  private _init = (props: P): void => {
     this._initProps(props);
     this.init();
 
@@ -51,7 +79,7 @@ class BaseComponent {
   // eslint-disable-next-line
   protected init(): void {}
 
-  _initProps(props: PropsTypes): void {
+  _initProps(props: P): void {
     this._props = this._makePropsProxy(props);
   }
 
@@ -97,18 +125,20 @@ class BaseComponent {
     this._element = newElement;
 
     this._subscribe();
+
+    this._eventEmitter.emit(EventType.DID_RENDER);
   };
 
-  private _makePropsProxy(props: PropsTypes) {
+  private _makePropsProxy(props: P) {
     return new Proxy(props, {
       get: (target, prop) => {
-        const value = target[prop as keyof PropsTypes];
+        const value = target[prop as keyof P];
         return typeof value === 'function' ? value.bind(target) : value;
       },
       set: (target, prop, value) => {
         const oldTarget = deepClone(target);
 
-        target[prop as keyof PropsTypes] = value;
+        target[prop as keyof P] = value;
 
         this._eventEmitter.emit(EventType.UPDATE, oldTarget, target);
 
@@ -124,7 +154,7 @@ class BaseComponent {
     this.componentDidMount();
   };
 
-  private _componentDidUpdate = (oldTarget: PropsTypes, target: PropsTypes): void => {
+  private _componentDidUpdate = (oldTarget: P, target: P): void => {
     if (this.componentDidUpdate(oldTarget, target)) {
       this._eventEmitter.emit(EventType.RENDER);
     }
@@ -135,11 +165,14 @@ class BaseComponent {
 
     this._eventEmitter.on(EventType.INIT, this._init);
     this._eventEmitter.on(EventType.RENDER, this._render);
+    this._eventEmitter.on(EventType.DID_RENDER, this._componentDidRender);
     this._eventEmitter.on(EventType.MOUNT, this._componentDidMount);
     this._eventEmitter.on(EventType.UPDATE, this._componentDidUpdate);
+    this._eventEmitter.on(EventType.SHOW, this._componentWasShown);
+    this._eventEmitter.on(EventType.HIDE, this._componentWasHidden);
   }
 
-  private _subscribe(addListeners = true): void {
+  protected _subscribe(addListeners = true): void {
     const events = Object.keys(this._listeners);
 
     for (const evt of events) {
@@ -157,20 +190,32 @@ class BaseComponent {
     return this._element;
   }
 
-  public updateProps(newProps: PropsTypes): void {
+  public getProps(): P {
+    return this._props;
+  }
+
+  public updateProps<T extends Partial<P>>(newProps: T): void {
     Object.assign(this._props, newProps);
   }
 
   protected getTemplate(): TemplateDelegate {
-    throw new Error('now template defined');
+    throw new Error('no template defined');
   }
+
+  private _componentDidRender = (): void => {
+    this.componentDidRender();
+  };
+
+  // eslint-disable-next-line
+  protected componentDidRender(): void {}
 
   // eslint-disable-next-line
   protected componentDidMount(): void {}
 
-  protected componentDidUpdate(_oldTarget: PropsTypes, _target: PropsTypes): boolean {
+  // eslint-disable-next-line
+  protected componentDidUpdate: ComponentDidUpdateType<P> = (_oldTarget, _target) => {
     return true;
-  }
+  };
 
   public dispatchComponentDidMount(): void {
     this._eventEmitter.emit(EventType.MOUNT);
@@ -186,7 +231,7 @@ class BaseComponent {
     });
   }
 
-  protected getChild(key: string): BaseComponent | BaseComponent[] | null {
+  protected getChild(key: string): IBaseComponent | IBaseComponent[] | null {
     return this._children[key] || null;
   }
 
@@ -194,20 +239,40 @@ class BaseComponent {
     return this._children;
   }
 
-  protected addChildren(children: Record<string, BaseComponent | BaseComponent[]>) {
+  protected addChildren(children: ChildrenType) {
     this._children = {
       ...this._children,
       ...children,
     };
   }
 
-  show() {
-    this.getContent().style.display = 'block';
+  protected clearChildren(): void {
+    this._children = {};
   }
 
-  hide() {
-    this.getContent().style.display = 'none';
+  public show() {
+    this.getContent().hidden = false;
+    this._eventEmitter.emit(EventType.SHOW);
   }
+
+  public hide() {
+    this.getContent().hidden = true;
+    this._eventEmitter.emit(EventType.HIDE);
+  }
+
+  _componentWasShown = () => {
+    this.componentWasShown();
+  };
+
+  _componentWasHidden = () => {
+    this.componentWasHidden();
+  };
+
+  // eslint-disable-next-line
+  public componentWasShown(): void {}
+
+  // eslint-disable-next-line
+  public componentWasHidden(): void {}
 }
 
 export default BaseComponent;

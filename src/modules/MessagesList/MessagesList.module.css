@@ -1,0 +1,12 @@
+.messagesList {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: auto;
+  min-height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top: 1px solid var(--c-gray-1);
+  border-bottom: 1px solid var(--c-gray-1);
+}

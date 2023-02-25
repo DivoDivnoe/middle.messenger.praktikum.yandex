@@ -1,4 +1,8 @@
 .button {
+  cursor: pointer;
+}
+
+.primary {
   --box-shadow: 0 4px 4px var(--c-black-transparent-1);
 
   width: 280px;
@@ -11,14 +15,26 @@
   border: none;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
-  cursor: pointer;
 }
 
-.button:hover {
+.primary:hover {
   background-color: var(--c-primary-hover);
 }
 
-.button:active {
+.primary:active {
   background-color: var(--c-primary-active);
   box-shadow: inset var(--box-shadow);
+}
+
+.secondary {
+  font-size: 11px;
+  line-height: 11px;
+  color: var(--c-primary);
+  text-align: center;
+  border: none;
+  background-color: transparent;
+}
+
+.secondary:hover {
+  color: var(--c-primary-hover);
 }

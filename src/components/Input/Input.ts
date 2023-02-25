@@ -1,7 +1,10 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Input.hbs';
 import styles from './Input.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+} from '@/utils/components/BaseComponent';
 
 export enum InputType {
   TEXT = 'text',
@@ -12,9 +15,9 @@ export enum InputType {
   FILE = 'file',
 }
 
-export type InputProps = {
+export type InputPropsType = {
   id?: string;
-  type?: string;
+  type?: InputType;
   placeholder?: string;
   name?: string;
   value?: string;
@@ -23,27 +26,17 @@ export type InputProps = {
   validationRule?: RegExp;
 };
 
-class Input extends BaseComponent {
-  constructor({ props, listeners = {} }: ComponentProps<InputProps>) {
-    const {
-      type = InputType.DATE,
-      value = '',
-      required = false,
-      disabled = false,
-      validationRule,
-    } = props;
+export type InputProps = InputPropsType & { styles: typeof styles };
 
-    const inputProps = {
-      ...props,
-      type,
-      value,
-      required,
-      disabled,
-      styles,
-      validationRule,
-    };
+class Input<
+  P extends InputPropsType = InputPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<InputProps> {
+  constructor({ props, listeners = {} }: O) {
+    const { type = InputType.DATE, value = '', required = false, disabled = false } = props;
+
     super({
-      props: inputProps,
+      props: { ...props, styles, type, value, required, disabled },
       listeners: {
         ...listeners,
         input: [
@@ -77,11 +70,19 @@ class Input extends BaseComponent {
     return true;
   }
 
-  protected override componentDidUpdate(oldTarget: InputProps, target: InputProps): boolean {
-    if (oldTarget.disabled !== target.disabled) return true;
+  protected override componentDidUpdate: ComponentDidUpdateType<InputProps> = (
+    oldTarget,
+    target,
+  ) => {
+    if (
+      oldTarget.disabled !== target.disabled ||
+      (oldTarget.value !== target.value && !target.value?.length) ||
+      (this._props.disabled && oldTarget.value !== target.value)
+    )
+      return true;
 
     return false;
-  }
+  };
 }
 
 export default Input;

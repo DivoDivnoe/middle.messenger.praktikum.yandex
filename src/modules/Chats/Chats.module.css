@@ -1,0 +1,57 @@
+.chatsBlock {
+  min-width: 311px;
+  height: 100vh;
+  background: var(--c-gray-3);
+  border-right: 1px solid var(--c-gray-1);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: 21px 10px 14px;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 23px;
+}
+
+.addButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    svg > * {
+      stroke: var(--c-primary);
+    }
+  }
+}
+
+.link {
+  font-size: 12px;
+  line-height: 12px;
+  color: var(--c-gray-0);
+  text-align: right;
+
+  &:hover {
+    color: var(--c-primary);
+  }
+}
+
+.input {
+  padding: 10px;
+  font-size: 12px;
+  line-height: 12px;
+  background: var(--c-gray-2);
+  border-radius: 5px;
+  border: none;
+
+  &::placeholder {
+    padding-left: 10px;
+    text-align: center;
+    background: url('./search.svg') 103px center no-repeat;
+  }
+}

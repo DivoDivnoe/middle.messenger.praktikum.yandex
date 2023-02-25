@@ -1,48 +1,61 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './ProfileForm.hbs';
 import styles from './ProfileForm.module.css';
-import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import Avatar from '@/components/Avatar';
-import { AvatarSize } from '@/components/Avatar/Avatar';
+import BaseComponent, {
+  ComponentDidUpdateType,
+  ComponentProps,
+  IBaseComponent,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
+import Avatar from '@/modules/Avatar';
 import UserData from '../UserData';
-import { UserDataInputType, UserProps } from '../UserData/UserData';
+import { ProfileProps, UserDataInputType } from '../UserData/UserData';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
+import { AvatarSize } from '@/components/Avatar/Avatar';
+import withUserStore, { UserProps } from '@/hocs/withUserStore';
+import userController from '@/controllers/UserController';
 
 type InputsProps = Record<UserDataInputType, string>;
 
-export type ProfileFormProps = {
-  user: UserProps;
-  onSubmit: (data: InputsProps) => void;
+export type ProfileFormPropsType = UserProps;
+export type ProfileFormProps = UserProps & {
+  styles: typeof styles;
 };
 
-class ProfileForm extends BaseComponent {
+export class ProfileForm<
+  P extends ProfileFormPropsType = ProfileFormPropsType,
+  O extends ComponentProps<P> = ComponentProps<P>,
+> extends BaseComponent<ProfileFormProps> {
   private _inputsData: InputsProps;
 
-  constructor({ props: { user, onSubmit } }: ComponentProps<ProfileFormProps>) {
+  constructor({ props: { user } }: O) {
     super({
-      props: { styles, user, onSubmit },
+      props: { user, styles },
       listeners: {
         submit: [
-          (evt) => {
+          async (evt) => {
             evt.preventDefault();
 
-            if ((this.getChild('userData') as UserData).validate()) {
-              onSubmit(this._inputsData);
+            if (
+              (
+                this.getChild('userData') as IBaseComponent<ProfileProps> & {
+                  validate: () => boolean;
+                }
+              ).validate()
+            ) {
+              await this._onSubmit();
             }
           },
         ],
       },
     });
 
-    this._inputsData = {
-      email: user.email,
-      login: user.login,
-      first_name: user.first_name,
-      second_name: user.second_name,
-      display_name: user.display_name ?? '',
-      phone: user.phone,
-    };
+    this._initInputsData();
+  }
+
+  private _initInputsData(): void {
+    this._inputsData = { ...this._props.user, display_name: this._props.user.display_name ?? '' };
   }
 
   protected override init(): void {
@@ -53,7 +66,7 @@ class ProfileForm extends BaseComponent {
     this.addChildren({ avatar, userData, button });
   }
 
-  private static _initAvatar(): Avatar {
+  private static _initAvatar() {
     const avatar = new Avatar({
       props: {
         className: String(styles.avatar),
@@ -76,10 +89,9 @@ class ProfileForm extends BaseComponent {
     return button;
   }
 
-  private _initUserData(): UserData {
+  private _initUserData() {
     const userData = new UserData({
       props: {
-        user: this._props.user as UserProps,
         isEditable: true,
         className: String(styles.userData),
         onChange: (name: UserDataInputType, value: string) => {
@@ -95,16 +107,21 @@ class ProfileForm extends BaseComponent {
     return template;
   }
 
-  protected override componentDidUpdate(
-    oldTarget: ProfileFormProps,
-    target: ProfileFormProps,
-  ): boolean {
+  protected override componentDidUpdate: ComponentDidUpdateType<ProfileFormProps> = (
+    oldTarget,
+    target,
+  ) => {
     if (oldTarget.user !== target.user) {
-      (this.getChild('userData') as BaseComponent).updateProps({ user: target.user });
+      this._initInputsData();
+      return false;
     }
 
     return true;
+  };
+
+  _onSubmit() {
+    return userController.updateProfile(this._inputsData);
   }
 }
 
-export default ProfileForm;
+export default withUserStore<PropsTypes>(ProfileForm);
