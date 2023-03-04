@@ -1,8 +1,8 @@
 <div class='{{styles.popupWrapper}}'>
   <div
     class='{{styles.popup}}
-      {{condition isError styles.error}}
-      {{condition uploadErrorMessage styles.uploadError}}
+      {{#if isError}}{{styles.error}}{{/if}}
+      {{#if uploadErrorMessage}}{{styles.uploadError}}{{/if}}
       popup'
   >
     <p class='{{styles.title}}'>
@@ -15,7 +15,7 @@
     <p class='{{styles.uploadErrorMessage}}'>Ошибка, попробуйте ещё раз</p>
 
     <form class='{{styles.form}}'>
-      <label class='{{condition fileName styles.path}}'>
+      <label {{#if fileName}}class='{{styles.path}}'{{/if}}>
         {{#if fileName}}
           {{fileName}}
         {{else}}

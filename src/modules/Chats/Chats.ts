@@ -7,7 +7,6 @@ import BaseComponent, {
   IBaseComponent,
   PropsTypes,
 } from '@/utils/components/BaseComponent';
-import '@/utils/helpers/condition';
 import withChatsStore, { ChatsProps } from '@/hocs/withChatsStore';
 import { ChatType } from '@/api/types';
 import ChatsList from '../ChatsList';
@@ -57,6 +56,7 @@ export class Chats<
   }
 
   protected override getTemplate(): TemplateDelegate {
+    console.log('chats module template');
     return template;
   }
 

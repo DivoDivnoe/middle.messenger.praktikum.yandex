@@ -11,6 +11,8 @@ import ProfileFormPage from './pages/profileForm';
 import SignupPage from './pages/signup';
 import router from './utils/components/Router';
 import renderDOM from './utils/helpers/renderDOM';
+import 'sanitize.css';
+import './styles/global.css';
 
 window.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('click', (evt) => {
@@ -43,16 +45,24 @@ window.addEventListener('DOMContentLoaded', async () => {
     .use(Routes.SERVER_ERROR, ServerErrorPage);
 
   const isProtectedRoute = !publicRoutes.includes(window.location.pathname as Routes);
+  console.log('');
 
   try {
     await AuthController.getUser();
 
+    console.log('get user');
+
     router.start();
 
+    console.log('router start');
+
     if (!isProtectedRoute) {
+      console.log('not protected');
       router.go(Routes.CHATS);
+      console.log('go to chats');
     }
   } catch {
+    console.log('did not get user');
     if (isProtectedRoute) {
       router.go(Routes.LOGIN);
     }

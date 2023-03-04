@@ -1,6 +1,7 @@
 {
   "env": {
     "browser": true,
+    "node": true,
     "es2021": true
   },
   "root": true,
@@ -12,6 +13,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "max-len": [2, 100]
+    "max-len": [2, 100],
+    "@typescript-eslint/no-var-requires": 0
   }
 }

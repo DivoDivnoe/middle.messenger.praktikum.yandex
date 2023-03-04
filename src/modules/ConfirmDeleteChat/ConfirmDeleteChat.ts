@@ -6,7 +6,6 @@ import BaseComponent, {
   ComponentProps,
   PropsTypes,
 } from '@/utils/components/BaseComponent';
-import '@/utils/helpers/condition';
 import Button from '@/components/Button';
 import { ButtonTheme } from '@/components/Button/Button';
 import withDeletedChatMainDataStore, {

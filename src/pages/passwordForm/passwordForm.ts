@@ -13,10 +13,10 @@ class PasswordFormPage extends BaseComponent<PasswordFormPageProps> {
   }
 
   protected override init(): void {
-    const passwordForm = new PasswordForm();
+    const passwordFormComp = new PasswordForm();
     const arrowButton = new BackArrow();
 
-    this.addChildren({ passwordForm, arrowButton });
+    this.addChildren({ passwordFormComp, arrowButton });
   }
 
   protected override getTemplate(): TemplateDelegate {

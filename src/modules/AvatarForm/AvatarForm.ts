@@ -6,7 +6,6 @@ import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import Input from '@/components/Input';
 import { InputType } from '@/components/Input/Input';
-import '../../utils/helpers/condition';
 import isEqual from '@/utils/helpers/isEqual';
 import userController from '@/controllers/UserController';
 
