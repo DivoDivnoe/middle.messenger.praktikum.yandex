@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "### Откройте pull request в ветку main из ветки, где вы разрабатывали проект, и добавьте ссылку на этот pr в README.md в ветке main.  ### ВАЖНО: pull request должен называться “Sprint i” (i — номер спринта).",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --mode production",
-    "dev": "cross-env NODE_ENV=development webpack serve --mode development",
+    "build": "cross-env NODE_ENV=production webpack",
+    "dev": "cross-env NODE_ENV=development webpack serve",
+    "start": "npm run build && node ./server.js",
     "stylelint": "stylelint  \"**/*.css\" --fix",
     "check": "tsc && lint-staged && npm run stylelint",
     "prepare": "husky install"
@@ -55,6 +56,8 @@
   },
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "dependencies": {
+    "express": "4.18.2",
+    "express-history-api-fallback": "2.2.1",
     "handlebars": "4.7.7",
     "nanoid": "4.0.1",
     "sanitize.css": "13.0.0"

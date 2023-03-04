@@ -8,6 +8,8 @@ const stylesHandler = MiniCssExtractPlugin.loader;
 
 const isProduction = process.env.NODE_ENV == 'production';
 
+const filename = (ext) => `[name]${!isProduction ? '' : '.[contenthash]'}.${ext}`;
+
 const optimization = () => {
   const config = {
     minimizer: [new MinifyCssWebpackPlugin()],
@@ -24,7 +26,9 @@ const config = {
   context: path.resolve(__dirname, 'src'),
   entry: './index.ts',
   output: {
+    filename: filename('js'),
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   devServer: {
     static: {
@@ -33,7 +37,7 @@ const config = {
     },
     historyApiFallback: true,
     compress: true,
-    port: 3000,
+    port: 3001,
     open: true,
   },
   devtool: isProduction ? false : 'inline-source-map',
@@ -42,7 +46,9 @@ const config = {
     new HtmlWebpackPlugin({
       template: './index.html',
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: filename('css'),
+    }),
   ],
   module: {
     rules: [
