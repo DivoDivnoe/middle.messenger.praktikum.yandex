@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development webpack serve",
     "start": "npm run build && node ./server.js",
     "stylelint": "stylelint  \"**/*.css\" --fix",
-    "check": "tsc && lint-staged && npm run stylelint",
+    "check": "tsc --noEmit && lint-staged && npm run stylelint",
     "prepare": "husky install"
   },
   "lint-staged": {

@@ -191,7 +191,7 @@ class SignupPage extends BaseComponent<{ styles: typeof styles }> {
       (item) => item instanceof Input,
     ) as Input[];
 
-    return inputs.reduce((acc, cur) => {
+    return inputs.reduce<boolean>((acc, cur) => {
       return acc && cur.validate();
     }, true);
   }
