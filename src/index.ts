@@ -50,19 +50,12 @@ window.addEventListener('DOMContentLoaded', async () => {
   try {
     await AuthController.getUser();
 
-    console.log('get user');
-
     router.start();
 
-    console.log('router start');
-
     if (!isProtectedRoute) {
-      console.log('not protected');
       router.go(Routes.CHATS);
-      console.log('go to chats');
     }
   } catch {
-    console.log('did not get user');
     if (isProtectedRoute) {
       router.go(Routes.LOGIN);
     }
