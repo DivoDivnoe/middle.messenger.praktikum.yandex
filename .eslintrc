@@ -17,7 +17,7 @@
   },
   "overrides": [
     {
-      "files": ["webpack.config.js", "server.js"],
+      "files": ["webpack.config.js", "server.js", "jest.config.js"],
       "rules": {
         "no-undef": ["off"],
         "@typescript-eslint/no-var-requires": ["off"]
