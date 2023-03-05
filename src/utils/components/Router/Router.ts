@@ -5,7 +5,7 @@ import Route from '../Route';
 type RouteType = Record<string, Route<any>>;
 
 class Router {
-  private static _instance: Router;
+  private static _instance: Router | null = null;
 
   private _history = window.history;
   private _routes: RouteType = {};
@@ -19,28 +19,31 @@ class Router {
     Router._instance = this;
   }
 
-  public go(pathName: string) {
+  public go(pathName: string): void {
     this._history.pushState({}, '', pathName);
 
     this._onRoute(pathName);
   }
 
-  public forward() {
+  public forward(): void {
     this._history.forward();
   }
 
-  public back() {
+  public back(): void {
     this._history.back();
   }
 
-  use<P extends PropsTypes = PropsTypes>(pathname: string, block: BaseComponentConstructor<P>) {
+  public use<P extends PropsTypes = PropsTypes>(
+    pathname: string,
+    block: BaseComponentConstructor<P>,
+  ): this {
     const route = new Route(pathname, block, { rootQuery: this._rootQuery });
     this._routes[pathname] = route;
 
     return this;
   }
 
-  _onRoute(pathname: string) {
+  private _onRoute(pathname: string): void {
     let route = this._routes[pathname];
 
     if (this._currentRoute && this._currentRoute !== route) {
@@ -56,7 +59,7 @@ class Router {
     route.render();
   }
 
-  start() {
+  public start(): void {
     // Реагируем на изменения в адресной строке и вызываем перерисовку
     window.onpopstate = (event: PopStateEvent) => {
       this._onRoute((event.currentTarget as Window).location.pathname);
@@ -64,7 +67,13 @@ class Router {
 
     this._onRoute(window.location.pathname);
   }
+
+  public destroy(): void {
+    window.onpopstate = null;
+    this._routes = {};
+    Router._instance = null;
+    this._currentRoute = null;
+  }
 }
 
-const router = new Router('#app');
-export default router;
+export default Router;

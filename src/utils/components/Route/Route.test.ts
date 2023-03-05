@@ -2,6 +2,10 @@ import Route from './Route';
 import BaseComponent from '../BaseComponent';
 import { TemplateDelegate } from 'handlebars';
 
+afterEach(() => {
+  document.body.innerHTML = '';
+});
+
 describe('Route component', () => {
   it('is rendered correctly', () => {
     const ROOT_ID = 'app';
@@ -25,8 +29,6 @@ describe('Route component', () => {
     route.render();
 
     expect(document.querySelector('.content')?.textContent).toBe('some content');
-
-    root.remove();
   });
 
   it('match method works correctly', () => {
@@ -75,8 +77,6 @@ describe('Route component', () => {
 
     route.navigate(PATH_NAME);
     expect(document.querySelector('.content')?.textContent).toBe('some content');
-
-    root.remove();
   });
 
   it('leave method works correctly', () => {
@@ -106,7 +106,5 @@ describe('Route component', () => {
 
     const content = document.querySelector('.content') as HTMLElement | null;
     expect(content?.hidden).toBe(true);
-
-    root.remove();
   });
 });
