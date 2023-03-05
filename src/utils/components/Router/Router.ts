@@ -1,6 +1,6 @@
 import { Routes } from '@/configs/Routes';
-import { BaseComponentConstructor, PropsTypes } from './BaseComponent';
-import Route from './Route';
+import { BaseComponentConstructor, PropsTypes } from '../BaseComponent';
+import Route from '../Route';
 
 type RouteType = Record<string, Route<any>>;
 

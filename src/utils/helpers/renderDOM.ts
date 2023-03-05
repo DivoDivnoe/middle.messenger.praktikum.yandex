@@ -1,4 +1,4 @@
-import { IBaseComponent } from '../components/BaseComponent';
+import { IBaseComponent } from '../components/BaseComponent/BaseComponent';
 
 const renderDOM = (query: string, block: IBaseComponent): Element => {
   const root = document.querySelector(query);

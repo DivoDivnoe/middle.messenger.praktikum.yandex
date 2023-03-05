@@ -9,7 +9,7 @@ import PasswordFormPage from './pages/passwordForm';
 import ProfilePage from './pages/profile';
 import ProfileFormPage from './pages/profileForm';
 import SignupPage from './pages/signup';
-import router from './utils/components/Router';
+import router from './utils/components/Router/Router';
 import renderDOM from './utils/helpers/renderDOM';
 import 'sanitize.css';
 import './styles/global.css';

@@ -1,7 +1,9 @@
 import { TemplateDelegate } from 'handlebars';
 import template from './Profile.hbs';
 import styles from './Profile.module.css';
-import BaseComponent, { ComponentDidUpdateType } from '@/utils/components/BaseComponent';
+import BaseComponent, {
+  ComponentDidUpdateType,
+} from '@/utils/components/BaseComponent';
 import Avatar from '@/modules/Avatar';
 import UserData from '../UserData';
 import LogoutButton from '../LogoutButton';
