@@ -2,7 +2,6 @@ import { TemplateDelegate } from 'handlebars';
 import template from './AddChatForm.hbs';
 import styles from './AddChatForm.module.css';
 import BaseComponent, { ComponentProps } from '@/utils/components/BaseComponent';
-import '@/utils/helpers/condition';
 import Button from '@/components/Button';
 import { ButtonType } from '@/components/Button/Button';
 import chatsController from '@/controllers/ChatsController';

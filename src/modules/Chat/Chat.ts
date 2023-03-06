@@ -5,7 +5,6 @@ import BaseComponent, {
   ComponentDidUpdateType,
   ComponentProps,
 } from '@/utils/components/BaseComponent';
-import '@/utils/helpers/condition';
 import Avatar from '@/components/Avatar';
 
 export type ChatPropsType = {

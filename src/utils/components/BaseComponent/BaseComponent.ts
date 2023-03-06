@@ -1,6 +1,6 @@
 import { TemplateDelegate } from 'handlebars';
-import deepClone from '../helpers/deepClone';
-import EventEmitter, { CallbackType } from './EventEmitter';
+import deepClone from '../../helpers/deepClone';
+import EventEmitter, { CallbackType } from '../EventEmitter';
 import { nanoid } from 'nanoid';
 
 enum EventType {

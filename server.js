@@ -1,8 +1,5 @@
-// eslint-disable-next-line
 const express = require('express');
-// eslint-disable-next-line
 const fallback = require('express-history-api-fallback');
-// eslint-disable-next-line
 const path = require('path');
 
 const app = express();

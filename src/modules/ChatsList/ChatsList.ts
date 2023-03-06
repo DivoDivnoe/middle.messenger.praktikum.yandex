@@ -4,7 +4,6 @@ import BaseComponent, {
   ComponentDidUpdateType,
   ComponentProps,
 } from '@/utils/components/BaseComponent';
-import '@/utils/helpers/condition';
 import Chat from '../Chat';
 import { ChatPropsType } from '../Chat/Chat';
 import { ChatType } from '@/api/types';

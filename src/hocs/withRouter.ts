@@ -1,5 +1,5 @@
 import BaseComponent, { ComponentProps, PropsTypes } from '@/utils/components/BaseComponent';
-import router from '@/utils/components/Router';
+import router from '@/utils/components/Router/Router';
 
 export type RouterProps = {
   router: typeof router;

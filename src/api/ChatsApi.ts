@@ -36,9 +36,6 @@ type getNewMessagesCountResponseType = {
 };
 
 class ChatsApi extends BaseAPI {
-  read = undefined;
-  update = undefined;
-
   constructor() {
     super(Endpoint.CHATS);
   }
@@ -47,11 +44,11 @@ class ChatsApi extends BaseAPI {
     return this._http.get(Path.ROOT, { data });
   }
 
-  public create(data: CreateChatType): Promise<CreateChatResponseType> {
+  public override create(data: CreateChatType): Promise<CreateChatResponseType> {
     return this._http.post(Path.ROOT, { data });
   }
 
-  public delete(chatId: number): Promise<DeleteChatResponse> {
+  public override delete(chatId: number): Promise<DeleteChatResponse> {
     return this._http.delete(Path.ROOT, { data: { chatId } });
   }
 

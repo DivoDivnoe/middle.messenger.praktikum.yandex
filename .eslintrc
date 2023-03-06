@@ -5,13 +5,23 @@
   },
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "jest"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended"
   ],
   "rules": {
     "max-len": [2, 100]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["webpack.config.js", "server.js", "jest.config.js"],
+      "rules": {
+        "no-undef": ["off"],
+        "@typescript-eslint/no-var-requires": ["off"]
+      }
+    }
+  ]
 }

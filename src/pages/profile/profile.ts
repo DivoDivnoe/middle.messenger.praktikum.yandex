@@ -15,10 +15,10 @@ export class ProfilePage extends BaseComponent<ProfilePageProps> {
   }
 
   protected override init(): void {
-    const profile = new Profile();
+    const profileComp = new Profile();
     const arrowButton = new BackArrow();
 
-    this.addChildren({ profile, arrowButton });
+    this.addChildren({ profileComp, arrowButton });
   }
 
   protected override getTemplate(): TemplateDelegate {

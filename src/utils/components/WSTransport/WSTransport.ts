@@ -1,4 +1,4 @@
-import EventEmitter from './EventEmitter';
+import EventEmitter from '../EventEmitter';
 
 export enum SocketEvent {
   MESSAGE = 'message',
@@ -44,7 +44,7 @@ class WSTransport extends EventEmitter {
   }
 
   private _setupPingPong(delay = 10000): void {
-    this._pingPongIntervalId = setInterval(() => {
+    this._pingPongIntervalId = window.setInterval(() => {
       this.send({ type: 'ping' });
     }, delay);
   }

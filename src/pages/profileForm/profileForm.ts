@@ -13,10 +13,10 @@ class ProfileFormPage extends BaseComponent<ProfileFormPageProps> {
   }
 
   protected override init(): void {
-    const profileForm = new ProfileForm({ props: {} });
+    const profileFormComp = new ProfileForm({ props: {} });
     const arrowButton = new BackArrow();
 
-    this.addChildren({ profileForm, arrowButton });
+    this.addChildren({ profileFormComp, arrowButton });
   }
 
   protected override getTemplate(): TemplateDelegate {

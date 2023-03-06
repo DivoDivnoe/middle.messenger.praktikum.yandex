@@ -10,11 +10,6 @@ enum Path {
 }
 
 class UserApi extends BaseAPI {
-  create = undefined;
-  read = undefined;
-  update = undefined;
-  delete = undefined;
-
   constructor() {
     super(Endpoint.USER);
   }

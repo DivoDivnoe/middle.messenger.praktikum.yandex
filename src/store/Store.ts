@@ -1,6 +1,6 @@
 import { ChatMessage, ChatType, User } from '@/api/types';
 import set from '../utils/helpers/set';
-import EventEmitter from '../utils/components/EventEmitter';
+import EventEmitter from '../utils/components/EventEmitter/EventEmitter';
 
 export enum StoreEvent {
   UPDATED = 'updated',

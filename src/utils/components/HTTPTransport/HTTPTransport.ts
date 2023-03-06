@@ -32,38 +32,36 @@ class HTTPTransport {
     this._endpoint = `${HTTPTransport.API_URL}${endpoint}`;
   }
 
-  get: RequestType = (path, options = {}) => {
+  public get: RequestType = (path, options = {}) => {
     const data = options.data ? queryStringify(options.data as Record<string, string>) : '';
 
     return this._request(`${path}${data}`, { ...options, method: Method.GET });
   };
-  post: RequestType = (path, options = {}) => {
+
+  public post: RequestType = (path, options = {}) => {
     return this._request(path, { ...options, method: Method.POST });
   };
-  put: RequestType = (path, options = {}) => {
+
+  public put: RequestType = (path, options = {}) => {
     return this._request(path, { ...options, method: Method.PUT });
   };
-  delete: RequestType = (path, options = {}) => {
+
+  public delete: RequestType = (path, options = {}) => {
     return this._request(path, { ...options, method: Method.DELETE });
   };
 
-  _request: RequestTypeRequiredOptions = (path, options) => {
+  private _request: RequestTypeRequiredOptions = (path, options) => {
     const url = `${this._endpoint}${path}`;
 
     return HTTPTransport.request(url, options);
   };
 
-  static request: RequestTypeRequiredOptions = (url, options) => {
+  public static request: RequestTypeRequiredOptions = (url, options) => {
     const DEFAULT_TIMEOUT = 5000;
 
     const { headers = {}, method = Method.GET, data, timeout = DEFAULT_TIMEOUT } = options;
 
     return new Promise((resolve, reject) => {
-      if (!method) {
-        reject('No method');
-        return;
-      }
-
       const xhr = new XMLHttpRequest();
       const isGet = method === Method.GET;
       const isFormData = data instanceof FormData;

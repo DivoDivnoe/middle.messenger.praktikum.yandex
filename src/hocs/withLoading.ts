@@ -1,4 +1,7 @@
-import { BaseComponentConstructor, PropsTypes } from '@/utils/components/BaseComponent';
+import {
+  BaseComponentConstructor,
+  PropsTypes,
+} from '@/utils/components/BaseComponent';
 import withStore from './withStore';
 import { StateProps } from '@/store/Store';
 

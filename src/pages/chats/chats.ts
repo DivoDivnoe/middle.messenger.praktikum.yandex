@@ -17,13 +17,19 @@ class ChatsPage extends BaseComponent<ChatBlockProps> {
   }
 
   protected override init(): void {
-    const chats = ChatsPage._initChats();
+    const chatsList = ChatsPage._initChats();
     const messages = ChatsPage._initMessages();
     const confirmDeleteChat = new ConfirmDeleteChat({ props: {} });
     const chatAddUserForm = new ChatAddUserForm({ props: {} });
     const chatRemoveUserForm = new ChatRemoveUserForm({ props: {} });
 
-    this.addChildren({ chats, messages, confirmDeleteChat, chatAddUserForm, chatRemoveUserForm });
+    this.addChildren({
+      chatsList,
+      messages,
+      confirmDeleteChat,
+      chatAddUserForm,
+      chatRemoveUserForm,
+    });
 
     chatsController.getFilteredList();
   }

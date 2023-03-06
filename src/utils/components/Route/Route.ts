@@ -1,9 +1,9 @@
-import renderDOM from '../helpers/renderDOM';
+import renderDOM from '../../helpers/renderDOM';
 import BaseComponent, {
   BaseComponentConstructor,
   IBaseComponent,
   PropsTypes,
-} from './BaseComponent';
+} from '../BaseComponent';
 
 type RouteProps = {
   rootQuery: string;
