@@ -18,8 +18,8 @@ enum EventType {
 export type PropsTypes = Record<string, unknown>;
 
 export interface ComponentProps<T = Record<string, never>> {
-  props: T;
   listeners?: ListenersType;
+  props: T;
 }
 
 type ChildrenType = Record<string, IBaseComponent | IBaseComponent[]>;
