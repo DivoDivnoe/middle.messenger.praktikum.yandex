@@ -3,22 +3,23 @@ import deepClone from '../helpers/deepClone';
 import EventEmitter, { CallbackType } from './EventEmitter';
 import { nanoid } from 'nanoid';
 
+export type ListenersType = Record<string, CallbackType[]>;
+
 enum EventType {
   INIT = 'init',
   RENDER = 'render',
   DID_RENDER = 'did-render',
   MOUNT = 'mount',
   UPDATE = 'update',
-  SHOW = 'show',
   HIDE = 'hide',
+  SHOW = 'show',
 }
 
 export type PropsTypes = Record<string, unknown>;
-export type ListenersType = Record<string, CallbackType[]>;
 
 export interface ComponentProps<T = Record<string, never>> {
-  props: T;
   listeners?: ListenersType;
+  props: T;
 }
 
 type ChildrenType = Record<string, IBaseComponent | IBaseComponent[]>;
